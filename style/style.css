@@ -533,8 +533,6 @@ h1, h2, h3, h4 {
   border-bottom: 1.5px solid var(--border-clr);
   position: relative;
   z-index: 30;
-  margin-top: -30px;
-  border-radius: 20px 20px 0 0;
 }
 .stats-container {
   max-width: 1400px;
@@ -592,19 +590,24 @@ h1, h2, h3, h4 {
 
 .destaques-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 24px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 32px;
 }
 
 .destaques-title-wrap {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.destaques .section-title {
+  margin-bottom: 0;
 }
 
 .destaques-nav {
-  display: flex;
-  gap: 12px;
+  display: none;
 }
 
 .destaques-slider-wrap {
@@ -617,15 +620,22 @@ h1, h2, h3, h4 {
 
 .destaques-track {
   display: flex;
-  align-items: flex-end; /* aligns all cards at the bottom so they expand upwards */
+  align-items: center; /* aligns all cards in the center so they expand proportionally both upwards and downwards */
   gap: 24px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none;
   padding: 40px 0;
   width: 100%;
   height: 360px; /* comfortably accommodates the 280px square hover size */
   scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.destaques-track.active-dragging {
+  scroll-behavior: auto;
+  cursor: grabbing;
 }
 .destaques-track::-webkit-scrollbar {
   display: none;
@@ -633,12 +643,11 @@ h1, h2, h3, h4 {
 
 .destaque-card {
   width: 280px;
-  height: 180px; /* default horizontal rectangle height */
+  height: 260px; /* default horizontal rectangle height */
   flex-shrink: 0;
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  scroll-snap-align: start;
   transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
   cursor: pointer;
   display: flex;
@@ -651,10 +660,11 @@ h1, h2, h3, h4 {
 
 .destaque-bg-wrap {
   position: absolute;
-  bottom: 0;
+  top: 50%;
   left: 0;
   width: 100%;
   height: 280px; /* fixed size to avoid object-fit recalcs during transition */
+  transform: translateY(-50%) scale(1);
   z-index: 0;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -664,6 +674,8 @@ h1, h2, h3, h4 {
   height: 100%;
   object-fit: cover;
   display: block;
+  pointer-events: none;
+  user-select: none;
 }
 
 .destaque-card::before {
@@ -718,10 +730,10 @@ h1, h2, h3, h4 {
 }
 
 .destaque-card:hover .destaque-bg-wrap {
-  transform: scale(1.08);
+  transform: translateY(-50%) scale(1.08);
 }
 
-/* Hover Animation - Increases Height Upwards to form a Square (280x280) */
+/* Hover Animation - Increases Height Proportionally (from center) to form a Square (280x280) */
 .destaque-card:hover {
   height: 280px; /* forms a perfect square with width 280px */
   box-shadow: 0 15px 30px rgba(13, 31, 45, 0.28);
@@ -840,20 +852,23 @@ h1, h2, h3, h4 {
   flex-direction: column;
   transition: var(--transition);
   cursor: pointer;
+  box-shadow: var(--shadow-sm);
 }
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 12px 30px rgba(74, 145, 196, 0.12);
+  border-color: var(--blue);
 }
 
 .product-img-wrap {
-  background: linear-gradient(145deg, var(--ice), rgba(126, 181, 214, 0.25));
+  background: linear-gradient(135deg, #F0F7FF 0%, #E1EFFF 100%);
   height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  border-bottom: 1px solid var(--border-clr);
 }
 
 .product-emoji {
@@ -883,12 +898,13 @@ h1, h2, h3, h4 {
 }
 .product-tag.highlight {
   background: var(--blue);
+  color: var(--white);
 }
 
 .product-hover-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(13, 31, 45, 0.45);
+  background: rgba(26, 63, 92, 0.45);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -903,14 +919,19 @@ h1, h2, h3, h4 {
 
 .view-details-btn {
   background: var(--white);
-  color: var(--black);
+  color: var(--deep);
+  border: 2px solid var(--blue);
   padding: 10px 22px;
   border-radius: 8px;
   font-size: 0.88rem;
   font-weight: 700;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   transform: translateY(10px);
   transition: var(--transition);
+}
+.view-details-btn:hover {
+  background: var(--blue);
+  color: var(--white);
 }
 .product-card:hover .view-details-btn {
   transform: translateY(0);
@@ -921,11 +942,12 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  background: var(--white);
 }
 
 .product-brand {
   font-size: 0.78rem;
-  color: var(--muted);
+  color: var(--blue);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -935,7 +957,7 @@ h1, h2, h3, h4 {
 .product-name {
   font-size: 1.15rem;
   font-weight: 700;
-  color: var(--black);
+  color: var(--navy);
   margin-bottom: 12px;
   line-height: 1.3;
 }
@@ -948,7 +970,7 @@ h1, h2, h3, h4 {
 }
 
 .spec-tag {
-  background: var(--gray);
+  background: var(--ice);
   border: 1px solid var(--border-clr);
   color: var(--deep);
   border-radius: 6px;
@@ -961,7 +983,7 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid var(--gray);
+  border-top: 1px solid var(--border-clr);
   padding-top: 18px;
   margin-top: auto;
 }
@@ -987,22 +1009,21 @@ h1, h2, h3, h4 {
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  border: 1.5px solid var(--border-clr);
-  background: var(--ice);
-  color: var(--deep);
+  border: none;
+  background: var(--blue);
+  color: var(--white);
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition);
+  box-shadow: 0 4px 10px rgba(74, 145, 196, 0.2);
 }
 .btn-cart-add:hover {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(74, 145, 196, 0.3);
+  background: var(--deep);
+  transform: scale(1.05);
 }
 
 /* ── BENTO SECTOR ──────────────────────────────────────── */
@@ -1028,27 +1049,51 @@ h1, h2, h3, h4 {
 .bento-card {
   border-radius: 16px;
   overflow: hidden;
-  color: var(--white);
+  color: var(--navy);
   position: relative;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px rgba(13, 31, 45, 0.08);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+  border: 1px solid var(--border-clr);
+  background: var(--white);
+}
+
+.bento-card h2,
+.bento-card h3 {
+  color: var(--navy) !important;
 }
 
 .bento-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(13, 31, 45, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(74, 145, 196, 0.12);
+  border-color: var(--blue);
 }
 
 /* Card Specific Layouts */
 .bento-tall {
   grid-row: 1 / span 2;
-  background: linear-gradient(180deg, #103866 0%, #0a223e 100%);
-  padding: 32px 28px 0;
+  background: linear-gradient(180deg, var(--white) 0%, var(--ice) 100%);
+  padding: 40px 32px 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.card-parceiros .bento-card-header {
+  position: relative;
+  z-index: 2;
+}
+
+.card-parceiros .bento-card-body {
+  position: relative;
+  z-index: 2;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
 }
 
 .card-parceiros .bento-logo {
@@ -1059,28 +1104,26 @@ h1, h2, h3, h4 {
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--muted);
 }
 
 .card-parceiros .bento-logo svg {
-  color: var(--sky);
+  color: var(--blue);
 }
 
 .card-parceiros h3 {
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 24px 0 20px;
-  color: var(--white);
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--navy);
+  letter-spacing: -0.5px;
 }
 
 .card-parceiros h3 strong {
-  color: var(--sky);
-  text-decoration: underline;
-  text-decoration-color: var(--blue);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
+  color: var(--blue);
+  font-weight: 800;
 }
 
 /* Bento Button */
@@ -1088,8 +1131,8 @@ h1, h2, h3, h4 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #f7b600; /* Warm yellow/amber color */
-  color: #0b1f38;
+  background: var(--blue);
+  color: var(--white);
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 0.88rem;
@@ -1098,11 +1141,11 @@ h1, h2, h3, h4 {
   text-decoration: none;
   width: fit-content;
   transition: transform 0.2s, background 0.2s;
-  box-shadow: 0 4px 15px rgba(247, 182, 0, 0.35);
+  box-shadow: 0 4px 15px rgba(74, 145, 196, 0.25);
 }
 
 .bento-btn:hover {
-  background: #ffd043;
+  background: var(--deep);
   transform: scale(1.03);
 }
 
@@ -1117,37 +1160,57 @@ h1, h2, h3, h4 {
 }
 
 .card-parceiros .bento-card-img-wrap {
-  height: 230px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  margin-top: 20px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 260px;
+  margin: 0;
+  z-index: 1;
 }
 
 .card-parceiros .technician-img {
-  max-width: 90%;
-  height: auto;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
   display: block;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+}
+
+.card-parceiros-img-wrap {
+  padding: 0 !important;
+  text-decoration: none;
+}
+
+.bento-card-img-full {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-parceiros-img-wrap:hover .bento-card-img-full {
+  transform: scale(1.02);
 }
 
 /* Card 2: VRF */
 .card-vrf {
-  background: linear-gradient(135deg, #0f3a63 0%, #0a1f33 100%);
-  padding: 24px 28px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--ice) 100%);
+  padding: 32px;
+  position: relative;
+  min-height: 240px;
 }
 
 .card-vrf .bento-card-content {
-  flex: 1;
+  position: relative;
+  z-index: 2;
+  max-width: 58%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
 }
 
@@ -1159,23 +1222,25 @@ h1, h2, h3, h4 {
 }
 
 .yellow-text {
-  color: #f7b600;
+  color: var(--blue);
 }
 
 .card-vrf h3 {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-family: 'Outfit', sans-serif;
-  font-weight: 600;
-  line-height: 1.4;
-  margin: 10px 0 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 12px 0 16px;
+  color: var(--navy);
+  letter-spacing: -0.3px;
 }
 
 .bento-btn-sm {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: #f7b600;
-  color: #0b1f38;
+  background: var(--blue);
+  color: var(--white);
   font-family: 'Syne', sans-serif;
   font-weight: 800;
   font-size: 0.8rem;
@@ -1184,92 +1249,102 @@ h1, h2, h3, h4 {
   text-decoration: none;
   width: fit-content;
   transition: background 0.2s, transform 0.2s;
-  box-shadow: 0 4px 12px rgba(247, 182, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(74, 145, 196, 0.2);
 }
 
 .bento-btn-sm:hover {
-  background: #ffd043;
+  background: var(--deep);
   transform: scale(1.02);
 }
 
 .card-vrf .vrf-img-wrap {
-  width: 150px;
-  height: 150px;
-  border-radius: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   flex-shrink: 0;
+  z-index: 1;
 }
 
 .card-vrf .vrf-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
 }
 
 /* Card 3: Câmaras Frias */
 .card-camaras {
-  background: linear-gradient(135deg, #124376 0%, #0d2744 100%);
-  padding: 24px 28px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--ice) 100%);
+  padding: 32px;
+  position: relative;
+  min-height: 240px;
 }
 
 .card-camaras .bento-card-content {
-  flex: 1;
+  position: relative;
+  z-index: 2;
+  max-width: 58%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
 }
 
 .card-camaras h3 {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 12px 0 16px;
+  color: var(--navy);
+  letter-spacing: -0.3px;
 }
 
 .bento-sub-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .bento-sub-tags .sub-tag {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: var(--white);
+  border: 1px solid var(--border-clr);
   font-size: 0.68rem;
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;
   letter-spacing: 0.3px;
+  color: var(--deep);
 }
 
 .card-camaras .camaras-img-wrap {
-  width: 150px;
-  height: 150px;
-  border-radius: 12px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
   flex-shrink: 0;
+  z-index: 1;
 }
 
 .card-camaras .camaras-img-wrap img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
 }
 
 /* Card 4: Wide (Lojas) */
 .bento-wide {
   grid-column: 2 / span 2;
-  background: linear-gradient(90deg, #09315b 0%, #0f4d8d 50%, #0a2542 100%);
+  background: linear-gradient(90deg, var(--white) 0%, var(--ice) 100%);
   display: flex;
   flex-direction: row;
   height: auto;
@@ -1294,21 +1369,23 @@ h1, h2, h3, h4 {
 .bento-title-left h2 {
   font-size: 1.8rem;
   font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  color: var(--white);
+  font-weight: 850;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+  color: var(--navy);
+  margin-bottom: 4px;
 }
 
 .bento-title-left p {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.7);
-  margin-top: 4px;
+  font-size: 0.92rem;
+  color: var(--muted);
+  font-weight: 500;
 }
 
 .bento-stats-flex {
   display: flex;
   gap: 24px;
-  border-left: 2px solid rgba(255, 255, 255, 0.15);
+  border-left: 2px solid var(--border-clr);
   padding-left: 24px;
 }
 
@@ -1318,15 +1395,20 @@ h1, h2, h3, h4 {
 }
 
 .bento-stat .stat-number {
-  font-size: 2rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
   font-weight: 900;
-  color: #f7b600;
+  color: var(--blue);
   line-height: 1;
+  letter-spacing: -1px;
 }
 
 .bento-stat .stat-lbl {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-top: 4px;
 }
 
@@ -1341,6 +1423,8 @@ h1, h2, h3, h4 {
   height: 100%;
   object-fit: cover;
   display: block;
+  mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 60%, rgba(0,0,0,0) 100%);
 }
 
 /* ── INSTALLATION BANNER ───────────────────────────────── */
@@ -1569,12 +1653,12 @@ footer {
 .footer-logo-wrap .logo {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 12px 24px;
+  padding: 15px 24px;
   border-radius: 12px;
   display: inline-flex;
 }
 .footer-logo-wrap .logo-img--footer {
-  height: 48px;
+  height: 70px;
   filter: brightness(0) invert(1);
 }
 
@@ -2393,36 +2477,29 @@ footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(74, 145, 196, 0.05) 0%, rgba(13, 31, 45, 0.02) 100%);
-  color: var(--blue);
+  background: transparent;
   transition: var(--transition);
-  padding: 30px;
-}
-
-.product-icon-svg {
-  width: 70px;
-  height: 70px;
-  opacity: 0.8;
-  transition: var(--transition);
-}
-
-.product-card:hover .product-icon-svg {
-  transform: scale(1.1) translateY(-5px);
-  opacity: 1;
-  color: var(--sky);
+  padding: 16px;
 }
 
 .modal-product-icon-container {
   width: 80px;
   height: 80px;
   border-radius: 12px;
-  background: rgba(74, 145, 196, 0.08);
-  color: var(--blue);
+  background: #ffffff;
+  border: 1px solid var(--border-clr);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 8px;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.modal-product-icon-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .modal-product-icon-container svg {
@@ -2507,4 +2584,255 @@ footer {
 }
 .wa-float:hover {
   background: #20ba5a;
+}
+
+/* ── PRODUCTS AD BANNER IMAGE ───────────────────────────── */
+.products-ad-banner-img-wrap {
+  grid-column: 1 / -1; /* spans all columns */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  text-decoration: none;
+}
+
+.products-ad-banner-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  /* Enhance sharpness and render resolution crisply */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* ── DESTAQUES AD BANNER ────────────────────────────────── */
+.destaques-ad-banner-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 20px auto 40px auto;
+  padding: 0 6vw;
+  box-sizing: border-box;
+}
+
+.destaques-ad-banner-link {
+  display: block;
+  width: 100%;
+  max-width: 1200px; /* increased width to match the other banner layout */
+  text-decoration: none;
+}
+
+.destaques-ad-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── CLIMA BEBIDAS SECTION ──────────────────────────────── */
+.clima-bebidas-section {
+  padding: 80px 6vw;
+  background-color: var(--gray);
+  border-top: 1px solid var(--border-clr);
+  border-bottom: 1px solid var(--border-clr);
+}
+
+.clima-bebidas-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.clima-bebidas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.clima-bebidas-header .header-left {
+  flex: 1;
+  min-width: 300px;
+}
+
+.clima-bebidas-header .header-left .section-title {
+  margin-bottom: 0;
+  max-width: 600px;
+  color: var(--navy);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+}
+
+.clima-bebidas-header .header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+/* Countdown Card - Redesigned to match image */
+.countdown-card {
+  background: var(--white);
+  border: 1px solid var(--border-clr);
+  border-radius: 18px;
+  padding: 24px 60px; /* Increased horizontal padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 30px rgba(13, 31, 45, 0.04);
+  min-width: 480px; /* Increased min-width */
+}
+
+.countdown-badge {
+  font-size: 0.85rem; /* Increased badge font size */
+  font-weight: 800;
+  color: var(--blue);
+  background: var(--ice);
+  padding: 8px 24px; /* Increased badge padding */
+  border-radius: 99px;
+  margin-bottom: 20px;
+  letter-spacing: 0.8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.countdown-timer {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Increased gap */
+}
+
+.timer-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.timer-num {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem; /* Increased number font size */
+  font-weight: 800;
+  color: var(--blue);
+  background: var(--ice);
+  border: 1px solid rgba(74, 145, 196, 0.25);
+  border-radius: 12px;
+  width: 82px; /* Increased box width */
+  height: 68px; /* Increased box height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(74, 145, 196, 0.05);
+}
+
+.timer-lbl {
+  font-size: 0.75rem; /* Increased label font size */
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+.timer-colon {
+  font-size: 2.8rem; /* Increased colon font size */
+  font-weight: 800;
+  color: var(--blue);
+  margin-bottom: 30px; /* Adjusted alignment margin */
+}
+
+/* Slider Controls */
+.clima-bebidas-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.clima-bebidas-control {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #EAEAEA;
+  border: none;
+  color: #555555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.clima-bebidas-control:hover {
+  background: var(--blue);
+  color: var(--white);
+  transform: scale(1.05);
+}
+
+/* Slider Track styling */
+.clima-bebidas-slider-wrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.clima-bebidas-track {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: none;
+  scrollbar-width: none;
+  padding: 10px 4px;
+  cursor: grab;
+  user-select: none;
+}
+
+.clima-bebidas-track::-webkit-scrollbar {
+  display: none;
+}
+
+.clima-bebidas-track.active-dragging {
+  scroll-behavior: auto;
+  cursor: grabbing;
+}
+
+.clima-bebidas-track .product-card {
+  width: calc((100% - 3 * 24px) / 4);
+  flex-shrink: 0;
+  min-width: 280px;
+  max-width: 340px;
+  margin: 0;
+}
+
+@media (max-width: 1200px) {
+  .clima-bebidas-track .product-card {
+    width: calc((100% - 1 * 24px) / 2);
+  }
+}
+
+@media (max-width: 640px) {
+  .clima-bebidas-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .clima-bebidas-header .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  .header-right-col {
+    align-items: center;
+    width: 100%;
+  }
+  .clima-bebidas-nav {
+    justify-content: center;
+    width: 100%;
+  }
+  .clima-bebidas-track .product-card {
+    width: 100%;
+    max-width: none;
+  }
 }

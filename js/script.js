@@ -308,6 +308,14 @@ Por favor, me confirme a disponibilidade de entrega e a data para instalação.`
 // Click listener on product card to open details modal
 productCards.forEach(card => {
   card.addEventListener('click', (e) => {
+    // Prevent modal if parent track was dragged
+    const track = card.closest('.clima-bebidas-track');
+    if (track && track.getAttribute('data-dragged') === 'true') {
+      // Reset after click event finishes
+      setTimeout(() => track.setAttribute('data-dragged', 'false'), 50);
+      return;
+    }
+
     // If user clicked on the Quick Cart button "+", don't open the modal!
     if (e.target.classList.contains('btn-cart-add')) {
       return;
@@ -404,20 +412,99 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// ── DESTAQUES SLIDER CONTROLS ────────────────────────────
-const destaquesTrack = document.getElementById('destaques-track');
-const destaquesPrev = document.getElementById('destaques-prev');
-const destaquesNext = document.getElementById('destaques-next');
+// ── GENERIC SLIDER DRAG TO SCROLL & NAVIGATION ───────────
+function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = null) {
+  const track = document.getElementById(trackId);
+  if (!track) return;
 
-if (destaquesTrack && destaquesPrev && destaquesNext) {
-  // Card width (280px) + gap (24px) = 304px per scroll step
-  const CARD_STEP = 304;
-  destaquesPrev.addEventListener('click', () => {
-    destaquesTrack.scrollBy({ left: -CARD_STEP, behavior: 'smooth' });
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let wasDragged = false;
+  let lastScrollTime = 0;
+
+  // Track scroll momentum
+  track.addEventListener('scroll', () => {
+    lastScrollTime = Date.now();
   });
-  destaquesNext.addEventListener('click', () => {
-    destaquesTrack.scrollBy({ left: CARD_STEP, behavior: 'smooth' });
+
+  track.addEventListener('mousedown', (e) => {
+    isDown = true;
+    track.classList.add('active-dragging');
+    track.setAttribute('data-dragged', 'false');
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+    wasDragged = false;
   });
+
+  track.addEventListener('mouseleave', () => {
+    if (isDown) {
+      isDown = false;
+      track.classList.remove('active-dragging');
+    }
+  });
+
+  track.addEventListener('mouseup', () => {
+    if (isDown) {
+      isDown = false;
+      track.classList.remove('active-dragging');
+      if (wasDragged) {
+        track.setAttribute('data-dragged', 'true');
+      }
+    }
+  });
+
+  track.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    if (Math.abs(walk) > 5) {
+      wasDragged = true;
+      track.setAttribute('data-dragged', 'true');
+    }
+    track.scrollLeft = scrollLeft - walk;
+  });
+
+  // Tap/Click handling on children (prevent actions when dragged)
+  const childCards = track.querySelectorAll('.destaque-card, .product-card');
+  childCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const timeSinceScroll = Date.now() - lastScrollTime;
+      // If we dragged, or scroll momentum is running, prevent event
+      if (track.getAttribute('data-dragged') === 'true' || wasDragged || timeSinceScroll < 150) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      if (clickCallback) {
+        clickCallback(card);
+      }
+    });
+  });
+
+  // Prev / Next button navigation
+  const prevBtn = document.getElementById(prevBtnId);
+  const nextBtn = document.getElementById(nextBtnId);
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      const cardWidth = track.firstElementChild?.offsetWidth || 300;
+      const gap = parseInt(window.getComputedStyle(track).gap) || 24;
+      track.scrollBy({
+        left: -(cardWidth + gap),
+        behavior: 'smooth'
+      });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const cardWidth = track.firstElementChild?.offsetWidth || 300;
+      const gap = parseInt(window.getComputedStyle(track).gap) || 24;
+      track.scrollBy({
+        left: cardWidth + gap,
+        behavior: 'smooth'
+      });
+    });
+  }
 }
 
 function scrollToProducts() {
@@ -431,3 +518,50 @@ function scrollToProducts() {
     });
   }
 }
+
+// Initialize sliders
+setupSliderDragAndNav('destaques-track', 'destaques-prev', 'destaques-next', () => {
+  scrollToProducts();
+});
+
+setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
+
+// ── BEBIDAS COUNTDOWN TIMER ──────────────────────────────
+function startCountdown() {
+  const hoursEl = document.getElementById('timer-hours');
+  const minutesEl = document.getElementById('timer-minutes');
+  const secondsEl = document.getElementById('timer-seconds');
+  
+  if (!hoursEl || !minutesEl || !secondsEl) return;
+  
+  let totalSeconds = localStorage.getItem('clima_countdown_seconds');
+  if (totalSeconds === null || totalSeconds <= 0) {
+    totalSeconds = 2 * 3600 + 33 * 60 + 23; // 2h 33m 23s
+  } else {
+    totalSeconds = parseInt(totalSeconds);
+  }
+
+  function updateTimer() {
+    if (totalSeconds <= 0) {
+      totalSeconds = 3 * 3600; // Reset to 3 hours
+    }
+    
+    totalSeconds--;
+    localStorage.setItem('clima_countdown_seconds', totalSeconds);
+    
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    
+    hoursEl.textContent = String(h).padStart(2, '0');
+    minutesEl.textContent = String(m).padStart(2, '0');
+    secondsEl.textContent = String(s).padStart(2, '0');
+  }
+  
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  startCountdown();
+});
