@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gela Fácil | Detalhes do Produto</title>
+  <meta name="description" content="Confira especificações, fotos e avaliações deste aparelho na Gela Fácil.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="../style/product-detail.css">
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────── -->
+<nav id="navbar" class="scrolled">
+  <div class="nav-container">
+    <a href="../index.html" class="logo" aria-label="Ir para o início">
+      <img src="../assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img" />
+    </a>
+    
+    <div class="nav-links" id="nav-links">
+      <a href="../index.html#destaques">Destaques</a>
+      <a href="../index.html#produtos">Catálogo</a>
+      <a href="../index.html#depoimentos">Depoimentos</a>
+      <a href="../index.html#faq">Ajuda</a>
+    </div>
+    
+    <!-- Mobile Menu Toggle Button -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── MAIN CONTENT ───────────────────────────────────── -->
+<main class="product-detail-container">
+  <a href="../index.html#produtos" class="back-link">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    Voltar para o Catálogo
+  </a>
+  
+  <div class="detail-grid">
+    <!-- Left Column: Gallery & Visuals + Serviços Adicionais -->
+    <div class="left-column-panel" style="display: flex; flex-direction: column; gap: 28px;">
+      <div class="gallery-container">
+        <div class="main-image-wrap" id="detail-img-container">
+          <!-- Main Product Image (loaded dynamically) -->
+        </div>
+        <div class="thumbnails-row" id="thumbnails-row">
+          <!-- Gallery thumbnails loaded dynamically -->
+        </div>
+      </div>
+      
+      <!-- Serviços Adicionais (Moved here!) -->
+      <div class="services-container-box">
+        <div class="services-section-title">Serviços Adicionais:</div>
+        <div class="services-list">
+          <div class="service-card selected" data-option="delivery" data-extra="0">
+            <div class="service-icon">⚡</div>
+            <div class="service-details">
+              <div class="service-title">Apenas Entrega</div>
+              <div class="service-desc">Receba o aparelho em casa em até 48h · Frete Grátis</div>
+            </div>
+            <div class="service-price">Grátis</div>
+          </div>
+          
+          <div class="service-card" data-option="installation" data-extra="299">
+            <div class="service-icon">🛠</div>
+            <div class="service-details">
+              <div class="service-title">Entrega + Instalação</div>
+              <div class="service-desc">Técnicos credenciados realizam a instalação na entrega</div>
+            </div>
+            <div class="service-price">+ R$ 299</div>
+          </div>
+          
+          <div class="service-card" data-option="full_service" data-extra="499">
+            <div class="service-icon">🛡</div>
+            <div class="service-details">
+              <div class="service-title">Plano Gela Fácil Prime</div>
+              <div class="service-desc">Entrega + Instalação + 2 Anos de Limpeza Preventiva</div>
+            </div>
+            <div class="service-price">+ R$ 499</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Column: Details & Ordering Options -->
+    <div class="product-info-panel">
+      <span class="brand-badge" id="modal-product-brand">Marca</span>
+      <h1 class="product-title" id="modal-product-title">Nome do Produto</h1>
+      
+      <div class="rating-summary">
+        <span class="stars" id="product-stars">★★★★★</span>
+        <span class="rating-count" id="product-rating-text">4.8 (0 avaliações)</span>
+      </div>
+      
+      <p class="product-detail-desc" id="product-detail-desc">
+        Carregando descrição do produto...
+      </p>
+      
+      <div class="price-box">
+        <div class="original-price" id="original-price-val">R$ 0</div>
+        <div class="installment-preview" id="installments-preview-txt">ou em até 10x sem juros no cartão</div>
+      </div>
+      
+      <!-- Summary Box (Moved UP!) -->
+      <div class="detail-summary-box">
+        <div class="summary-row">
+          <span>Preço do Aparelho</span>
+          <span id="summary-product-val">R$ 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Serviço Adicional</span>
+          <span id="summary-service-val">Grátis</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total Estimado</span>
+          <strong id="summary-total-val">R$ 0</strong>
+        </div>
+        <div class="summary-row" style="margin-bottom: 0; font-size: 0.85rem; color: var(--deep);" id="summary-installments">
+          ou em até 10x sem juros no cartão
+        </div>
+      </div>
+      
+      <div class="actions-row">
+        <button class="btn-ghost" id="modal-cart-add-btn">
+          Adicionar ao Carrinho
+        </button>
+        <button class="btn-primary" id="modal-buy-now-btn">
+          Comprar Agora
+        </button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── SPECS AND REVIEWS TAB SECTION ──────────────────── -->
+<section class="extra-details-section">
+  <div class="tabs-header">
+    <button class="tab-nav-btn active" onclick="switchTab('specs')">Especificações Técnicas</button>
+    <button class="tab-nav-btn" onclick="switchTab('reviews')">Avaliações dos Clientes</button>
+  </div>
+  
+  <!-- Specs Tab -->
+  <div class="tab-content active" id="tab-specs">
+    <div class="specs-table-grid" id="detail-specs-grid">
+      <!-- Specs populated dynamically -->
+    </div>
+  </div>
+  
+  <!-- Reviews Tab -->
+  <div class="tab-content" id="tab-reviews">
+    <div class="reviews-grid">
+      <div class="reviews-summary-card">
+        <h4>Nota Geral</h4>
+        <div class="average-score" id="average-score-val">5.0</div>
+        <div class="stars-large" id="average-stars-row">★★★★★</div>
+        <div class="rating-total-txt" id="average-total-text">Baseado em 34 avaliações</div>
+      </div>
+      
+      <div class="reviews-list-col">
+        <div id="reviews-list">
+          <!-- Reviews list loaded dynamically -->
+        </div>
+        
+        <!-- Leave a Review Box -->
+        <div class="write-review-box">
+          <h4>Deixe sua avaliação</h4>
+          <div class="rating-select" id="rating-select-row">
+            <span class="rating-star-option" data-star="1">★</span>
+            <span class="rating-star-option" data-star="2">★</span>
+            <span class="rating-star-option" data-star="3">★</span>
+            <span class="rating-star-option" data-star="4">★</span>
+            <span class="rating-star-option active" data-star="5">★</span>
+          </div>
+          <form class="review-form" id="new-review-form" onsubmit="handleReviewSubmit(event)">
+            <div class="form-group-row">
+              <input type="text" id="review-author" placeholder="Seu nome" required>
+              <input type="email" id="review-email" placeholder="Seu e-mail" required>
+            </div>
+            <textarea id="review-comment" rows="4" placeholder="Escreva sua opinião sobre o produto..." required></textarea>
+            <button type="submit" class="btn-primary" style="align-self: flex-start;">Enviar Avaliação</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SHOPPING CART DRAWER ────────────────────────────────── -->
+<div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h3>Seu Carrinho (<span class="cart-drawer-count-header">0</span>)</h3>
+    <button class="cart-drawer-close" id="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Fechar carrinho">&times;</button>
+  </div>
+  
+  <div class="cart-drawer-body" id="cart-drawer-body">
+    <!-- Dynamic items here. If empty, show empty state -->
+    <div class="cart-empty-state" id="cart-empty-state">
+      <div class="empty-icon-wrap">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </div>
+      <h4>Seu carrinho está vazio</h4>
+      <p>Navegue pelo nosso catálogo e encontre o clima ideal para o seu ambiente.</p>
+      <button class="btn-primary empty-cart-action-btn" onclick="closeCartDrawer(); window.location.href='../index.html#produtos';">Ver Produtos</button>
+    </div>
+    <div class="cart-items-container" id="cart-items-container" style="display: none;">
+      <!-- JavaScript will inject items here -->
+    </div>
+  </div>
+  
+  <div class="cart-drawer-footer" id="cart-drawer-footer">
+    <div class="cart-summary-row">
+      <span>Subtotal</span>
+      <span id="cart-subtotal-val">R$ 0</span>
+    </div>
+    <div class="cart-summary-row">
+      <span>Serviços Adicionais</span>
+      <span id="cart-services-val">R$ 0</span>
+    </div>
+    <div class="cart-summary-divider"></div>
+    <div class="cart-summary-row total">
+      <span>Total</span>
+      <strong id="cart-total-val">R$ 0</strong>
+    </div>
+    <button class="btn-primary cart-checkout-btn" id="cart-checkout-btn" onclick="goToCheckout()" disabled>
+      Finalizar Compra <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</div>
+
+
+
+<script src="../js/script.js"></script>
+<script src="../js/product-detail.js"></script>
+</body>
+</html>
