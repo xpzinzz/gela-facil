@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gela Fácil | Catálogo Completo de Climatização e Bebidas</title>
+  <!-- SEO Tags -->
+  <meta name="description" content="Explore nosso catálogo completo de ar-condicionados Split, Inverter, Portáteis, além de cervejeiras e frigobares premium na Gela Fácil.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="../style/products.css">
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────── -->
+<nav id="navbar" class="scrolled">
+  <div class="nav-container">
+    <a href="../index.html" class="logo" aria-label="Ir para o início">
+      <img src="../assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img" />
+    </a>
+    
+    <!-- Hamburger Button for Mobile -->
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    
+    <ul class="nav-links" id="nav-links">
+      <li><a href="../index.html#hero-section">Início</a></li>
+      <li><a href="#" class="active">Produtos</a></li>
+      <li><a href="../index.html#servicos">Serviços</a></li>
+      <li><a href="../index.html#instalacao">Instalação</a></li>
+      <li><a href="../index.html#avaliacoes">Avaliações</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    
+    <div class="nav-actions">
+      <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20falar%20com%20um%20atendente." class="btn-ghost nav-cta-ghost" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Falar conosco</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── CATALOG HERO ────────────────────────────────────── -->
+<header class="catalog-header">
+  <div class="catalog-header-container">
+    <span class="catalog-label">Catálogo Completo</span>
+    <h1 class="catalog-title">Encontre o Clima Ideal</h1>
+    <p class="catalog-subtitle">Escolha entre ar-condicionados de alta tecnologia e cervejeiras premium para equipar o seu ambiente.</p>
+  </div>
+</header>
+
+<!-- ── MAIN CATALOG GRID & FILTERS ──────────────────────── -->
+<main class="catalog-container">
+  
+  <!-- FILTER BAR -->
+  <section class="catalog-controls">
+    <!-- Search & Sort Row -->
+    <div class="controls-top-row">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search-input" placeholder="Buscar por modelo, marca ou capacidade..." aria-label="Buscar produtos" />
+        <button id="search-clear-btn" aria-label="Limpar busca" style="display: none;">&times;</button>
+      </div>
+      
+      <div class="sort-box">
+        <label for="sort-select">Ordenar por:</label>
+        <select id="sort-select" class="sort-select">
+          <option value="featured">Recomendados</option>
+          <option value="price-asc">Menor Preço</option>
+          <option value="price-desc">Maior Preço</option>
+          <option value="rating">Melhor Avaliado</option>
+          <option value="name-asc">Nome (A - Z)</option>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Categories & Brands Grid-flex -->
+    <div class="filter-options-panel">
+      <!-- Categories Chips -->
+      <div class="filter-group">
+        <span class="filter-group-title">Categorias</span>
+        <div class="category-chips" id="category-chips">
+          <button class="chip active" data-category="all">Todos</button>
+          <button class="chip" data-category="inverter">Ar Inverter</button>
+          <button class="chip" data-category="split">Ar Split</button>
+          <button class="chip" data-category="portatil">Ar Portátil</button>
+          <button class="chip" data-category="bebidas">Cervejeiras &amp; Frigobares</button>
+        </div>
+      </div>
+      
+      <!-- Brands Chips -->
+      <div class="filter-group">
+        <span class="filter-group-title">Marcas</span>
+        <div class="brand-chips" id="brand-chips">
+          <button class="chip-brand active" data-brand="all">Todas</button>
+          <button class="chip-brand" data-brand="Samsung">Samsung</button>
+          <button class="chip-brand" data-brand="LG">LG</button>
+          <button class="chip-brand" data-brand="Midea">Midea</button>
+          <button class="chip-brand" data-brand="Elgin">Elgin</button>
+          <button class="chip-brand" data-brand="Springer Midea">Springer Midea</button>
+          <button class="chip-brand" data-brand="Philco">Philco</button>
+          <button class="chip-brand" data-brand="Electrolux">Electrolux</button>
+          <button class="chip-brand" data-brand="Venax">Venax</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Active filters overview -->
+    <div class="active-filters-row" id="active-filters-row" style="display: none;">
+      <span class="active-filters-label">Filtros ativos:</span>
+      <div class="active-filters-container" id="active-filters-container">
+        <!-- Rendered dynamically -->
+      </div>
+      <button class="btn-clear-all" id="btn-clear-all-filters">Limpar Tudo</button>
+    </div>
+  </section>
+  
+  <!-- PRODUCTS DISPLAY SECTION -->
+  <section class="products-display">
+    <div class="results-stats">
+      Exibindo <strong id="results-count">0</strong> produtos
+    </div>
+    
+    <div class="catalog-grid" id="catalog-grid">
+      <!-- Dynamically filled with products -->
+    </div>
+    
+    <!-- Empty state -->
+    <div class="catalog-empty-state" id="catalog-empty-state" style="display: none;">
+      <div class="empty-icon">🔍</div>
+      <h3>Nenhum produto encontrado</h3>
+      <p>Tente ajustar a busca ou os filtros de categoria e marca para encontrar o que procura.</p>
+      <button class="btn-primary" id="btn-reset-catalog">Redefinir Filtros</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ── FOOTER ────────────────────────────────────────────── -->
+<footer id="contato">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo-wrap">
+          <div class="logo">
+            <img src="../assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img logo-img--footer" />
+          </div>
+        </div>
+        <p>Especialistas em vendas, instalações e manutenções de ar-condicionado. Leveza, economia e conforto térmico sob medida para você.</p>
+        <div class="footer-contact">
+          <a href="tel:+5527999999999"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (27) 99999-9999</a>
+          <a href="mailto:contato@gelafacil.com.br"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> contato@gelafacil.com.br</a>
+          <a href="#"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Atendemos Vitória, Vila Velha, Serra e Cariacica – ES</a>
+        </div>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Aparelhos</h4>
+        <ul>
+          <li><a href="?category=inverter">Split Inverter</a></li>
+          <li><a href="?category=portatil">Ar Portátil</a></li>
+          <li><a href="?category=split">Multi-Split</a></li>
+          <li><a href="?category=inverter">Cassete Comercial</a></li>
+          <li><a href="./products.html">Modelos Quente/Frio</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Nossos Serviços</h4>
+        <ul>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20instalação." target="_blank">Instalação Residencial</a></li>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20limpeza/manutenção." target="_blank">Higienização e Limpeza</a></li>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Preciso%20de%20uma%20visita%20técnica%20de%20manutenção." target="_blank">Carga de Gás e Reparos</a></li>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20informações%20sobre%20o%20PMOC." target="_blank">Contratos PMOC Empresariais</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-col">
+        <h4>Atendimento</h4>
+        <ul>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento." target="_blank">Fazer Orçamento</a></li>
+          <li><a href="../index.html#instalacao">Como funciona</a></li>
+          <li><a href="../index.html#avaliacoes">Depoimentos</a></li>
+          <li><a href="https://wa.me/5527999999999?text=Olá!%20Quero%20falar%20com%20o%20suporte." target="_blank">Fale com Suporte</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <span>© 2026 Gela Fácil. Todos os direitos reservados.</span>
+      <span>CNPJ: 00.000.000/0001-00 · Vitória – ES</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ── FLOATING CART ─────────────────────────────────────── -->
+<button class="cart-float" id="cart-float-btn" onclick="openCartDrawer()" aria-label="Abrir carrinho">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  <span class="cart-float-count">0</span>
+</button>
+
+<!-- ── SHOPPING CART DRAWER ────────────────────────────────── -->
+<div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-drawer-header">
+    <h3>Seu Carrinho (<span class="cart-drawer-count-header">0</span>)</h3>
+    <button class="cart-drawer-close" id="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Fechar carrinho">&times;</button>
+  </div>
+  
+  <div class="cart-drawer-body" id="cart-drawer-body">
+    <!-- Dynamic items here. If empty, show empty state -->
+    <div class="cart-empty-state" id="cart-empty-state">
+      <div class="empty-icon-wrap">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </div>
+      <h4>Seu carrinho está vazio</h4>
+      <p>Navegue pelo nosso catálogo e encontre o clima ideal para o seu ambiente.</p>
+      <button class="btn-primary empty-cart-action-btn" onclick="closeCartDrawer();">Ver Produtos</button>
+    </div>
+    <div class="cart-items-container" id="cart-items-container" style="display: none;">
+      <!-- JavaScript will inject items here -->
+    </div>
+  </div>
+  
+  <div class="cart-drawer-footer" id="cart-drawer-footer">
+    <div class="cart-summary-row">
+      <span>Subtotal</span>
+      <span id="cart-subtotal-val">R$ 0</span>
+    </div>
+    <div class="cart-summary-row">
+      <span>Serviços Adicionais</span>
+      <span id="cart-services-val">R$ 0</span>
+    </div>
+    <div class="cart-summary-divider"></div>
+    <div class="cart-summary-row total">
+      <span>Total</span>
+      <strong id="cart-total-val">R$ 0</strong>
+    </div>
+    <button class="btn-primary cart-checkout-btn" id="cart-checkout-btn" onclick="goToCheckout()" disabled>
+      Finalizar Compra <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+</div>
+
+<script src="../js/script.js"></script>
+<script src="../js/products-catalog.js"></script>
+</body>
+</html>
