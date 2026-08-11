@@ -20,22 +20,34 @@
   --transition:     all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
   --shadow:         0 8px 32px rgba(0,0,0,0.35);
   --shadow-sm:      0 2px 8px rgba(0,0,0,0.2);
+  --font-title:     'Outfit', sans-serif;
+  --font-subtitle:  'Syne', sans-serif;
+  --font-body:      'Inter', sans-serif;
 }
 
 /* ── RESET ────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 15px; }
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   background: var(--admin-bg);
   color: var(--admin-white);
   overflow-x: hidden;
   min-height: 100vh;
 }
 a { text-decoration: none; color: inherit; }
-button { cursor: pointer; font-family: inherit; }
-input, select, textarea { font-family: inherit; }
-h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
+button { cursor: pointer; font-family: var(--font-subtitle); }
+input, select, textarea { font-family: var(--font-body); }
+h1,h2,h3 { font-family: var(--font-title); }
+h4,h5,h6,
+.nav-label,
+.login-form label,
+.kpi-label,
+.stock-kpi-label,
+.summary-label,
+.form-group label,
+.order-detail-item label,
+.order-status-update label { font-family: var(--font-subtitle); }
 
 /* ── SCROLLBAR ───────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -214,7 +226,7 @@ h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
   display: none; background: transparent; border: none;
   color: var(--admin-muted); align-items: center; justify-content: center;
 }
-.page-breadcrumb { font-size: 1rem; font-weight: 700; font-family: 'Outfit', sans-serif; color: var(--admin-white); }
+.page-breadcrumb { font-size: 1rem; font-weight: 700; font-family: var(--font-subtitle); color: var(--admin-white); }
 
 .top-bar-right { display: flex; align-items: center; gap: 12px; }
 .top-search {
@@ -314,7 +326,7 @@ h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
 .kpi-ticket  { background: rgba(239,68,68,0.12);  color: var(--admin-danger); }
 .kpi-content { flex: 1; }
 .kpi-label { display: block; font-size: 0.78rem; color: var(--admin-muted); font-weight: 500; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
-.kpi-value { display: block; font-size: 1.55rem; font-weight: 800; color: var(--admin-white); font-family: 'Outfit', sans-serif; margin-bottom: 4px; }
+.kpi-value { display: block; font-size: 1.55rem; font-weight: 800; color: var(--admin-white); font-family: var(--font-title); margin-bottom: 4px; }
 .kpi-change { font-size: 0.78rem; font-weight: 600; }
 .kpi-change.positive { color: var(--admin-success); }
 .kpi-change.negative { color: var(--admin-danger); }
@@ -529,7 +541,7 @@ h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
 .stock-low { border-top-color: var(--admin-warning); }
 .stock-out { border-top-color: var(--admin-danger); }
 .stock-value { border-top-color: var(--admin-blue); }
-.stock-kpi-num { font-size: 1.8rem; font-weight: 800; font-family: 'Outfit', sans-serif; color: var(--admin-white); }
+.stock-kpi-num { font-size: 1.8rem; font-weight: 800; font-family: var(--font-title); color: var(--admin-white); }
 .stock-kpi-label { font-size: 0.78rem; color: var(--admin-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
 
 /* Stock progress bar */
@@ -566,7 +578,7 @@ h1,h2,h3,h4 { font-family: 'Outfit', sans-serif; }
 .summary-card:hover { border-color: rgba(74,145,196,0.25); transform: translateY(-2px); }
 .summary-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .summary-label { font-size: 0.78rem; color: var(--admin-muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
-.summary-value { font-size: 1.4rem; font-weight: 800; color: var(--admin-white); font-family: 'Outfit', sans-serif; margin-top: 3px; }
+.summary-value { font-size: 1.4rem; font-weight: 800; color: var(--admin-white); font-family: var(--font-title); margin-top: 3px; }
 
 /* ── SETTINGS PAGE ───────────────────────────────────────── */
 .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 18px; }

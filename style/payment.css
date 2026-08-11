@@ -167,6 +167,12 @@
   font-size: 1.15rem;
 }
 
+.form-section-title,
+.form-group label,
+.card-label {
+  font-family: var(--font-subtitle);
+}
+
 .step-num {
   width: 26px;
   height: 26px;
@@ -221,7 +227,7 @@
   border-radius: 10px;
   padding: 14px 18px;
   color: var(--navy);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.98rem;
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -361,7 +367,7 @@
   padding: 10px 14px;
   color: var(--muted);
   font-size: 0.88rem;
-  font-family: monospace;
+  font-family: var(--font-body);
   outline: none;
   font-weight: 600;
 }
@@ -921,7 +927,7 @@
 
 .card-number-display {
   font-size: 1.18rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-body);
   font-weight: 700;
   letter-spacing: 2px;
   margin-top: 20px;
@@ -983,7 +989,7 @@
 
 .card-cvv-display {
   color: #111;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: 0.92rem;
   font-style: italic;

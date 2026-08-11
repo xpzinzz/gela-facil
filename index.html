@@ -1,836 +1,903 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gela Fácil – Ar-condicionado, Vendas e Serviços Especializados</title>
   <!-- SEO Tags -->
-  <meta name="description" content="Gela Fácil - Venda, instalação e manutenção de ar-condicionado com entrega rápida em até 48h e técnicos certificados. Climatização residencial e comercial." />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="description"
+    content="Gela Fácil - Venda, instalação e manutenção de ar-condicionado com entrega rápida em até 48h e técnicos certificados. Climatização residencial e comercial." />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Syne:wght@700;800&family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css" />
   <link rel="stylesheet" href="style/style.css" />
 </head>
+
 <body>
 
-<!-- ── NAV ─────────────────────────────────────────────── -->
-<nav id="navbar">
-  <div class="nav-container">
-    <a href="#" class="logo" aria-label="Ir para o início">
-      <img src="assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img" />
-    </a>
-    
-    <!-- Hamburger Button for Mobile -->
-    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    
-    <ul class="nav-links" id="nav-links">
-      <li><a href="#hero-section">Início</a></li>
-      <li><a href="pages/products.html">Produtos</a></li>
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#instalacao">Instalação</a></li>
-      <li><a href="#avaliacoes">Avaliações</a></li>
-      <li><a href="#contato">Contato</a></li>
-    </ul>
-    
-    <div class="nav-actions">
-      <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20falar%20com%20um%20atendente." class="btn-ghost nav-cta-ghost" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Falar conosco</a>
-      <a href="pages/products.html" class="btn-primary nav-cta-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Ver produtos</a>
-    </div>
-  </div>
-</nav>
-
-<!-- ── HERO CAROUSEL (100vh) ────────────────────────── -->
-<section class="hero-carousel" id="hero-section">
-  <div class="carousel-track-container">
-    <div class="carousel-track" id="carousel-track">
-      
-      <!-- Slide 1: Venda Residencial -->
-      <div class="carousel-slide active" style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_residential.png');">
-        <div class="hero-content">
-          <h1>O clima <em>perfeito</em><br>na sua casa,<br>sem complicação.</h1>
-          <p class="hero-sub">Ar-condicionados das melhores marcas com entrega rápida, instalação profissional e manutenção garantida. A Gela Fácil cuida de tudo pra você.</p>
-          <div class="hero-ctas">
-            <a href="pages/products.html" class="btn-primary btn-hero">Ver Catálogo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 8px; vertical-align: middle;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Slide 2: Manutenção e Limpeza -->
-      <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_maintenance.png');">
-        <div class="hero-content">
-          <h1>Manutenção<br>preventiva e<br>corretiva profissional.</h1>
-          <p class="hero-sub">Evite poeira, bactérias e alto consumo de energia elétrica. Deixe seu ar-condicionado higienizado e gelando como novo com técnicos credenciados.</p>
-          <div class="hero-ctas">
-            <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20manutenção%20ou%20limpeza%20no%20meu%20ar-condicionado." class="btn-primary btn-hero" target="_blank">Agendar Limpeza <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 8px; vertical-align: middle;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Slide 3: Comercial -->
-      <div class="carousel-slide" style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_commercial.png');">
-        <div class="hero-content">
-          <h1>Climatização de<br>alta performance<br>para sua empresa.</h1>
-          <p class="hero-sub">Dimensionamento técnico, venda em lote, infraestrutura completa de dutos e split, contratos de manutenção PMOC. Atendemos lojas, clínicas e escritórios.</p>
-          <div class="hero-ctas">
-            <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20climatização%20comercial%20para%20minha%20empresa." class="btn-primary btn-hero" target="_blank">Falar com Consultor B2B <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 8px; vertical-align: middle;"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="16"/><line x1="15" y1="22" x2="15" y2="16"/><line x1="9" y1="16" x2="15" y2="16"/><path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01"/></svg></a>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
-  
-  <!-- Slide Indicator Dots -->
-  <div class="carousel-dots" id="carousel-dots">
-    <span class="dot active" data-slide="0"></span>
-    <span class="dot" data-slide="1"></span>
-    <span class="dot" data-slide="2"></span>
-  </div>
-  
-  <!-- Scroll Down Indicator -->
-  <div class="scroll-indicator">
-    <a href="#produtos" aria-label="Rolar para baixo">
-      <span class="mouse"><span class="wheel"></span></span>
-      <span class="arrow-down"></span>
-    </a>
-  </div>
-</section>
-
-<!-- ── QUICK STATS BAR ─────────────────────────────────── -->
-<section class="stats-bar">
-  <div class="stats-container">
-    <div class="stat-item">
-      <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-      <div class="stat-text">
-        <strong>+2.400</strong>
-        <span>Clientes Atendidos</span>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></polygon></svg></span>
-      <div class="stat-text">
-        <strong>5.0 / 5★</strong>
-        <span>Avaliação Média</span>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span>
-      <div class="stat-text">
-        <strong>48 Horas</strong>
-        <span>Entrega Garantida</span>
-      </div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-      <div class="stat-text">
-        <strong>1 Ano</strong>
-        <span>Garantia de Instalação</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── DESTAQUES ────────────────────────────────────────── -->
-<section class="destaques" id="servicos">
-  <div class="destaques-container">
-    <div class="destaques-header">
-      <div class="destaques-title-wrap">
-        <div class="section-label">Nossas Especialidades</div>
-        <h2 class="section-title dark">DESTAQUES</h2>
-      </div>
-      <div class="destaques-nav">
-        <button class="destaques-control prev" id="destaques-prev" aria-label="Destaque anterior">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="destaques-control next" id="destaques-next" aria-label="Próximo destaque">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-    </div>
-    
-    <div class="destaques-slider-wrap">
-      <div class="destaques-track" id="destaques-track">
-        <!-- Card 1 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_clean.png" alt="Higienização de Ar-Condicionado" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>HIGIENIZAÇÃO DE AR CONDICIONADO</h3>
-            <span class="destaque-cta">Ver serviços <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 2 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_washer.png" alt="Peças para Lavadoras" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>PEÇAS PARA LAVADORA DE ROUPAS</h3>
-            <span class="destaque-cta">Ver peças <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 3 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_install.png" alt="Material de Instalação" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>MATERIAL DE INSTALAÇÃO AR</h3>
-            <span class="destaque-cta">Ver materiais <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 4 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_bags.png" alt="Maletas e Bolsas" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>MALETAS E BOLSAS</h3>
-            <span class="destaque-cta">Ver produtos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 5 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_gas.png" alt="Fluidos Refrigerantes" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>FLUIDOS REFRIGERANTES</h3>
-            <span class="destaque-cta">Ver fluidos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 6 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_tools.png" alt="Manifold e Ferramentas" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>MANIFOLD & FERRAMENTAS</h3>
-            <span class="destaque-cta">Ver ferramentas <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 7 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_acc.png" alt="Limpeza de Ar Condicionado" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>PARA LIMPEZA AR CONDICIONADO</h3>
-            <span class="destaque-cta">Ver produtos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-
-        <!-- Card 8 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_clean.png" alt="Serviços de Manutenção" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>SERVIÇOS DE MANUTENÇÃO</h3>
-            <span class="destaque-cta">Ver serviços <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 9 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_washer.png" alt="Placas Eletrônicas" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>PLACAS ELETRÔNICAS</h3>
-            <span class="destaque-cta">Ver peças <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 10 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_install.png" alt="Tubos de Cobre" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>TUBOS E CONEXÕES COBRE</h3>
-            <span class="destaque-cta">Ver materiais <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 11 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_tools.png" alt="Compressores" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>COMPRESSORES DIVERSOS</h3>
-            <span class="destaque-cta">Ver produtos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-        
-        <!-- Card 12 -->
-        <div class="destaque-card">
-          <div class="destaque-bg-wrap">
-            <img src="assets/destaques/destaque_gas.png" alt="Gases Refrigerantes" class="destaque-bg-img" />
-          </div>
-          <div class="destaque-content">
-            <h3>CILINDROS E GÁS REFRIGERANTE</h3>
-            <span class="destaque-cta">Ver fluidos <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Banner Promocional: Seção Split 2 -->
-<div class="destaques-ad-banner-wrap">
-  <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20ver%20as%20ofertas%20de%20Ar%20e%20Refrigeração." target="_blank" class="destaques-ad-banner-link">
-    <img src="assets/destaques/seção-split-2.png" alt="Ofertas de Climatização" class="destaques-ad-banner-img" />
-  </a>
-</div>
-
-<!-- ── PRODUCTS ─────────────────────────────────────────── -->
-<section class="products" id="produtos">
-  <div class="products-container">
-    <div class="products-header">
-      <div>
-        <div class="section-label">Loja Virtual</div>
-        <h2 class="section-title dark">Selecione seu Novo Ar-Condicionado</h2>
-      </div>
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all">Todos</button>
-        <button class="filter-tab" data-filter="split">Split</button>
-        <button class="filter-tab" data-filter="inverter">Inverter</button>
-        <button class="filter-tab" data-filter="portatil">Portátil</button>
-      </div>
-    </div>
-    
-    <div class="products-grid" id="products-grid">
-
-      <!-- Produto 1 -->
-      <div class="product-card" data-id="1" data-brand="Samsung" data-name="WindFree Inverter 12.000 BTU" data-price="2399" data-category="inverter split" data-image="assets/produtos/samsung_windfree.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/samsung_windfree.png" alt="Samsung WindFree" class="product-image" />
-          </div>
-          <div class="product-tag promo">-17% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Samsung</div>
-          <h3 class="product-name">WindFree Inverter 12.000 BTU</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Inverter</span>
-            <span class="spec-tag">12.000 BTU</span>
-            <span class="spec-tag">A+++</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 2.899</span>
-              <span class="product-price">R$ 2.399</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produto 2 -->
-      <div class="product-card" data-id="2" data-brand="LG" data-name="Dual Inverter Voice 9.000 BTU" data-price="1849" data-category="inverter split" data-image="assets/produtos/lg_dual_inverter.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/lg_dual_inverter.png" alt="LG Dual Inverter" class="product-image" />
-          </div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">LG</div>
-          <h3 class="product-name">Dual Inverter Voice 9.000 BTU</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Inverter</span>
-            <span class="spec-tag">9.000 BTU</span>
-            <span class="spec-tag">Wi-Fi</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 2.199</span>
-              <span class="product-price">R$ 1.849</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Produto 3 -->
-      <div class="product-card" data-id="3" data-brand="Midea" data-name="Xtreme Save Inverter 18.000 BTU" data-price="2899" data-category="inverter split" data-image="assets/produtos/midea_xtreme_save.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/midea_xtreme_save.png" alt="Midea Xtreme Save" class="product-image" />
-          </div>
-          <div class="product-tag highlight">Mais Vendido</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Midea</div>
-          <h3 class="product-name">Xtreme Save Inverter 18.000 BTU</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Inverter</span>
-            <span class="spec-tag">18.000 BTU</span>
-            <span class="spec-tag">A++</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 3.499</span>
-              <span class="product-price">R$ 2.899</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Banner de Anúncio Imagem: Seção Split -->
-      <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20ver%20as%20ofertas%20da%20linha%20de%20Ar%20e%20Climatização." target="_blank" class="products-ad-banner-img-wrap">
-        <img src="assets/produtos/seção-slipt.png" alt="Oferta Especial Ar-Condicionado Split" class="products-ad-banner-img" />
+  <!-- ── NAV ─────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo" aria-label="Ir para o início">
+        <img src="assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img" />
       </a>
 
-      <!-- Produto 4 -->
-      <div class="product-card" data-id="4" data-brand="Elgin" data-name="Eco Inverter Plus 24.000 BTU" data-price="3699" data-category="inverter split" data-image="assets/produtos/elgin_eco_inverter.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/elgin_eco_inverter.png" alt="Elgin Eco Inverter Plus" class="product-image" />
-          </div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Elgin</div>
-          <h3 class="product-name">Eco Inverter Plus 24.000 BTU</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Inverter</span>
-            <span class="spec-tag">24.000 BTU</span>
-            <span class="spec-tag">Quente/Frio</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 4.299</span>
-              <span class="product-price">R$ 3.699</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
+      <!-- Hamburger Button for Mobile -->
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
 
-      <!-- Produto 5 -->
-      <div class="product-card" data-id="5" data-brand="Springer" data-name="Silentia 7.500 BTU Split" data-price="1299" data-category="split" data-image="assets/produtos/springer_silentia.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/springer_silentia.png" alt="Springer Silentia" class="product-image" />
-          </div>
-          <div class="product-tag promo">-22% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Springer</div>
-          <h3 class="product-name">Silentia 7.500 BTU Split</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Split</span>
-            <span class="spec-tag">7.500 BTU</span>
-            <span class="spec-tag">Silencioso</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 1.699</span>
-              <span class="product-price">R$ 1.299</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero-section">Início</a></li>
+        <li><a href="pages/products.html">Produtos</a></li>
+        <li><a href="#instalacao">Instalação</a></li>
+        <li><a href="#avaliacoes">Avaliações</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
 
-      <!-- Produto 6 -->
-      <div class="product-card" data-id="6" data-brand="Philco" data-name="Portable Portátil 12.000 BTU" data-price="1749" data-category="portatil" data-image="assets/produtos/philco_portable.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/produtos/philco_portable.png" alt="Philco Portable" class="product-image" />
-          </div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Philco</div>
-          <h3 class="product-name">Portable Portátil 12.000 BTU</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Portátil</span>
-            <span class="spec-tag">12.000 BTU</span>
-            <span class="spec-tag">Sem obra</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 2.099</span>
-              <span class="product-price">R$ 1.749</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
+      <div class="nav-actions">
+        <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20falar%20com%20um%20atendente."
+          class="btn-ghost nav-cta-ghost" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" class="icon-svg">
+            <path
+              d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+          </svg> Falar conosco</a>
+        <a href="pages/products.html" class="btn-primary nav-cta-primary"><svg width="16" height="16"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg> Ver produtos</a>
       </div>
-
     </div>
-  </div>
-</section>
+  </nav>
 
-<!-- ── BENTO SECTOR ──────────────────────────────────────── -->
-<section class="bento-section" id="instalacao">
-  <div class="bento-container">
-    <div class="bento-grid">
-      
-      <!-- Card 1: Tall (Parceiros) -->
-      <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20me%20cadastrar%20no%20programa%20de%20parceiros%20da%20Gela%20Fácil." target="_blank" class="bento-card bento-tall card-parceiros card-parceiros-img-wrap">
-        <img src="assets/bento/card-1.png" alt="Gela Fácil Parceiros" class="bento-card-img-full" />
+  <!-- ── HERO CAROUSEL (100vh) ────────────────────────── -->
+  <section class="hero-carousel" id="hero-section">
+    <div class="carousel-track-container">
+      <div class="carousel-track" id="carousel-track">
+
+        <!-- Slide 1: Venda Residencial -->
+        <div class="carousel-slide active"
+          style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_residential.png');">
+          <div class="hero-content">
+            <h1>O clima <em>perfeito</em><br>na sua casa,<br>sem complicação.</h1>
+            <p class="hero-sub">Ar-condicionados das melhores marcas com entrega rápida, instalação profissional e
+              manutenção garantida. A Gela Fácil cuida de tudo pra você.</p>
+            <div class="hero-ctas">
+              <a href="pages/products.html" class="btn-primary btn-hero">Ver Catálogo <svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  style="margin-left: 8px; vertical-align: middle;">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: Manutenção e Limpeza -->
+        <div class="carousel-slide"
+          style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_maintenance.png');">
+          <div class="hero-content">
+            <h1>Manutenção<br>preventiva e<br>corretiva profissional.</h1>
+            <p class="hero-sub">Evite poeira, bactérias e alto consumo de energia elétrica. Deixe seu ar-condicionado
+              higienizado e gelando como novo com técnicos credenciados.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20manutenção%20ou%20limpeza%20no%20meu%20ar-condicionado."
+                class="btn-primary btn-hero" target="_blank">Agendar Limpeza <svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  style="margin-left: 8px; vertical-align: middle;">
+                  <path
+                    d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                </svg></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3: Comercial -->
+        <div class="carousel-slide"
+          style="background-image: linear-gradient(to right, rgba(13, 31, 45, 0.85) 35%, rgba(13, 31, 45, 0.4) 100%), url('assets/hero/hero_commercial.png');">
+          <div class="hero-content">
+            <h1>Climatização de<br>alta performance<br>para sua empresa.</h1>
+            <p class="hero-sub">Dimensionamento técnico, venda em lote, infraestrutura completa de dutos e split,
+              contratos de manutenção PMOC. Atendemos lojas, clínicas e escritórios.</p>
+            <div class="hero-ctas">
+              <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20climatização%20comercial%20para%20minha%20empresa."
+                class="btn-primary btn-hero" target="_blank">Falar com Consultor B2B <svg width="16" height="16"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                  style="margin-left: 8px; vertical-align: middle;">
+                  <rect x="4" y="2" width="16" height="20" rx="2" ry="2" />
+                  <line x1="9" y1="22" x2="9" y2="16" />
+                  <line x1="15" y1="22" x2="15" y2="16" />
+                  <line x1="9" y1="16" x2="15" y2="16" />
+                  <path d="M8 6h.01M16 6h.01M8 10h.01M16 10h.01" />
+                </svg></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Slide Indicator Dots -->
+    <div class="carousel-dots" id="carousel-dots">
+      <span class="dot active" data-slide="0"></span>
+      <span class="dot" data-slide="1"></span>
+      <span class="dot" data-slide="2"></span>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <div class="scroll-indicator">
+      <a href="#produtos" aria-label="Rolar para baixo">
+        <span class="mouse"><span class="wheel"></span></span>
+        <span class="arrow-down"></span>
       </a>
-      
-      <!-- Card 2: VRF -->
-      <div class="bento-card card-vrf">
-        <div class="bento-card-content">
-          <div class="bento-tag yellow-text">SISTEMA VRF</div>
-          <h3>Tecnologia avançada para climatização profissional.</h3>
-          <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20sistema%20VRF%20comercial." class="bento-btn-sm" target="_blank">Saber mais <span class="arrow">▶</span></a>
-        </div>
-        <div class="bento-card-img-wrap vrf-img-wrap">
-          <img src="assets/bento/vrf_cassette.png" alt="Ar-condicionado VRF Cassete" />
-        </div>
-      </div>
-      
-      <!-- Card 3: Câmaras Frias -->
-      <div class="bento-card card-camaras">
-        <div class="bento-card-content">
-          <div class="bento-tag yellow-text">CÂMARAS FRIAS</div>
-          <h3>Projetos modulares e sob medida para conservação.</h3>
-          <div class="bento-sub-tags">
-            <span class="sub-tag">MODULARES</span>
-            <span class="sub-tag">SOB MEDIDA</span>
-            <span class="sub-tag">GRANDE PORTE</span>
-          </div>
-          <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20de%20Câmara%20Fria." class="bento-btn-sm" target="_blank">Faça seu orçamento <span class="arrow">▶</span></a>
-        </div>
-        <div class="bento-card-img-wrap camaras-img-wrap">
-          <img src="assets/bento/cold_chamber.png" alt="Câmaras Frias" />
+    </div>
+  </section>
+
+  <!-- ── QUICK STATS BAR ─────────────────────────────────── -->
+  <section class="stats-bar">
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg></span>
+        <div class="stat-text">
+          <strong>+2.400</strong>
+          <span>Clientes Atendidos</span>
         </div>
       </div>
-      
-      <!-- Card 4: Wide (Nossas Lojas) -->
-      <div class="bento-card bento-wide card-lojas">
-        <div class="bento-card-content">
-          <div class="bento-title-flex">
-            <div class="bento-title-left">
-              <h2>NOSSAS LOJAS</h2>
-              <p>Encontre uma filial da Gela Fácil perto de você.</p>
+      <div class="stat-item">
+        <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <polygon
+              points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </polygon>
+          </svg></span>
+        <div class="stat-text">
+          <strong>5.0 / 5★</strong>
+          <span>Avaliação Média</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <rect x="1" y="3" width="15" height="13" />
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+            <circle cx="5.5" cy="18.5" r="2.5" />
+            <circle cx="18.5" cy="18.5" r="2.5" />
+          </svg></span>
+        <div class="stat-text">
+          <strong>48 Horas</strong>
+          <span>Entrega Garantida</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <span class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg></span>
+        <div class="stat-text">
+          <strong>1 Ano</strong>
+          <span>Garantia de Instalação</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="products" id="produtos">
+    <div class="products-container">
+      <div class="products-header">
+        <div>
+          <div class="section-label">Loja Virtual</div>
+          <h2 class="section-title dark">Selecione seu Novo Ar-Condicionado</h2>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">Todos</button>
+          <button class="filter-tab" data-filter="split">Split</button>
+          <button class="filter-tab" data-filter="inverter">Inverter</button>
+          <button class="filter-tab" data-filter="portatil">Portátil</button>
+        </div>
+      </div>
+
+      <div class="products-grid" id="products-grid">
+
+        <!-- Produto 1 -->
+        <div class="product-card" data-id="1" data-brand="Samsung" data-name="WindFree Inverter 12.000 BTU"
+          data-price="2399" data-category="inverter split" data-image="assets/produtos/samsung_windfree.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/samsung_windfree.png" alt="Samsung WindFree" class="product-image" />
             </div>
-            <div class="bento-stats-flex">
-              <div class="bento-stat">
-                <span class="stat-number">4</span>
-                <span class="stat-lbl">lojas no</span>
+            <div class="product-tag promo">-17% OFF</div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Samsung</div>
+            <h3 class="product-name">WindFree Inverter 12.000 BTU</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Inverter</span>
+              <span class="spec-tag">12.000 BTU</span>
+              <span class="spec-tag">A+++</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 2.899</span>
+                <span class="product-price">R$ 2.399</span>
               </div>
-              <div class="bento-stat">
-                <span class="stat-number">ES</span>
-                <span class="stat-lbl">Vitória, Vila Velha, Serra</span>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 2 -->
+        <div class="product-card" data-id="2" data-brand="LG" data-name="Dual Inverter Voice 9.000 BTU"
+          data-price="1849" data-category="inverter split" data-image="assets/produtos/lg_dual_inverter.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/lg_dual_inverter.png" alt="LG Dual Inverter" class="product-image" />
+            </div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">LG</div>
+            <h3 class="product-name">Dual Inverter Voice 9.000 BTU</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Inverter</span>
+              <span class="spec-tag">9.000 BTU</span>
+              <span class="spec-tag">Wi-Fi</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 2.199</span>
+                <span class="product-price">R$ 1.849</span>
+              </div>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 3 -->
+        <div class="product-card" data-id="3" data-brand="Midea" data-name="Xtreme Save Inverter 18.000 BTU"
+          data-price="2899" data-category="inverter split" data-image="assets/produtos/midea_xtreme_save.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/midea_xtreme_save.png" alt="Midea Xtreme Save" class="product-image" />
+            </div>
+            <div class="product-tag highlight">Mais Vendido</div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Midea</div>
+            <h3 class="product-name">Xtreme Save Inverter 18.000 BTU</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Inverter</span>
+              <span class="spec-tag">18.000 BTU</span>
+              <span class="spec-tag">A++</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 3.499</span>
+                <span class="product-price">R$ 2.899</span>
+              </div>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Banner de Anúncio Imagem: Seção Split -->
+        <div class="products-ad-banner-wrapper">
+          <div class="products-ad-banner-img-wrap">
+            <img src="assets/produtos/banner-climatizacao-premium.png" alt="" width="2172" height="724" loading="lazy"
+              decoding="async" class="products-ad-banner-img" />
+            <div class="promo-banner-content promo-banner-content-left">
+              <span class="promo-banner-kicker">Conforto em qualquer espaço</span>
+              <h2>Climatização <span>completa</span></h2>
+              <p>Split, piso-teto e soluções comerciais com alta eficiência.</p>
+              <button type="button" class="promo-banner-cta" aria-label="Ver linha completa na página de produtos"
+                onclick="window.location.href='pages/products.html'">
+                Ver linha completa <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 4 -->
+        <div class="product-card" data-id="4" data-brand="Elgin" data-name="Eco Inverter Plus 24.000 BTU"
+          data-price="3699" data-category="inverter split" data-image="assets/produtos/elgin_eco_inverter.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/elgin_eco_inverter.png" alt="Elgin Eco Inverter Plus" class="product-image" />
+            </div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Elgin</div>
+            <h3 class="product-name">Eco Inverter Plus 24.000 BTU</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Inverter</span>
+              <span class="spec-tag">24.000 BTU</span>
+              <span class="spec-tag">Quente/Frio</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 4.299</span>
+                <span class="product-price">R$ 3.699</span>
+              </div>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 5 -->
+        <div class="product-card" data-id="5" data-brand="Springer" data-name="Silentia 7.500 BTU Split"
+          data-price="1299" data-category="split" data-image="assets/produtos/springer_silentia.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/springer_silentia.png" alt="Springer Silentia" class="product-image" />
+            </div>
+            <div class="product-tag promo">-22% OFF</div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Springer</div>
+            <h3 class="product-name">Silentia 7.500 BTU Split</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Split</span>
+              <span class="spec-tag">7.500 BTU</span>
+              <span class="spec-tag">Silencioso</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 1.699</span>
+                <span class="product-price">R$ 1.299</span>
+              </div>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 6 -->
+        <div class="product-card" data-id="6" data-brand="Philco" data-name="Portable Portátil 12.000 BTU"
+          data-price="1749" data-category="portatil" data-image="assets/produtos/philco_portable.png">
+          <div class="product-img-wrap">
+            <div class="product-icon-container">
+              <img src="assets/produtos/philco_portable.png" alt="Philco Portable" class="product-image" />
+            </div>
+            <div class="product-hover-overlay">
+              <span class="view-details-btn">Comprar &amp; Instalar</span>
+            </div>
+          </div>
+          <div class="product-info">
+            <div class="product-brand">Philco</div>
+            <h3 class="product-name">Portable Portátil 12.000 BTU</h3>
+            <div class="product-specs">
+              <span class="spec-tag">Portátil</span>
+              <span class="spec-tag">12.000 BTU</span>
+              <span class="spec-tag">Sem obra</span>
+            </div>
+            <div class="product-footer">
+              <div class="product-price-wrap">
+                <span class="old-price">R$ 2.099</span>
+                <span class="product-price">R$ 1.749</span>
+              </div>
+              <button class="btn-cart-add">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BENTO SECTOR ──────────────────────────────────────── -->
+  <section class="bento-section" id="instalacao">
+    <div class="bento-container">
+      <div class="bento-grid">
+
+        <!-- Card 1: Tall (Parceiros) -->
+        <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20me%20cadastrar%20no%20programa%20de%20parceiros%20da%20Gela%20Fácil."
+          target="_blank" rel="noopener noreferrer" class="bento-card bento-tall card-parceiros">
+          <img src="assets/bento/technician-gela-facil.png" alt="Técnico parceiro Gela Fácil"
+            class="card-parceiros-visual" />
+
+          <div class="bento-card-header">
+            <span class="bento-logo">
+              <span class="bento-brand-icon" aria-hidden="true">
+                <i class="fa-solid fa-snowflake"></i>
+              </span>
+              Gela F&aacute;cil Parceiros
+            </span>
+          </div>
+
+          <div class="bento-card-body">
+            <h3>Seu talento merece <strong>o parceiro certo.</strong></h3>
+            <span class="bento-btn">
+              Seja parceiro
+              <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </span>
+          </div>
+        </a>
+
+        <!-- Card 2: VRF -->
+        <div class="bento-card card-vrf">
+          <div class="bento-card-content">
+            <div class="bento-tag yellow-text">SISTEMA VRF</div>
+            <h3>Tecnologia avançada para climatização profissional.</h3>
+            <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20sistema%20VRF%20comercial."
+              class="bento-btn-sm" target="_blank">Saber mais <span class="arrow">▶</span></a>
+          </div>
+          <div class="bento-card-img-wrap vrf-img-wrap">
+            <img src="assets/bento/vrf_cassette.png" alt="Ar-condicionado VRF Cassete" />
+          </div>
+        </div>
+
+        <!-- Card 3: Câmaras Frias -->
+        <div class="bento-card card-camaras">
+          <div class="bento-card-content">
+            <div class="bento-tag yellow-text">CÂMARAS FRIAS</div>
+            <h3>Projetos modulares e sob medida para conservação.</h3>
+            <div class="bento-sub-tags">
+              <span class="sub-tag">MODULARES</span>
+              <span class="sub-tag">SOB MEDIDA</span>
+              <span class="sub-tag">GRANDE PORTE</span>
+            </div>
+            <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20solicitar%20um%20orçamento%20de%20Câmara%20Fria."
+              class="bento-btn-sm" target="_blank">Faça seu orçamento <span class="arrow">▶</span></a>
+          </div>
+          <div class="bento-card-img-wrap camaras-img-wrap">
+            <img src="assets/bento/cold_chamber.png" alt="Câmaras Frias" />
+          </div>
+        </div>
+
+        <!-- Card 4: Wide (Nossas Lojas) -->
+        <div class="bento-card bento-wide card-lojas">
+          <div class="bento-card-content">
+            <div class="bento-title-flex">
+              <div class="bento-title-left">
+                <h2>NOSSAS LOJAS</h2>
+                <p>Encontre uma filial da Gela Fácil perto de você.</p>
+              </div>
+              <div class="bento-stats-flex">
+                <div class="bento-stat">
+                  <span class="stat-number">4</span>
+                  <span class="stat-lbl">lojas no</span>
+                </div>
+                <div class="bento-stat">
+                  <span class="stat-number">ES</span>
+                  <span class="stat-lbl">Vitória, Vila Velha, Serra</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bento-card-img-wrap stores-img-wrap">
+            <img src="assets/bento/lojas_gelafacil.png" alt="Showroom Gela Fácil" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLIMA BEBIDAS COM CRONÔMETRO ────────────────────────── -->
+  <section class="clima-bebidas-section" id="clima-bebidas">
+    <div class="clima-bebidas-container">
+      <div class="clima-bebidas-header">
+        <div class="header-left">
+          <h2 class="section-title dark">Craques para deixar sua bebida no Clima Certo</h2>
+        </div>
+        <div class="header-right">
+          <div class="header-right-col">
+            <div class="countdown-card">
+              <div class="countdown-badge">
+                NOVAS OFERTAS LIBERADAS EM:
+              </div>
+              <div class="countdown-timer" id="bebidas-countdown">
+                <div class="timer-box">
+                  <span class="timer-num" id="timer-hours">02</span>
+                  <span class="timer-lbl">HORAS</span>
+                </div>
+                <span class="timer-colon">:</span>
+                <div class="timer-box">
+                  <span class="timer-num" id="timer-minutes">33</span>
+                  <span class="timer-lbl">MIN</span>
+                </div>
+                <span class="timer-colon">:</span>
+                <div class="timer-box">
+                  <span class="timer-num" id="timer-seconds">23</span>
+                  <span class="timer-lbl">SEG</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="clima-bebidas-nav" aria-label="Navegação dos produtos para bebidas">
+              <button class="clima-bebidas-control" id="clima-bebidas-prev" type="button"
+                aria-label="Produto anterior">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="m15 18-6-6 6-6" />
+                </svg>
+              </button>
+              <button class="clima-bebidas-control" id="clima-bebidas-next" type="button"
+                aria-label="Próximo produto">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2.5">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="clima-bebidas-slider-wrap">
+        <div class="clima-bebidas-track" id="clima-bebidas-track">
+          <!-- Card 1 -->
+          <div class="product-card" data-id="b1" data-brand="Electrolux"
+            data-name="Frigobar Electrolux 122 Litros Efficient EM120 Branco - 110V" data-price="1209"
+            data-category="bebidas" data-image="assets/clima-bebidas/electrolux_frigobar.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/electrolux_frigobar.png" alt="Frigobar Electrolux 122L"
+                  class="product-image" />
+              </div>
+              <div class="product-tag promo">-17% OFF</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Electrolux</div>
+              <h3 class="product-name">Frigobar Electrolux 122 Litros Efficient EM120 Branco - 110V</h3>
+              <div class="product-specs">
+                <span class="spec-tag">122 Litros</span>
+                <span class="spec-tag">Branco</span>
+                <span class="spec-tag">110V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 1.809</span>
+                  <span class="product-price">R$ 1.209</span>
+                </div>
+                <button class="btn-cart-add">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="product-card" data-id="b2" data-brand="Electrolux"
+            data-name="Cervejeira Home Bar Electrolux 100 Litros Frost Free Porta de Vidro EB100 Preto - 110V"
+            data-price="2229" data-category="bebidas" data-image="assets/clima-bebidas/electrolux_cervejeira.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/electrolux_cervejeira.png" alt="Cervejeira Electrolux 100L"
+                  class="product-image" />
+              </div>
+              <div class="product-tag promo">-9% OFF</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Electrolux</div>
+              <h3 class="product-name">Cervejeira Home Bar Electrolux 100 Litros Frost Free Porta de Vidro EB100 Preto
+              </h3>
+              <div class="product-specs">
+                <span class="spec-tag">100 Litros</span>
+                <span class="spec-tag">Frost Free</span>
+                <span class="spec-tag">110V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 2.729</span>
+                  <span class="product-price">R$ 2.229</span>
+                </div>
+                <button class="btn-cart-add">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="product-card" data-id="b3" data-brand="Venax"
+            data-name="Cervejeira Venax Blue Light 102 Litros Preto - 220V" data-price="2529" data-category="bebidas"
+            data-image="assets/clima-bebidas/venax_cervejeira.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/venax_cervejeira.png" alt="Cervejeira Venax 102L"
+                  class="product-image" />
+              </div>
+              <div class="product-tag promo">-18% OFF</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Venax</div>
+              <h3 class="product-name">Cervejeira Venax Blue Light 102 Litros Preto - 220V</h3>
+              <div class="product-specs">
+                <span class="spec-tag">102 Litros</span>
+                <span class="spec-tag">Blue Light</span>
+                <span class="spec-tag">220V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 3.423</span>
+                  <span class="product-price">R$ 2.529</span>
+                </div>
+                <button class="btn-cart-add">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="product-card" data-id="b4" data-brand="Electrolux"
+            data-name="Cervejeira Electrolux 100 Litros Home Bar com Torre de Chopp EB10C Frost Free Porta de Vidro Preta - 110V"
+            data-price="2799" data-category="bebidas" data-image="assets/clima-bebidas/electrolux_chopp.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/electrolux_chopp.png" alt="Cervejeira Electrolux com Torre de Chopp"
+                  class="product-image" />
+              </div>
+              <div class="product-tag promo">-16% OFF</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Electrolux</div>
+              <h3 class="product-name">Cervejeira Electrolux 100 Litros Home Bar com Torre de Chopp EB10C Frost Free
+              </h3>
+              <div class="product-specs">
+                <span class="spec-tag">Torre de Chopp</span>
+                <span class="spec-tag">100 Litros</span>
+                <span class="spec-tag">110V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 3.693</span>
+                  <span class="product-price">R$ 2.799</span>
+                </div>
+                <button class="btn-cart-add">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="product-card" data-id="b5" data-brand="Electrolux"
+            data-name="Frigobar Electrolux Efficient 122 Litros Branco - 220V" data-price="1209"
+            data-category="bebidas" data-image="assets/clima-bebidas/electrolux_frigobar.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/electrolux_frigobar.png" alt="Frigobar Electrolux Efficient 122L 220V"
+                  class="product-image" />
+              </div>
+              <div class="product-tag highlight">220V</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Electrolux</div>
+              <h3 class="product-name">Frigobar Electrolux Efficient 122 Litros Branco - 220V</h3>
+              <div class="product-specs">
+                <span class="spec-tag">122 Litros</span>
+                <span class="spec-tag">Econômico</span>
+                <span class="spec-tag">220V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 1.809</span>
+                  <span class="product-price">R$ 1.209</span>
+                </div>
+                <button class="btn-cart-add">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="product-card" data-id="b6" data-brand="Venax"
+            data-name="Cervejeira Venax Blue Light 102 Litros Preto - 110V" data-price="2529"
+            data-category="bebidas" data-image="assets/clima-bebidas/venax_cervejeira.png">
+            <div class="product-img-wrap">
+              <div class="product-icon-container">
+                <img src="assets/clima-bebidas/venax_cervejeira.png" alt="Cervejeira Venax Blue Light 102L 110V"
+                  class="product-image" />
+              </div>
+              <div class="product-tag promo">-18% OFF</div>
+              <div class="product-hover-overlay">
+                <span class="view-details-btn">Comprar &amp; Instalar</span>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-brand">Venax</div>
+              <h3 class="product-name">Cervejeira Venax Blue Light 102 Litros Preto - 110V</h3>
+              <div class="product-specs">
+                <span class="spec-tag">102 Litros</span>
+                <span class="spec-tag">Blue Light</span>
+                <span class="spec-tag">110V</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price-wrap">
+                  <span class="old-price">R$ 3.423</span>
+                  <span class="product-price">R$ 2.529</span>
+                </div>
+                <button class="btn-cart-add">+</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="bento-card-img-wrap stores-img-wrap">
-          <img src="assets/bento/lojas_gelafacil.png" alt="Showroom Gela Fácil" />
-        </div>
       </div>
-      
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ── CLIMA BEBIDAS COM CRONÔMETRO ────────────────────────── -->
-<section class="clima-bebidas-section" id="clima-bebidas">
-  <div class="clima-bebidas-container">
-    <div class="clima-bebidas-header">
-      <div class="header-left">
-        <h2 class="section-title dark">Craques para deixar sua bebida no Clima Certo</h2>
-      </div>
-      <div class="header-right">
-        <div class="header-right-col">
-          <div class="countdown-card">
-            <div class="countdown-badge">
-              <span class="badge-icon">⚡</span> NOVAS OFERTAS LIBERADAS EM:
-            </div>
-            <div class="countdown-timer" id="bebidas-countdown">
-              <div class="timer-box">
-                <span class="timer-num" id="timer-hours">02</span>
-                <span class="timer-lbl">HORAS</span>
-              </div>
-              <span class="timer-colon">:</span>
-              <div class="timer-box">
-                <span class="timer-num" id="timer-minutes">33</span>
-                <span class="timer-lbl">MIN</span>
-              </div>
-              <span class="timer-colon">:</span>
-              <div class="timer-box">
-                <span class="timer-num" id="timer-seconds">23</span>
-                <span class="timer-lbl">SEG</span>
-              </div>
+
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer id="contato">
+    <div class="footer-container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <div class="logo">
+              <img src="assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img logo-img--footer" />
             </div>
           </div>
-
+          <p>Especialistas em vendas, instalações e manutenções de ar-condicionado. Leveza, economia e conforto térmico
+            sob medida para você.</p>
+          <div class="footer-contact">
+            <a href="tel:+5527999999999"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2.5">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg> (27) 99999-9999</a>
+            <a href="mailto:contato@gelafacil.com.br"><svg class="footer-icon-svg" width="14" height="14"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg> contato@gelafacil.com.br</a>
+            <a href="#"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg> Atendemos Vitória, Vila Velha, Serra e Cariacica – ES</a>
+          </div>
         </div>
+
+        <div class="footer-col">
+          <h4>Aparelhos</h4>
+          <ul>
+            <li><a href="pages/products.html?category=inverter">Split Inverter</a></li>
+            <li><a href="pages/products.html?category=portatil">Ar Portátil</a></li>
+            <li><a href="pages/products.html?category=split">Multi-Split</a></li>
+            <li><a href="pages/products.html?category=split">Cassete Comercial</a></li>
+            <li><a href="pages/products.html">Modelos Quente/Frio</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Nossos Serviços</h4>
+          <ul>
+            <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20instalação."
+                target="_blank">Instalação Residencial</a></li>
+            <li><a
+                href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20limpeza/manutenção."
+                target="_blank">Higienização e Limpeza</a></li>
+            <li><a
+                href="https://wa.me/5527999999999?text=Olá!%20Preciso%20de%20uma%20visita%20técnica%20de%20manutenção."
+                target="_blank">Carga de Gás e Reparos</a></li>
+            <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20informações%20sobre%20o%20PMOC."
+                target="_blank">Contratos PMOC Empresariais</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Atendimento</h4>
+          <ul>
+            <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento."
+                target="_blank">Fazer Orçamento</a></li>
+            <li><a href="#instalacao">Como funciona</a></li>
+            <li><a href="#avaliacoes">Depoimentos</a></li>
+            <li><a href="https://wa.me/5527999999999?text=Olá!%20Quero%20falar%20com%20o%20suporte."
+                target="_blank">Fale com Suporte</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 Gela Fácil. Todos os direitos reservados.</span>
+        <span>CNPJ: 00.000.000/0001-00 · Vitória – ES</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── FLOATING CART ─────────────────────────────────────── -->
+  <button class="cart-float" id="cart-float-btn" onclick="openCartDrawer()" aria-label="Abrir carrinho">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+    <span class="cart-float-count">0</span>
+  </button>
+
+
+
+
+
+  <!-- ── SHOPPING CART DRAWER ────────────────────────────────── -->
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
+  <div class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h3>Seu Carrinho (<span class="cart-drawer-count-header">0</span>)</h3>
+      <button class="cart-drawer-close" id="cart-drawer-close" onclick="closeCartDrawer()"
+        aria-label="Fechar carrinho">&times;</button>
+    </div>
+
+    <div class="cart-drawer-body" id="cart-drawer-body">
+      <!-- Dynamic items here. If empty, show empty state -->
+      <div class="cart-empty-state" id="cart-empty-state">
+        <div class="empty-icon-wrap">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+        </div>
+        <h4>Seu carrinho está vazio</h4>
+        <p>Navegue pelo nosso catálogo e encontre o clima ideal para o seu ambiente.</p>
+        <button class="btn-primary empty-cart-action-btn" onclick="closeCartDrawer(); scrollToProducts();">Ver
+          Produtos</button>
+      </div>
+      <div class="cart-items-container" id="cart-items-container" style="display: none;">
+        <!-- JavaScript will inject items here -->
       </div>
     </div>
 
-    <div class="clima-bebidas-slider-wrap">
-      <div class="clima-bebidas-track" id="clima-bebidas-track">
-      <!-- Card 1 -->
-      <div class="product-card" data-id="b1" data-brand="Electrolux" data-name="Frigobar Electrolux 122 Litros Efficient EM120 Branco - 110V" data-price="1209" data-category="bebidas" data-image="assets/clima-bebidas/electrolux_frigobar.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/clima-bebidas/electrolux_frigobar.png" alt="Frigobar Electrolux 122L" class="product-image" />
-          </div>
-          <div class="product-tag promo">-17% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Electrolux</div>
-          <h3 class="product-name">Frigobar Electrolux 122 Litros Efficient EM120 Branco - 110V</h3>
-          <div class="product-specs">
-            <span class="spec-tag">122 Litros</span>
-            <span class="spec-tag">Branco</span>
-            <span class="spec-tag">110V</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 1.809</span>
-              <span class="product-price">R$ 1.209</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
+    <div class="cart-drawer-footer" id="cart-drawer-footer">
+      <div class="cart-summary-row">
+        <span>Subtotal</span>
+        <span id="cart-subtotal-val">R$ 0</span>
       </div>
-
-      <!-- Card 2 -->
-      <div class="product-card" data-id="b2" data-brand="Electrolux" data-name="Cervejeira Home Bar Electrolux 100 Litros Frost Free Porta de Vidro EB100 Preto - 110V" data-price="2229" data-category="bebidas" data-image="assets/clima-bebidas/electrolux_cervejeira.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/clima-bebidas/electrolux_cervejeira.png" alt="Cervejeira Electrolux 100L" class="product-image" />
-          </div>
-          <div class="product-tag promo">-9% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Electrolux</div>
-          <h3 class="product-name">Cervejeira Home Bar Electrolux 100 Litros Frost Free Porta de Vidro EB100 Preto</h3>
-          <div class="product-specs">
-            <span class="spec-tag">100 Litros</span>
-            <span class="spec-tag">Frost Free</span>
-            <span class="spec-tag">110V</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 2.729</span>
-              <span class="product-price">R$ 2.229</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
+      <div class="cart-summary-row">
+        <span>Serviços Adicionais</span>
+        <span id="cart-services-val">R$ 0</span>
       </div>
-
-      <!-- Card 3 -->
-      <div class="product-card" data-id="b3" data-brand="Venax" data-name="Cervejeira Venax Blue Light 102 Litros Preto - 220V" data-price="2529" data-category="bebidas" data-image="assets/clima-bebidas/venax_cervejeira.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/clima-bebidas/venax_cervejeira.png" alt="Cervejeira Venax 102L" class="product-image" />
-          </div>
-          <div class="product-tag promo">-18% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Venax</div>
-          <h3 class="product-name">Cervejeira Venax Blue Light 102 Litros Preto - 220V</h3>
-          <div class="product-specs">
-            <span class="spec-tag">102 Litros</span>
-            <span class="spec-tag">Blue Light</span>
-            <span class="spec-tag">220V</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 3.423</span>
-              <span class="product-price">R$ 2.529</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
+      <div class="cart-summary-divider"></div>
+      <div class="cart-summary-row total">
+        <span>Total</span>
+        <strong id="cart-total-val">R$ 0</strong>
       </div>
-
-      <!-- Card 4 -->
-      <div class="product-card" data-id="b4" data-brand="Electrolux" data-name="Cervejeira Electrolux 100 Litros Home Bar com Torre de Chopp EB10C Frost Free Porta de Vidro Preta - 110V" data-price="2799" data-category="bebidas" data-image="assets/clima-bebidas/electrolux_chopp.png">
-        <div class="product-img-wrap">
-          <div class="product-icon-container">
-            <img src="assets/clima-bebidas/electrolux_chopp.png" alt="Cervejeira Electrolux com Torre de Chopp" class="product-image" />
-          </div>
-          <div class="product-tag promo">-16% OFF</div>
-          <div class="product-hover-overlay">
-            <span class="view-details-btn">Comprar &amp; Instalar</span>
-          </div>
-        </div>
-        <div class="product-info">
-          <div class="product-brand">Electrolux</div>
-          <h3 class="product-name">Cervejeira Electrolux 100 Litros Home Bar com Torre de Chopp EB10C Frost Free</h3>
-          <div class="product-specs">
-            <span class="spec-tag">Torre de Chopp</span>
-            <span class="spec-tag">100 Litros</span>
-            <span class="spec-tag">110V</span>
-          </div>
-          <div class="product-footer">
-            <div class="product-price-wrap">
-              <span class="old-price">R$ 3.693</span>
-              <span class="product-price">R$ 2.799</span>
-            </div>
-            <button class="btn-cart-add">+</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-</section>
-
-
-
-<!-- ── FOOTER ────────────────────────────────────────────── -->
-<footer id="contato">
-  <div class="footer-container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo-wrap">
-          <div class="logo">
-            <img src="assets/brand/logo-transparente.png" alt="Gela Fácil Logo" class="logo-img logo-img--footer" />
-          </div>
-        </div>
-        <p>Especialistas em vendas, instalações e manutenções de ar-condicionado. Leveza, economia e conforto térmico sob medida para você.</p>
-        <div class="footer-contact">
-          <a href="tel:+5527999999999"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (27) 99999-9999</a>
-          <a href="mailto:contato@gelafacil.com.br"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> contato@gelafacil.com.br</a>
-          <a href="#"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Atendemos Vitória, Vila Velha, Serra e Cariacica – ES</a>
-        </div>
-      </div>
-      
-      <div class="footer-col">
-        <h4>Aparelhos</h4>
-        <ul>
-          <li><a href="pages/products.html?category=inverter">Split Inverter</a></li>
-          <li><a href="pages/products.html?category=portatil">Ar Portátil</a></li>
-          <li><a href="pages/products.html?category=split">Multi-Split</a></li>
-          <li><a href="pages/products.html?category=split">Cassete Comercial</a></li>
-          <li><a href="pages/products.html">Modelos Quente/Frio</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-col">
-        <h4>Nossos Serviços</h4>
-        <ul>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20instalação." target="_blank">Instalação Residencial</a></li>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20um%20orçamento%20de%20limpeza/manutenção." target="_blank">Higienização e Limpeza</a></li>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Preciso%20de%20uma%20visita%20técnica%20de%20manutenção." target="_blank">Carga de Gás e Reparos</a></li>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20informações%20sobre%20o%20PMOC." target="_blank">Contratos PMOC Empresariais</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-col">
-        <h4>Atendimento</h4>
-        <ul>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20fazer%20um%20orçamento." target="_blank">Fazer Orçamento</a></li>
-          <li><a href="#instalacao">Como funciona</a></li>
-          <li><a href="#avaliacoes">Depoimentos</a></li>
-          <li><a href="https://wa.me/5527999999999?text=Olá!%20Quero%20falar%20com%20o%20suporte." target="_blank">Fale com Suporte</a></li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="footer-bottom">
-      <span>© 2026 Gela Fácil. Todos os direitos reservados.</span>
-      <span>CNPJ: 00.000.000/0001-00 · Vitória – ES</span>
+      <button class="btn-primary cart-checkout-btn" id="cart-checkout-btn" onclick="goToCheckout()" disabled>
+        Finalizar Compra <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" class="icon-svg">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </button>
     </div>
   </div>
-</footer>
 
-<!-- ── FLOATING CART ─────────────────────────────────────── -->
-<button class="cart-float" id="cart-float-btn" onclick="openCartDrawer()" aria-label="Abrir carrinho">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-  <span class="cart-float-count">0</span>
-</button>
-
-
-
-
-
-<!-- ── SHOPPING CART DRAWER ────────────────────────────────── -->
-<div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="closeCartDrawer()"></div>
-<div class="cart-drawer" id="cart-drawer">
-  <div class="cart-drawer-header">
-    <h3>Seu Carrinho (<span class="cart-drawer-count-header">0</span>)</h3>
-    <button class="cart-drawer-close" id="cart-drawer-close" onclick="closeCartDrawer()" aria-label="Fechar carrinho">&times;</button>
-  </div>
-  
-  <div class="cart-drawer-body" id="cart-drawer-body">
-    <!-- Dynamic items here. If empty, show empty state -->
-    <div class="cart-empty-state" id="cart-empty-state">
-      <div class="empty-icon-wrap">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      </div>
-      <h4>Seu carrinho está vazio</h4>
-      <p>Navegue pelo nosso catálogo e encontre o clima ideal para o seu ambiente.</p>
-      <button class="btn-primary empty-cart-action-btn" onclick="closeCartDrawer(); scrollToProducts();">Ver Produtos</button>
-    </div>
-    <div class="cart-items-container" id="cart-items-container" style="display: none;">
-      <!-- JavaScript will inject items here -->
-    </div>
-  </div>
-  
-  <div class="cart-drawer-footer" id="cart-drawer-footer">
-    <div class="cart-summary-row">
-      <span>Subtotal</span>
-      <span id="cart-subtotal-val">R$ 0</span>
-    </div>
-    <div class="cart-summary-row">
-      <span>Serviços Adicionais</span>
-      <span id="cart-services-val">R$ 0</span>
-    </div>
-    <div class="cart-summary-divider"></div>
-    <div class="cart-summary-row total">
-      <span>Total</span>
-      <strong id="cart-total-val">R$ 0</strong>
-    </div>
-    <button class="btn-primary cart-checkout-btn" id="cart-checkout-btn" onclick="goToCheckout()" disabled>
-      Finalizar Compra <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="icon-svg"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-    </button>
-  </div>
-</div>
-
-<script src="js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
+
 </html>

@@ -204,7 +204,7 @@ const productDetailsDb = {
     ratingCount: 34,
     gallery: [
       "assets/produtos/samsung_windfree.png",
-      "assets/produtos/seção-slipt.png"
+      "assets/produtos/banner-climatizacao-premium.png"
     ],
     desc: "O ar-condicionado Samsung WindFree proporciona um resfriamento suave sem vento direto, mantendo o ambiente confortavelmente frio sem correntes de ar frio incômodas. Economiza até 77% de energia em comparação com modelos tradicionais através da tecnologia Digital Inverter Ultra.",
     specs: {
@@ -229,7 +229,7 @@ const productDetailsDb = {
     ratingCount: 42,
     gallery: [
       "assets/produtos/lg_dual_inverter.png",
-      "assets/produtos/seção-slipt.png"
+      "assets/produtos/banner-climatizacao-premium.png"
     ],
     desc: "O LG DUAL Inverter Voice garante até 70% de economia de energia e refrigeração até 40% mais rápida. Com controle de voz via Google Assistente e Alexa, você comanda o clima de qualquer lugar. Super silencioso, ideal para quartos e escritórios.",
     specs: {
@@ -254,7 +254,7 @@ const productDetailsDb = {
     ratingCount: 28,
     gallery: [
       "assets/produtos/midea_xtreme_save.png",
-      "assets/produtos/seção-slipt.png"
+      "assets/produtos/banner-climatizacao-premium.png"
     ],
     desc: "O split Midea Xtreme Save traz excelente eficiência energética com a tecnologia Inverter. Possui filtro com tripla filtragem que elimina até 99.9% dos vírus e bactérias do ar, mantendo sua família protegida e o ar sempre puro.",
     specs: {
@@ -278,7 +278,7 @@ const productDetailsDb = {
     ratingCount: 19,
     gallery: [
       "assets/produtos/elgin_eco_inverter.png",
-      "assets/produtos/seção-slipt.png"
+      "assets/produtos/banner-climatizacao-premium.png"
     ],
     desc: "Ideal para grandes ambientes comerciais ou residenciais, o Elgin Eco Inverter Plus oferece refrigeração e aquecimento eficientes. Tem baixo nível de ruído e utiliza gás ecológico que não agride a camada de ozônio.",
     specs: {
@@ -433,6 +433,54 @@ const productDetailsDb = {
     },
     reviews: [
       { author: "Gabriel N.", stars: 5, date: "01/05/2026", comment: "Melhor aquisição que fiz. Chopp gelado e cremoso na hora, sem complicação." }
+    ]
+  },
+  "b5": {
+    name: "Frigobar Efficient 122L - 220V",
+    brand: "Electrolux",
+    price: 1209,
+    image: "assets/clima-bebidas/electrolux_frigobar.png",
+    rating: 4.8,
+    ratingCount: 31,
+    gallery: [
+      "assets/clima-bebidas/electrolux_frigobar.png",
+      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
+    ],
+    desc: "Versão 220V do frigobar Efficient com 122 litros, prateleiras reguláveis e espaço otimizado para latas, garrafas e alimentos.",
+    specs: {
+      "Voltagem": "220V",
+      "Selo Procel": "A+++",
+      "Capacidade": "122 Litros",
+      "Garantia": "1 ano",
+      "Cor": "Branco",
+      "Tipo": "Frigobar Efficient"
+    },
+    reviews: [
+      { author: "Camila R.", stars: 5, date: "08/05/2026", comment: "Ótimo espaço interno e funcionamento bem silencioso." }
+    ]
+  },
+  "b6": {
+    name: "Cervejeira Blue Light 102L - 110V",
+    brand: "Venax",
+    price: 2529,
+    image: "assets/clima-bebidas/venax_cervejeira.png",
+    rating: 4.9,
+    ratingCount: 22,
+    gallery: [
+      "assets/clima-bebidas/venax_cervejeira.png",
+      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
+    ],
+    desc: "Versão 110V da cervejeira Blue Light, com controle eletrônico de temperatura, porta de vidro e iluminação interna em LED azul.",
+    specs: {
+      "Voltagem": "110V",
+      "Selo Procel": "A",
+      "Capacidade": "102 Litros",
+      "Garantia": "1 ano",
+      "Iluminação": "LED Blue Light",
+      "Tipo": "Cervejeira Exclusiva"
+    },
+    reviews: [
+      { author: "Renato P.", stars: 5, date: "09/05/2026", comment: "Bonita, espaçosa e mantém as bebidas na temperatura certa." }
     ]
   }
 };
@@ -808,11 +856,7 @@ function scrollToProducts() {
   }
 }
 
-// Initialize sliders
-setupSliderDragAndNav('destaques-track', 'destaques-prev', 'destaques-next', () => {
-  scrollToProducts();
-});
-
+// Initialize remaining generic sliders
 setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
 
 // ── BEBIDAS COUNTDOWN TIMER ──────────────────────────────
@@ -851,9 +895,104 @@ function startCountdown() {
   setInterval(updateTimer, 1000);
 }
 
+// ── DESTAQUES CAROUSEL DRAG & ARROWS ─────────────────────
+function initDestaquesCarousel() {
+  const track = document.getElementById('destaques-track');
+  const prevBtn = document.getElementById('destaques-prev');
+  const nextBtn = document.getElementById('destaques-next');
+  const progressFill = document.getElementById('destaques-progress-fill');
+  const counter = document.getElementById('destaques-counter');
+
+  if (!track) return;
+
+  const cards = Array.from(track.querySelectorAll('.destaque-card'));
+  const totalCards = cards.length;
+  const sliderWrap = track.closest('.destaques-slider-wrap');
+  let isDown = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+  let dragged = false;
+  const mobileDragQuery = window.matchMedia('(max-width: 900px)');
+
+  const getCardStep = () => {
+    const firstCard = cards[0];
+    const gap = parseFloat(window.getComputedStyle(track).gap) || 18;
+    return (firstCard?.offsetWidth || 280) + gap;
+  };
+
+  const updateProgress = () => {
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    const currentScroll = Math.max(0, track.scrollLeft);
+    const currentIndex = Math.min(totalCards, Math.round(currentScroll / getCardStep()) + 1);
+
+    if (progressFill) progressFill.style.width = `${Math.max(100 / totalCards, (currentIndex / totalCards) * 100)}%`;
+    if (counter) counter.textContent = String(currentIndex).padStart(2, '0');
+    if (prevBtn) prevBtn.disabled = currentScroll <= 2;
+    if (nextBtn) nextBtn.disabled = currentScroll >= maxScroll - 2;
+    if (sliderWrap) {
+      sliderWrap.classList.toggle('has-scrolled', currentScroll > 8);
+      sliderWrap.classList.toggle('is-at-end', currentScroll >= maxScroll - 8);
+    }
+  };
+
+  const scrollOneCard = (direction) => {
+    track.scrollBy({ left: direction * getCardStep(), behavior: 'smooth' });
+  };
+
+  prevBtn?.addEventListener('click', () => scrollOneCard(-1));
+  nextBtn?.addEventListener('click', () => scrollOneCard(1));
+  track.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress, { passive: true });
+
+  track.addEventListener('mousedown', (event) => {
+    if (!mobileDragQuery.matches) return;
+    isDown = true;
+    dragged = false;
+    startX = event.pageX;
+    startScrollLeft = track.scrollLeft;
+    track.classList.add('is-dragging');
+  });
+
+  const releaseDrag = () => {
+    isDown = false;
+    track.classList.remove('is-dragging');
+  };
+
+  track.addEventListener('mouseleave', releaseDrag);
+  track.addEventListener('mouseup', releaseDrag);
+  track.addEventListener('mousemove', (event) => {
+    if (!mobileDragQuery.matches || !isDown) return;
+    const distance = event.pageX - startX;
+    if (Math.abs(distance) > 5) dragged = true;
+    if (dragged) event.preventDefault();
+    track.scrollLeft = startScrollLeft - distance * 1.35;
+  });
+
+  cards.forEach(card => {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'link');
+    card.addEventListener('click', (event) => {
+      if (dragged) {
+        event.preventDefault();
+        return;
+      }
+      scrollToProducts();
+    });
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        scrollToProducts();
+      }
+    });
+  });
+
+  updateProgress();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   startCountdown();
   updateCartCounters();
+  initDestaquesCarousel();
   
   const navCartBtn = document.getElementById('nav-cart-btn');
   if (navCartBtn) {

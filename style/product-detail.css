@@ -124,6 +124,13 @@
   letter-spacing: 1px;
 }
 
+.brand-badge,
+.services-section-title,
+.service-title,
+.spec-label {
+  font-family: var(--font-subtitle);
+}
+
 .product-title {
   font-size: 2.3rem;
   color: var(--black);
@@ -550,7 +557,7 @@
   border-radius: 10px;
   padding: 14px 18px;
   color: var(--navy);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
