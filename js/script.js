@@ -111,13 +111,14 @@ let slideIndex = 0;
 let carouselInterval;
 
 function showSlide(n) {
+  if (!slides || slides.length === 0) return;
   slides.forEach(slide => slide.classList.remove('active'));
   dots.forEach(dot => dot.classList.remove('active'));
   
   // Wrap index
   slideIndex = (n + slides.length) % slides.length;
   
-  slides[slideIndex].classList.add('active');
+  if (slides[slideIndex]) slides[slideIndex].classList.add('active');
   if (dots[slideIndex]) dots[slideIndex].classList.add('active');
 }
 
@@ -130,11 +131,12 @@ function prevSlide() {
 }
 
 function startCarouselAutoplay() {
+  if (!slides || slides.length === 0) return;
   carouselInterval = setInterval(nextSlide, 7000); // changes slide every 7 seconds
 }
 
 function stopCarouselAutoplay() {
-  clearInterval(carouselInterval);
+  if (carouselInterval) clearInterval(carouselInterval);
 }
 
 // Event Listeners for Controls
@@ -164,8 +166,10 @@ dots.forEach(dot => {
   });
 });
 
-// Initialize Carousel Autoplay
-startCarouselAutoplay();
+// Initialize Carousel Autoplay if slides exist
+if (slides && slides.length > 0) {
+  startCarouselAutoplay();
+}
 
 // ── PRODUCT CATALOG FILTERS ─────────────────────────────
 const filterTabs = document.querySelectorAll('.filter-tab');

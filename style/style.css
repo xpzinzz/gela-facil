@@ -59,35 +59,35 @@
 
 .destaques-title-wrap {
   max-width: 530px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .destaques .section-label {
-  position: relative;
-  top: 40px;
-  left: 5px;
-  margin-bottom: 2px;
   color: #4d9dcc;
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
 }
 
 .destaques .section-title {
   color: #071b36;
-  margin-top: 50px;
+  margin: 0;
   font-size: clamp(2.15rem, 3vw, 3rem);
   font-weight: 800;
-  line-height: 0.98;
+  line-height: 1.05;
   letter-spacing: -0.045em;
 }
 
 .destaques-title-line {
-  position: relative;
-  top: -37px;
-  width: 30vh;
+  width: 120px;
+  max-width: 100%;
   height: 3px;
   display: block;
-  margin: 18px 0 16px;
+  margin: 8px 0 12px;
   border-radius: 99px;
   background: linear-gradient(90deg, #2d98ce 0 62%, #c6e6f6 62%);
 }
@@ -976,7 +976,7 @@ body {
   background-color: var(--white);
   color: var(--navy);
   overflow-x: hidden;
-  overflow-y: hidden; /* locked initially for splash screen */
+  overflow-y: auto;
   line-height: 1.5;
 }
 
@@ -1099,11 +1099,10 @@ textarea {
 /* ── NAVBAR ────────────────────────────────────────────── */
 #navbar {
   position: fixed;
-  top: 24px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 90%;
-  max-width: 1200px;
+  width: min(92%, 1200px);
   height: 72px;
   z-index: 1000;
   display: flex;
@@ -1137,7 +1136,7 @@ textarea {
   transform: scale(1.00);
 }
 .logo-img {
-  height: 55px;
+  height: 46px;
   width: auto;
   object-fit: contain;
   filter: brightness(0) invert(1); /* Logo starts white */
@@ -1147,16 +1146,17 @@ textarea {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 22px;
   list-style: none;
 }
 .nav-links a {
   text-decoration: none;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 500;
   transition: var(--transition);
   position: relative;
+  white-space: nowrap;
 }
 .nav-links a::after {
   content: '';
@@ -1178,7 +1178,14 @@ textarea {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
+}
+
+.nav-actions .btn-ghost,
+.nav-actions .btn-primary {
+  padding: 9px 16px;
+  font-size: 0.88rem;
+  white-space: nowrap;
 }
 
 .nav-cta-primary {
@@ -1195,7 +1202,7 @@ textarea {
 /* Scrolled Navbar Style */
 #navbar.scrolled {
   top: 12px;
-  width: 94%;
+  width: min(94%, 1200px);
   height: 70px;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
@@ -1204,7 +1211,7 @@ textarea {
   box-shadow: 0 10px 30px rgba(13, 31, 45, 0.1);
 }
 #navbar.scrolled .logo-img {
-  height: 54px;
+  height: 46px;
   filter: none; /* Logo in original color on white background */
 }
 #navbar.scrolled .nav-links a {
@@ -2996,7 +3003,7 @@ footer {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   /* Hamburger Menu Toggle Display */
   .menu-toggle {
     display: flex;
@@ -3407,24 +3414,16 @@ footer {
 /* ── PRODUCTS AD BANNER IMAGE ───────────────────────────── */
 .products-ad-banner-wrapper {
   grid-column: 1 / -1; /* spans all columns */
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   margin-top: 40px;
   margin-bottom: 40px;
-  padding: 40px var(--page-gutter);
   display: flex;
   justify-content: center;
-  border-top: 1px solid var(--border-clr);
-  border-bottom: 1px solid var(--border-clr);
   box-sizing: border-box;
 }
 
 .products-ad-banner-wrapper .products-ad-banner-img-wrap {
-  max-width: var(--content-max);
+  max-width: 100%;
   width: 100%;
 }
 
@@ -3451,17 +3450,11 @@ footer {
 
 /* ── DESTAQUES AD BANNER ────────────────────────────────── */
 .destaques-ad-banner-wrap {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding: 40px var(--page-gutter);
+  margin: 40px 0;
   box-sizing: border-box;
-  border-bottom: 1px solid var(--border-clr);
 }
 
 .destaques-ad-banner-link {
@@ -3897,12 +3890,13 @@ footer {
   background: var(--white);
   border: 1px solid var(--border-clr);
   border-radius: 18px;
-  padding: 24px 60px; /* Increased horizontal padding */
+  padding: 20px clamp(16px, 4vw, 40px);
   display: flex;
   flex-direction: column;
   align-items: center;
   box-shadow: 0 8px 30px rgba(13, 31, 45, 0.04);
-  min-width: 480px; /* Increased min-width */
+  width: 100%;
+  max-width: 480px;
 }
 
 .countdown-badge {

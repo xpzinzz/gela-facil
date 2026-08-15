@@ -659,7 +659,7 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 768px) {
   .form-row.split-2,
   .form-row.split-3 {
     grid-template-columns: 1fr;
@@ -668,6 +668,17 @@
   
   .form-row.split-3 .span-2 {
     grid-column: span 1;
+  }
+  
+  .wizard-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  
+  .wizard-actions button {
+    width: 100%;
+    justify-content: center;
   }
   
   .payment-methods-tabs {
