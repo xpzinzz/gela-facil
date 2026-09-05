@@ -635,12 +635,112 @@ window.closeCartDrawer = function() {
 // ── CHECKOUT & PAYMENT LOGIC ────────────────────────────
 window.goToCheckout = function() {
   closeCartDrawer();
-  if (window.location.pathname.includes('/pages/')) {
-    window.location.href = './payment.html';
-  } else {
-    window.location.href = './pages/payment.html';
-  }
+  showToast('A compra e o pagamento serão feitos no Mercado Livre. Links em breve.');
 };
+
+// Affiliate storefront: product sales happen on Mercado Livre, never on this site.
+window.openMercadoLivreProduct = function(productId) {
+  const product = productDetailsDb[String(productId)];
+  const affiliateUrl = product && product.affiliateUrl;
+  if (affiliateUrl) {
+    window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  showToast('Link deste produto no Mercado Livre em breve.');
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.title = 'Gela Fácil | Produtos no Mercado Livre e serviços em Linhares-ES';
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.content = 'Encontre produtos anunciados no Mercado Livre e contrate instalação ou manutenção de ar-condicionado com a Gela Fácil em Linhares-ES e região.';
+
+  // Keep every existing contact shortcut pointed at the official number.
+  document.querySelectorAll('a[href*="wa.me/5527999999999"]').forEach(link => {
+    link.href = link.href.replace('5527999999999', '5527999735745');
+  });
+  document.querySelectorAll('a[href="tel:+5527999999999"]').forEach(link => {
+    link.href = 'tel:+5527999735745';
+    const textNode = Array.from(link.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+    if (textNode) textNode.textContent = ' (27) 99973-5745';
+  });
+
+  // The old local checkout is intentionally disabled in affiliate mode.
+  document.querySelectorAll('#cart-float-btn, #cart-drawer, #cart-drawer-overlay').forEach(el => {
+    el.style.display = 'none';
+  });
+
+  const main = document.querySelector('main') || document.querySelector('#produtos');
+  if (main && !document.querySelector('.affiliate-disclosure')) {
+    const notice = document.createElement('aside');
+    notice.className = 'affiliate-disclosure';
+    notice.setAttribute('aria-label', 'Como funcionam as compras e os serviços');
+    notice.innerHTML = `
+      <strong>Compra segura pelo Mercado Livre</strong>
+      <span>Pagamento, entrega, troca e garantia do produto são tratados diretamente pelo Mercado Livre e pelo vendedor. A Gela Fácil apenas indica os produtos como afiliada.</span>
+      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares-ES e região. Não atendemos outros refrigeradores.</span>`;
+    main.parentNode.insertBefore(notice, main);
+  }
+
+  const firstHeroTitle = document.querySelector('.carousel-slide:first-child h1');
+  const firstHeroText = document.querySelector('.carousel-slide:first-child .hero-sub');
+  if (firstHeroTitle) firstHeroTitle.innerHTML = 'Escolha seu <em>ar-condicionado</em><br>e compre pelo<br>Mercado Livre.';
+  if (firstHeroText) firstHeroText.textContent = 'Compare modelos selecionados e finalize a compra com pagamento e entrega pelo Mercado Livre. Em Linhares-ES e região, você também pode contratar nossa instalação e manutenção separadamente.';
+  const commercialText = document.querySelector('.carousel-slide:nth-child(3) .hero-sub');
+  if (commercialText) commercialText.textContent = 'Instalação, dimensionamento e manutenção de sistemas de ar-condicionado para empresas em Linhares-ES e região. Fale conosco para avaliar seu projeto.';
+
+  const statCopies = [
+    ['Mercado Livre', 'Pagamento e entrega'],
+    ['Linhares-ES', 'Atendimento local'],
+    ['Sob consulta', 'Orçamento do serviço'],
+    ['Equipe local', 'Instalação e manutenção']
+  ];
+  document.querySelectorAll('.stats-bar .stat-text').forEach((box, index) => {
+    if (!statCopies[index]) return;
+    const strong = box.querySelector('strong');
+    const span = box.querySelector('span');
+    if (strong) strong.textContent = statCopies[index][0];
+    if (span) span.textContent = statCopies[index][1];
+  });
+
+  const catalogTitle = document.querySelector('.catalog-title');
+  const catalogSubtitle = document.querySelector('.catalog-subtitle');
+  if (catalogTitle) catalogTitle.textContent = 'Produtos selecionados para você';
+  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes aqui e finalize a compra diretamente no Mercado Livre. Os links de afiliado serão disponibilizados em breve.';
+
+  document.querySelectorAll('.footer-brand > p').forEach(p => {
+    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares-ES e região.';
+  });
+  document.querySelectorAll('.footer-contact a').forEach(link => {
+    if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares-ES e região';
+  });
+
+  const bento = document.querySelector('.bento-section .bento-container');
+  if (bento) {
+    bento.innerHTML = `
+      <div class="bento-grid">
+        <div class="bento-card card-vrf">
+          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional em Linhares-ES e região.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
+        </div>
+        <div class="bento-card card-camaras">
+          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção preventiva ou corretiva de ar-condicionado.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
+        </div>
+      </div>`;
+  }
+
+  const relabelProductActions = root => {
+    root.querySelectorAll('.view-details-btn').forEach(el => {
+      if (el.textContent !== 'Ver detalhes') el.textContent = 'Ver detalhes';
+    });
+    root.querySelectorAll('.rating-summary, .product-rating').forEach(el => el.style.display = 'none');
+    root.querySelectorAll('.btn-cart-add').forEach(btn => {
+      if (btn.textContent.trim() !== '↗') btn.textContent = '↗';
+      const label = 'Ver produto e consultar link do Mercado Livre';
+      if (btn.getAttribute('aria-label') !== label) btn.setAttribute('aria-label', label);
+    });
+  };
+  relabelProductActions(document);
+  new MutationObserver(() => relabelProductActions(document)).observe(document.body, { childList: true, subtree: true });
+});
 
 // ── PRODUCT CARD EVENT LISTENER ADJUSTMENT ──────────────
 productCards.forEach(card => {
@@ -674,17 +774,7 @@ quickAddBtns.forEach(btn => {
     if (!card) return;
     const dataset = card.dataset;
     
-    addToCart(
-      dataset.id,
-      dataset.name,
-      dataset.brand,
-      parseInt(dataset.price),
-      dataset.image || 'split',
-      'delivery',
-      'Apenas Entrega',
-      0,
-      1
-    );
+    openMercadoLivreProduct(dataset.id);
   });
 });
 

@@ -350,9 +350,9 @@ function filterAndRender() {
               <div class="product-price-wrap">
                 ${oldPriceHtml}
                 <span class="product-price">${formatPrice(prod.price)}</span>
-                <span class="product-payment-note">Entrega e instalação disponíveis</span>
+                <span class="product-payment-note">Compra, pagamento e entrega pelo Mercado Livre</span>
               </div>
-              <button class="btn-cart-add" aria-label="Adicionar ${prod.name} ao carrinho">
+              <button class="btn-cart-add" aria-label="Consultar ${prod.name} no Mercado Livre">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                   <circle cx="9" cy="20" r="1" /><circle cx="19" cy="20" r="1" />
                   <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.55h7.8a2 2 0 0 0 1.95-1.55L21 7H6" />
@@ -405,20 +405,7 @@ function setupCardClickListeners() {
       const price = parseInt(card.getAttribute('data-price'));
       const image = card.getAttribute('data-image');
       
-      // Call global addToCart (from script.js)
-      if (window.addToCart) {
-        window.addToCart(
-          id,
-          name,
-          brand,
-          price,
-          image,
-          'delivery',
-          'Apenas Entrega',
-          0,
-          1
-        );
-      }
+      openMercadoLivreProduct(id);
     });
   });
 }

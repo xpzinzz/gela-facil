@@ -9,6 +9,9 @@ function adjustImagePath(path) {
   return '../' + path;
 }
 
+// Local checkout was retired when the catalog became an affiliate storefront.
+window.location.replace('./products.html');
+
 document.addEventListener('DOMContentLoaded', () => {
   // If cart is empty, alert and redirect to catalog
   if (!cart || cart.length === 0) {

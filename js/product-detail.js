@@ -39,6 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
     selectedOptionName: 'Apenas Entrega',
     selectedOptionPrice: 0
   };
+
+  const isAirConditioner = !String(id).startsWith('b');
+  const servicesBox = document.querySelector('.services-container-box');
+  if (servicesBox) {
+    servicesBox.innerHTML = isAirConditioner ? `
+      <div class="services-section-title">Serviços Gela Fácil (contratação separada):</div>
+      <p>Instalação e manutenção de ar-condicionado em Linhares-ES e região. Solicite avaliação e orçamento pelo WhatsApp.</p>
+      <a class="btn-primary" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Vi%20um%20ar-condicionado%20no%20site%20e%20gostaria%20de%20um%20or%C3%A7amento%20de%20instala%C3%A7%C3%A3o%20ou%20manuten%C3%A7%C3%A3o.">Pedir orçamento de serviço</a>` : `
+      <div class="services-section-title">Importante sobre este produto</div>
+      <p>A Gela Fácil não oferece instalação nem manutenção para geladeiras, frigobares, cervejeiras ou outros refrigeradores. Compra, entrega e demais responsabilidades ficam com o Mercado Livre e o vendedor.</p>`;
+  }
   
   // Populate basic text details
   document.getElementById('modal-product-brand').textContent = detailProduct.brand;
@@ -69,10 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSpecs();
   
   // Render reviews
-  renderReviews();
+  const reviewsTab = document.querySelector("[onclick=\"switchTab('reviews')\"]");
+  if (reviewsTab) reviewsTab.style.display = 'none';
   
-  // Setup additional services cards click listeners
-  setupServices();
+  // Services are quoted separately and are never added to the product price.
   
   // Setup review star selection clicks
   setupReviewStarSelection();
@@ -80,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add Event Listeners to Buttons
   const cartAddBtn = document.getElementById('modal-cart-add-btn');
   if (cartAddBtn) {
+    cartAddBtn.style.display = 'none';
     cartAddBtn.addEventListener('click', () => {
       addToCart(
         currentProduct.id,
@@ -98,24 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const buyNowBtn = document.getElementById('modal-buy-now-btn');
   if (buyNowBtn) {
+    buyNowBtn.textContent = 'Ver no Mercado Livre';
     buyNowBtn.addEventListener('click', () => {
-      addToCart(
-        currentProduct.id,
-        currentProduct.name,
-        currentProduct.brand,
-        currentProduct.price,
-        currentProduct.image,
-        currentProduct.selectedOption,
-        currentProduct.selectedOptionName,
-        currentProduct.selectedOptionPrice,
-        1
-      );
-      goToCheckout();
+      openMercadoLivreProduct(currentProduct.id);
     });
+  }
+
+  const summaryBox = document.querySelector('.detail-summary-box');
+  if (summaryBox) {
+    summaryBox.innerHTML = '<strong>Valor anunciado no Mercado Livre</strong><p style="margin:8px 0 0">O preço, parcelamento, disponibilidade e frete devem ser confirmados no anúncio. Serviços da Gela Fácil não estão incluídos.</p>';
   }
   
   // Recalculate totals
-  updateDetailTotals();
+  // No local checkout or combined product/service total in affiliate mode.
 });
 
 // Render dynamic thumbnails

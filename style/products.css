@@ -1763,7 +1763,7 @@ body {
 .catalog-header,
 .catalog-container,
 .catalog-empty-state {
-  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-family: var(--font-body);
 }
 
 .catalog-title,
@@ -1772,7 +1772,7 @@ body {
 .catalog-grid .product-name,
 .catalog-grid .product-price-wrap .product-price,
 .catalog-empty-state h3 {
-  font-family: 'Manrope', var(--font-title), sans-serif;
+  font-family: var(--font-title);
 }
 
 .catalog-title {
@@ -1792,7 +1792,7 @@ body {
 .catalog-grid .spec-tag,
 .catalog-search-tools .sort-label,
 .catalog-search-hints span {
-  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-family: var(--font-body);
 }
 
 .catalog-label,
@@ -1820,7 +1820,7 @@ body {
 .catalog-grid .product-card,
 .catalog-grid .view-details-btn,
 .catalog-grid .btn-cart-add {
-  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-family: var(--font-body);
 }
 
 .catalog-grid .product-name {
@@ -1849,5 +1849,5 @@ body {
 .product-payment-note,
 .product-rating,
 .product-availability {
-  font-family: 'DM Sans', var(--font-body), sans-serif;
+  font-family: var(--font-body);
 }
