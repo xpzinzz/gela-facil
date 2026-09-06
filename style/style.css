@@ -3005,6 +3005,10 @@ footer {
 
 @media (max-width: 1024px) {
   /* Hamburger Menu Toggle Display */
+  .scroll-indicator {
+    display: none;
+  }
+
   .menu-toggle {
     display: flex;
   }
