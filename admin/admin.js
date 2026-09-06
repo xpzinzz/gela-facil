@@ -68,6 +68,12 @@ let charts = {};
 let currentOrderFilter = 'all';
 let editingProductId = null;
 
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+}
+
 // ── HELPERS ───────────────────────────────────────────────
 const fmt = (n) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
 const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
@@ -263,7 +269,7 @@ function renderStockAlerts() {
     <div class="stock-alert-item">
       <div class="stock-alert-icon ${iconCls}">${label}</div>
       <div class="stock-alert-info">
-        <div class="stock-alert-name">${p.name}</div>
+        <div class="stock-alert-name">${escapeHtml(p.name)}</div>
         <div class="stock-alert-qty">Qtd: ${p.stock} | Mín: ${p.minStock}</div>
       </div>
     </div>`;
@@ -278,10 +284,13 @@ function renderStockBadge() {
 }
 
 // ── CHARTS ────────────────────────────────────────────────
-Chart.defaults.color = '#8892A4';
-Chart.defaults.font.family = "'Inter', sans-serif";
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.color = '#8892A4';
+  Chart.defaults.font.family = "'Inter', sans-serif";
+}
 
 function renderCharts() {
+  if (typeof Chart === 'undefined') return;
   renderRevenueChart();
   renderCategoryChart();
 }
@@ -361,6 +370,7 @@ function renderCategoryChart() {
 
 // Reports Charts
 function renderReportCharts() {
+  if (typeof Chart === 'undefined') return;
   renderTopProductsChart();
   renderWeeklyChart();
   renderPaymentChart();
@@ -474,8 +484,8 @@ function renderProducts() {
         <div class="product-thumb">
           <div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${letter}</div>
           <div class="product-thumb-info">
-            <strong>${p.name}</strong>
-            <span>${p.brand} · ${p.sku}</span>
+            <strong>${escapeHtml(p.name)}</strong>
+            <span>${escapeHtml(p.brand)} · ${escapeHtml(p.sku)}</span>
           </div>
         </div>
       </td>
@@ -597,11 +607,11 @@ function renderStock() {
       <td>
         <div class="product-thumb">
           <div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${p.brand[0]}</div>
-          <div class="product-thumb-info"><strong>${p.name}</strong><span>${p.brand}</span></div>
+          <div class="product-thumb-info"><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(p.brand)}</span></div>
         </div>
       </td>
-      <td><code style="background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:5px;font-size:0.78rem">${p.sku}</code></td>
-      <td>${p.category}</td>
+      <td><code style="background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:5px;font-size:0.78rem">${escapeHtml(p.sku)}</code></td>
+      <td>${escapeHtml(p.category)}</td>
       <td>
         <div class="stock-progress-wrap">
           <div class="stock-progress-bar"><div class="stock-progress-fill fill-${st}" style="width:${pct}%"></div></div>
@@ -631,17 +641,17 @@ function renderStockHistory() {
     return `
     <tr>
       <td>${fmtDate(h.date)}</td>
-      <td>${h.product}</td>
+      <td>${escapeHtml(h.product)}</td>
       <td><span style="color:${typeColor};font-weight:700">${typeLabel}</span></td>
       <td><strong>${h.qty} un.</strong></td>
-      <td>${h.user}</td>
+      <td>${escapeHtml(h.user)}</td>
     </tr>`;
   }).join('');
 }
 
 function populateStockProductSelect() {
   const sel = document.getElementById('stock-product-select');
-  sel.innerHTML = DB.products.map(p => `<option value="${p.id}">${p.name} (${p.stock} em estoque)</option>`).join('');
+  sel.innerHTML = DB.products.map(p => `<option value="${p.id}">${escapeHtml(p.name)} (${p.stock} em estoque)</option>`).join('');
 }
 
 function openStockAdjust(productId) {
@@ -664,6 +674,14 @@ function setupStockForm() {
 
     const product = DB.products.find(p => p.id === productId);
     if (!product) return;
+    if (!Number.isSafeInteger(qty) || qty < 0 || (type !== 'adjust' && qty === 0)) {
+      showToast('Informe uma quantidade válida.', true);
+      return;
+    }
+    if (type === 'out' && qty > product.stock) {
+      showToast('Saída maior que o estoque disponível.', true);
+      return;
+    }
 
     if (type === 'in') product.stock += qty;
     else if (type === 'out') product.stock = Math.max(0, product.stock - qty);
@@ -855,12 +873,18 @@ function setupReports() {
 function exportCSV() {
   const rows = [['ID','Produto','Marca','Categoria','Preço','Estoque','Status']];
   DB.products.forEach(p => rows.push([p.id, p.name, p.brand, p.category, p.price, p.stock, p.status]));
-  const csv = rows.map(r => r.join(',')).join('\n');
+  const csv = '\uFEFF' + rows.map(r => r.map(csvCell).join(';')).join('\r\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = 'gelafacil_produtos.csv'; a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
   showToast('CSV exportado com sucesso!');
+}
+
+function csvCell(value) {
+  let text = String(value ?? '');
+  if (/^[\s]*[=+@-]/.test(text)) text = "'" + text;
+  return '"' + text.replace(/"/g, '""') + '"';
 }
 
 // ── EXPORT BUTTON ─────────────────────────────────────────
@@ -906,7 +930,10 @@ function setupNotifications() {
 // ── SETTINGS ──────────────────────────────────────────────
 function setupSettings() {
   document.querySelectorAll('.settings-form button.btn-primary-admin').forEach(btn => {
-    btn.addEventListener('click', () => showToast('Configurações salvas com sucesso!'));
+    btn.addEventListener('click', event => {
+      event.preventDefault();
+      showToast('Painel demonstrativo: configurações ainda não são salvas.', true);
+    });
   });
 }
 
@@ -924,7 +951,7 @@ function initApp() {
 document.addEventListener('DOMContentLoaded', () => {
   // Logout apenas redireciona para uma página ou faz reload (sem login por enquanto)
   document.getElementById('btn-logout').addEventListener('click', () => {
-    if (confirm('Deseja sair do painel?')) location.reload();
+    if (confirm('Deseja sair do painel?')) location.href = '../index.html';
   });
 
   setupNavigation();

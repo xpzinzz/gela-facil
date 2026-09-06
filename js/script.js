@@ -87,18 +87,34 @@ if (navbar) {
 }
 
 // Toggle Mobile Menu
-if (menuToggle) {
+function setMenuOpen(open) {
+  if (!menuToggle || !navLinksContainer) return;
+  menuToggle.classList.toggle('active', open);
+  navLinksContainer.classList.toggle('active', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+  menuToggle.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+}
+if (menuToggle && navLinksContainer) {
+  menuToggle.setAttribute('aria-controls', 'nav-links');
+  setMenuOpen(false);
   menuToggle.addEventListener('click', () => {
-    menuToggle.classList.toggle('active');
-    navLinksContainer.classList.toggle('active');
+    setMenuOpen(!navLinksContainer.classList.contains('active'));
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && navLinksContainer.classList.contains('active')) {
+      setMenuOpen(false);
+      menuToggle.focus();
+    }
+  });
+  document.addEventListener('click', event => {
+    if (!navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) setMenuOpen(false);
   });
 }
 
 // Close Mobile Menu when clicking on links
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
-    menuToggle.classList.remove('active');
-    navLinksContainer.classList.remove('active');
+    setMenuOpen(false);
   });
 });
 
@@ -120,6 +136,11 @@ function showSlide(n) {
   
   if (slides[slideIndex]) slides[slideIndex].classList.add('active');
   if (dots[slideIndex]) dots[slideIndex].classList.add('active');
+  slides.forEach((slide, index) => {
+    slide.inert = index !== slideIndex;
+    slide.setAttribute('aria-hidden', String(index !== slideIndex));
+  });
+  dots.forEach((dot, index) => dot.setAttribute('aria-current', String(index === slideIndex)));
 }
 
 function nextSlide() {
@@ -131,6 +152,8 @@ function prevSlide() {
 }
 
 function startCarouselAutoplay() {
+  stopCarouselAutoplay();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
   if (!slides || slides.length === 0) return;
   carouselInterval = setInterval(nextSlide, 7000); // changes slide every 7 seconds
 }
@@ -168,7 +191,13 @@ dots.forEach(dot => {
 
 // Initialize Carousel Autoplay if slides exist
 if (slides && slides.length > 0) {
+  showSlide(0);
   startCarouselAutoplay();
+  document.addEventListener('visibilitychange', () => document.hidden ? stopCarouselAutoplay() : startCarouselAutoplay());
+  const carousel = slides[0].closest('.hero-carousel');
+  carousel?.addEventListener('focusin', stopCarouselAutoplay);
+  carousel?.addEventListener('mouseenter', stopCarouselAutoplay);
+  carousel?.addEventListener('mouseleave', startCarouselAutoplay);
 }
 
 // ── PRODUCT CATALOG FILTERS ─────────────────────────────
@@ -199,6 +228,28 @@ filterTabs.forEach(tab => {
 
 // ── PRODUCT DETAILS DATABASE ────────────────────────────
 const productDetailsDb = {
+  "ventisol-clin16": {
+    name: "Climatizador evaporativo CLIN16 16 litros",
+    brand: "Ventisol",
+    price: null,
+    affiliateUrl: "https://meli.la/1isvNAZ",
+    sourceUrl: "https://www.ventisol.com.br/climatizador-16l-ventisol-130w-clin16",
+    marketplaceProductId: "MLB26208174",
+    categories: ["climatizador", "evaporativo"],
+    image: "assets/produtos/ventisol_clin16.jpg",
+    gallery: ["assets/produtos/ventisol_clin16.jpg", "assets/produtos/ventisol_clin16_2.jpg", "assets/produtos/ventisol_clin16_3.jpg"],
+    desc: "O Ventisol CLIN16 é um climatizador evaporativo com reservatório de 16 litros e potência de 130 W. Possui filtro tipo colmeia e três velocidades para ajustar a ventilação. O reservatório superior permite adicionar gelo, conforme as orientações do fabricante. Confira no anúncio a voltagem disponível e as condições de compra.",
+    specs: {
+      "Modelo": "CLIN16",
+      "Tipo": "Climatizador evaporativo",
+      "Capacidade": "16 litros",
+      "Potência": "130 W",
+      "Velocidades": "3",
+      "Filtro": "Tipo colmeia",
+      "Voltagem": "Versões 127 V e 220 V; confira no anúncio",
+      "Dimensões (C × L × A)": "39 × 30 × 74 cm"
+    }
+  },
   "1": {
     name: "WindFree Inverter 12.000 BTU",
     brand: "Samsung",
@@ -314,7 +365,7 @@ const productDetailsDb = {
       "Gás Ecológico": "R-410A",
       "Garantia": "1 ano",
       "Capacidade": "7.500 BTUs",
-      "Tecnologia": "Convencional Split"
+      "Tecnologia": "Janela"
     },
     reviews: [
       { author: "Pedro Henrique", stars: 4, date: "09/04/2026", comment: "Ar de janela clássico e eficiente. O ruído é bem menor que os antigos." }
@@ -490,10 +541,10 @@ const productDetailsDb = {
 };
 
 // ── SHOPPING CART STATE & MANAGEMENT ────────────────────
-let cart = JSON.parse(localStorage.getItem('gela_facil_cart') || '[]');
+// Legacy cart data must never prevent the affiliate storefront from loading.
+let cart = [];
 
 function saveCart() {
-  localStorage.setItem('gela_facil_cart', JSON.stringify(cart));
   updateCartCounters();
 }
 
@@ -640,19 +691,24 @@ window.goToCheckout = function() {
 
 // Affiliate storefront: product sales happen on Mercado Livre, never on this site.
 window.openMercadoLivreProduct = function(productId) {
-  const product = productDetailsDb[String(productId)];
+  const product = Object.hasOwn(productDetailsDb, String(productId)) ? productDetailsDb[String(productId)] : null;
   const affiliateUrl = product && product.affiliateUrl;
-  if (affiliateUrl) {
+  if (isValidAffiliateUrl(affiliateUrl)) {
     window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
     return;
   }
   showToast('Link deste produto no Mercado Livre em breve.');
 };
 
+function isValidAffiliateUrl(value) {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password &&
+      ['mercadolivre.com.br', 'mercadolivre.com', 'mercadolibre.com', 'meli.la'].some(host => url.hostname === host || url.hostname.endsWith('.' + host));
+  } catch { return false; }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  document.title = 'Gela Fácil | Produtos no Mercado Livre e serviços em Linhares-ES';
-  const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription) metaDescription.content = 'Encontre produtos anunciados no Mercado Livre e contrate instalação ou manutenção de ar-condicionado com a Gela Fácil em Linhares-ES e região.';
 
   // Keep every existing contact shortcut pointed at the official number.
   document.querySelectorAll('a[href*="wa.me/5527999999999"]').forEach(link => {
@@ -677,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
     notice.innerHTML = `
       <strong>Compra segura pelo Mercado Livre</strong>
       <span>Pagamento, entrega, troca e garantia do produto são tratados diretamente pelo Mercado Livre e pelo vendedor. A Gela Fácil apenas indica os produtos como afiliada.</span>
-      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares-ES e região. Não atendemos outros refrigeradores.</span>`;
+      <span><b>Serviço separado:</b> venda, instalação, manutenção e higienização de ar-condicionado, geladeira e freezer. Base em Bebedouro, Linhares–ES. Consulte atendimento para sua cidade.</span>`;
     main.parentNode.insertBefore(notice, main);
   }
 
@@ -705,10 +761,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const catalogTitle = document.querySelector('.catalog-title');
   const catalogSubtitle = document.querySelector('.catalog-subtitle');
   if (catalogTitle) catalogTitle.textContent = 'Produtos selecionados para você';
-  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes aqui e finalize a compra diretamente no Mercado Livre. Os links de afiliado serão disponibilizados em breve.';
+  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes e acesse os anúncios disponíveis no Mercado Livre para confirmar preço, voltagem e entrega.';
 
   document.querySelectorAll('.footer-brand > p').forEach(p => {
-    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares-ES e região.';
+    p.textContent = 'Produtos indicados no Mercado Livre e serviços de ar-condicionado, geladeira e freezer. Base em Bebedouro, Linhares–ES. Consulte sua cidade.';
   });
   document.querySelectorAll('.footer-contact a').forEach(link => {
     if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares-ES e região';
@@ -719,10 +775,10 @@ document.addEventListener('DOMContentLoaded', () => {
     bento.innerHTML = `
       <div class="bento-grid">
         <div class="bento-card card-vrf">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional em Linhares-ES e região.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Venda e instalação. Base em Bebedouro, Linhares–ES.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20de%20venda%20ou%20instala%C3%A7%C3%A3o%20de%20ar-condicionado%2C%20geladeira%20ou%20freezer."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
         </div>
         <div class="bento-card card-camaras">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção preventiva ou corretiva de ar-condicionado.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Manutenção e higienização de ar-condicionado, geladeira e freezer.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20higieniza%C3%A7%C3%A3o%20de%20ar-condicionado%2C%20geladeira%20ou%20freezer."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
         </div>
       </div>`;
   }
@@ -739,11 +795,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
   relabelProductActions(document);
-  new MutationObserver(() => relabelProductActions(document)).observe(document.body, { childList: true, subtree: true });
 });
 
 // ── PRODUCT CARD EVENT LISTENER ADJUSTMENT ──────────────
 productCards.forEach(card => {
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('role', 'link');
+  card.setAttribute('aria-label', `Ver detalhes de ${card.dataset.name}`);
+  card.addEventListener('keydown', event => {
+    if (event.target === card && event.key === 'Enter') card.click();
+  });
   card.addEventListener('click', (e) => {
     // Prevent redirect if parent track was dragged
     const track = card.closest('.clima-bebidas-track');
@@ -787,11 +848,12 @@ function scrollToProducts() {
 
 // Helper: Format number to BRL Currency
 function formatPrice(value) {
+  if (!Number.isFinite(value)) return 'Consulte no Mercado Livre';
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(value);
 }
 
@@ -800,6 +862,8 @@ function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast-notification';
   toast.textContent = message;
+  toast.setAttribute('role', 'status');
+  toast.setAttribute('aria-live', 'polite');
   
   document.body.appendChild(toast);
   
@@ -827,12 +891,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const href = this.getAttribute('href');
     if (href === '#') return;
     
-    const target = document.querySelector(href);
+    const target = document.getElementById(href.slice(1));
     if (target) {
       e.preventDefault();
       
       // Calculate navbar height offset
-      const navHeight = navbar.offsetHeight || 70;
+      const navHeight = navbar?.offsetHeight || 70;
       const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight + 5;
       
       window.scrollTo({
@@ -860,6 +924,7 @@ function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = nu
   });
 
   track.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return;
     isDown = true;
     track.classList.add('active-dragging');
     track.setAttribute('data-dragged', 'false');
@@ -867,6 +932,11 @@ function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = nu
     scrollLeft = track.scrollLeft;
     wasDragged = false;
   });
+
+  track.addEventListener('touchstart', () => {
+    wasDragged = false;
+    track.setAttribute('data-dragged', 'false');
+  }, { passive: true });
 
   track.addEventListener('mouseleave', () => {
     if (isDown) {
@@ -952,42 +1022,6 @@ function scrollToProducts() {
 
 // Initialize remaining generic sliders
 setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
-
-// ── BEBIDAS COUNTDOWN TIMER ──────────────────────────────
-function startCountdown() {
-  const hoursEl = document.getElementById('timer-hours');
-  const minutesEl = document.getElementById('timer-minutes');
-  const secondsEl = document.getElementById('timer-seconds');
-  
-  if (!hoursEl || !minutesEl || !secondsEl) return;
-  
-  let totalSeconds = localStorage.getItem('clima_countdown_seconds');
-  if (totalSeconds === null || totalSeconds <= 0) {
-    totalSeconds = 2 * 3600 + 33 * 60 + 23; // 2h 33m 23s
-  } else {
-    totalSeconds = parseInt(totalSeconds);
-  }
-
-  function updateTimer() {
-    if (totalSeconds <= 0) {
-      totalSeconds = 3 * 3600; // Reset to 3 hours
-    }
-    
-    totalSeconds--;
-    localStorage.setItem('clima_countdown_seconds', totalSeconds);
-    
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    
-    hoursEl.textContent = String(h).padStart(2, '0');
-    minutesEl.textContent = String(m).padStart(2, '0');
-    secondsEl.textContent = String(s).padStart(2, '0');
-  }
-  
-  updateTimer();
-  setInterval(updateTimer, 1000);
-}
 
 // ── DESTAQUES CAROUSEL DRAG & ARROWS ─────────────────────
 function initDestaquesCarousel() {
@@ -1084,7 +1118,6 @@ function initDestaquesCarousel() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  startCountdown();
   updateCartCounters();
   initDestaquesCarousel();
   

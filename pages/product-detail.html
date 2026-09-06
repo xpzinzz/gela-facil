@@ -8,7 +8,7 @@
   <meta name="description" content="Confira especificações, fotos e avaliações deste aparelho na Gela Fácil.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="../style/style.css">
   <link rel="stylesheet" href="../style/product-detail.css">
@@ -24,7 +24,7 @@
       </a>
 
       <!-- Hamburger Button for Mobile -->
-      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu de navegação">
+      <button class="menu-toggle" id="menu-toggle" aria-controls="nav-links" aria-expanded="false" aria-label="Abrir menu de navegação">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -38,8 +38,8 @@
       </ul>
 
       <div class="nav-actions">
-        <a href="https://wa.me/5527999999999?text=Olá!%20Gostaria%20de%20falar%20com%20um%20atendente."
-          class="btn-ghost nav-cta-ghost" target="_blank"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+        <a href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20falar%20com%20um%20atendente."
+          class="btn-ghost nav-cta-ghost" target="_blank" rel="noopener noreferrer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2.5" class="icon-svg">
             <path
               d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -78,35 +78,8 @@
 
         <!-- Serviços Adicionais (Moved here!) -->
         <div class="services-container-box">
-          <div class="services-section-title">Serviços Adicionais:</div>
-          <div class="services-list">
-            <div class="service-card selected" data-option="delivery" data-extra="0">
-              <div class="service-icon">⚡</div>
-              <div class="service-details">
-                <div class="service-title">Apenas Entrega</div>
-                <div class="service-desc">Receba o aparelho em casa em até 48h · Frete Grátis</div>
-              </div>
-              <div class="service-price">Grátis</div>
-            </div>
-
-            <div class="service-card" data-option="installation" data-extra="299">
-              <div class="service-icon">🛠</div>
-              <div class="service-details">
-                <div class="service-title">Entrega + Instalação</div>
-                <div class="service-desc">Técnicos credenciados realizam a instalação na entrega</div>
-              </div>
-              <div class="service-price">+ R$ 299</div>
-            </div>
-
-            <div class="service-card" data-option="full_service" data-extra="499">
-              <div class="service-icon">🛡</div>
-              <div class="service-details">
-                <div class="service-title">Plano Gela Fácil Prime</div>
-                <div class="service-desc">Entrega + Instalação + 2 Anos de Limpeza Preventiva</div>
-              </div>
-              <div class="service-price">+ R$ 499</div>
-            </div>
-          </div>
+          <div class="services-section-title">Serviços Gela Fácil (contratação separada)</div>
+          <p>Consulte orçamento e atendimento para sua cidade pelo WhatsApp.</p>
         </div>
       </div>
 
@@ -154,7 +127,7 @@
             Adicionar ao Carrinho
           </button>
           <button class="btn-primary" id="modal-buy-now-btn">
-            Comprar Agora
+            Consultar anúncio
           </button>
         </div>
       </div>
@@ -165,7 +138,6 @@
   <section class="extra-details-section">
     <div class="tabs-header">
       <button class="tab-nav-btn active" onclick="switchTab('specs')">Especificações Técnicas</button>
-      <button class="tab-nav-btn" onclick="switchTab('reviews')">Avaliações dos Clientes</button>
     </div>
 
     <!-- Specs Tab -->
@@ -175,44 +147,6 @@
       </div>
     </div>
 
-    <!-- Reviews Tab -->
-    <div class="tab-content" id="tab-reviews">
-      <div class="reviews-grid">
-        <div class="reviews-summary-card">
-          <h4>Nota Geral</h4>
-          <div class="average-score" id="average-score-val">5.0</div>
-          <div class="stars-large" id="average-stars-row">★★★★★</div>
-          <div class="rating-total-txt" id="average-total-text">Baseado em 34 avaliações</div>
-        </div>
-
-        <div class="reviews-list-col">
-          <div id="reviews-list">
-            <!-- Reviews list loaded dynamically -->
-          </div>
-
-          <!-- Leave a Review Box -->
-          <div class="write-review-box">
-            <h4>Deixe sua avaliação</h4>
-            <div class="rating-select" id="rating-select-row">
-              <span class="rating-star-option" data-star="1">★</span>
-              <span class="rating-star-option" data-star="2">★</span>
-              <span class="rating-star-option" data-star="3">★</span>
-              <span class="rating-star-option" data-star="4">★</span>
-              <span class="rating-star-option active" data-star="5">★</span>
-            </div>
-            <form class="review-form" id="new-review-form" onsubmit="handleReviewSubmit(event)">
-              <div class="form-group-row">
-                <input type="text" id="review-author" placeholder="Seu nome" required>
-                <input type="email" id="review-email" placeholder="Seu e-mail" required>
-              </div>
-              <textarea id="review-comment" rows="4" placeholder="Escreva sua opinião sobre o produto..."
-                required></textarea>
-              <button type="submit" class="btn-primary" style="align-self: flex-start;">Enviar Avaliação</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- ── SHOPPING CART DRAWER ────────────────────────────────── -->

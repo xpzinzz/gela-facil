@@ -1,0 +1,29 @@
+{
+  "status": "pending_product_identification",
+  "note": "Links enviados pelo proprietário. A consulta automática não conseguiu identificar os anúncios. Não publicar produtos sem confirmar nome, fotos e especificações. Preservar estes links de afiliado ao cadastrar.",
+  "affiliateUrls": [
+    "https://meli.la/2UVwQPR",
+    "https://meli.la/2qFf9Va",
+    "https://meli.la/1Cxvz5X",
+    "https://meli.la/2p65HAQ",
+    "https://meli.la/2eWkjRc",
+    "https://meli.la/2BZx3L8",
+    "https://meli.la/2ziopoK",
+    "https://meli.la/2XWerXs",
+    "https://meli.la/2VWFqur",
+    "https://meli.la/2QLfEjw",
+    "https://meli.la/1NYTfsb",
+    "https://meli.la/25Sy6oD"
+  ],
+  "registeredProducts": [
+    {
+      "id": "ventisol-clin16",
+      "affiliateUrl": "https://meli.la/1isvNAZ",
+      "receivedVariant": "https://meli.la/1isvnaz",
+      "marketplaceProductId": "MLB26208174",
+      "sourceUrl": "https://www.ventisol.com.br/climatizador-16l-ventisol-130w-clin16",
+      "priceVerified": false,
+      "voltageVerified": false
+    }
+  ]
+}

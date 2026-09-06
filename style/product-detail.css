@@ -52,7 +52,7 @@
   border-radius: 12px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(74, 145, 196, 0.08);
+  border: 1px solid rgba(0, 89, 187, 0.08);
 }
 
 .main-image-wrap img {
@@ -101,7 +101,7 @@
 .thumb-btn.active {
   border-color: var(--blue);
   background: var(--ice);
-  box-shadow: 0 4px 12px rgba(74, 145, 196, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 89, 187, 0.15);
 }
 
 /* Info Column */
@@ -223,7 +223,7 @@
 .service-card.selected {
   border-color: var(--blue);
   background: var(--ice);
-  box-shadow: 0 8px 20px rgba(74, 145, 196, 0.12);
+  box-shadow: 0 8px 20px rgba(0, 89, 187, 0.12);
 }
 
 .service-icon {
@@ -378,7 +378,7 @@
   padding: 16px 20px;
   background: var(--gray);
   border-radius: 10px;
-  border: 1px solid rgba(74, 145, 196, 0.06);
+  border: 1px solid rgba(0, 89, 187, 0.06);
   transition: var(--transition);
 }
 
@@ -581,7 +581,7 @@
   border-color: var(--blue);
   background: var(--white);
   outline: none;
-  box-shadow: 0 0 0 4px rgba(74, 145, 196, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 0 0 4px rgba(0, 89, 187, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .review-form button[type="submit"] {
@@ -616,4 +616,21 @@
     grid-template-columns: 1fr;
     gap: 16px;
   }
+}
+
+/* Product content must be allowed to shrink inside the grid. */
+.detail-grid > *, .reviews-grid > *, .form-group-row > * { min-width: 0; }
+.services-container-box { overflow-wrap: anywhere; }
+.thumbnails-row { max-width: 100%; overflow-x: auto; }
+.thumb-btn { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .product-detail-container { margin-top: 100px; padding-inline: 16px; }
+  .gallery-container, .services-container-box, .write-review-box, .reviews-summary-card { padding: 16px; }
+  .main-image-wrap { height: auto; aspect-ratio: 1; }
+  .detail-grid { gap: 24px; }
+  .tabs-header { flex-wrap: wrap; }
+  .tab-nav-btn { flex: 1 1 180px; padding: 12px; white-space: normal; }
+  .specs-table-grid { overflow-wrap: anywhere; }
+  .review-form input, .review-form textarea { font-size: 16px; }
+  .services-container-box .btn-primary { width: 100%; margin-top: 16px; }
 }

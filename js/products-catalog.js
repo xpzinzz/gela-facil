@@ -16,26 +16,14 @@ const productCategories = {
   "2": ["inverter", "split"],
   "3": ["inverter", "split"],
   "4": ["inverter", "split"],
-  "5": ["split"],
+  "5": ["janela"],
   "6": ["portatil"],
   "b1": ["bebidas"],
   "b2": ["bebidas"],
   "b3": ["bebidas"],
-  "b4": ["bebidas"]
-};
-
-// Promotional metadata to match index.html design
-const productPromoData = {
-  "1": { oldPrice: 2899, tag: "-17% OFF", tagClass: "promo" },
-  "2": { oldPrice: 2199, tag: null, tagClass: null },
-  "3": { oldPrice: 3499, tag: "Mais Vendido", tagClass: "highlight" },
-  "4": { oldPrice: 4299, tag: null, tagClass: null },
-  "5": { oldPrice: 1699, tag: "-22% OFF", tagClass: "promo" },
-  "6": { oldPrice: 2099, tag: null, tagClass: null },
-  "b1": { oldPrice: 1809, tag: "-17% OFF", tagClass: "promo" },
-  "b2": { oldPrice: 2729, tag: "-9% OFF", tagClass: "promo" },
-  "b3": { oldPrice: 3423, tag: "-18% OFF", tagClass: "promo" },
-  "b4": { oldPrice: 3693, tag: "-16% OFF", tagClass: "promo" }
+  "b4": ["bebidas"],
+  "b5": ["bebidas"],
+  "b6": ["bebidas"]
 };
 
 // Extract spec tags from the product structure
@@ -118,6 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
     state.search = initialSearch;
     const searchInput = document.getElementById('search-input');
     if (searchInput) searchInput.value = state.search;
+    const clearButton = document.getElementById('search-clear-btn');
+    if (clearButton) clearButton.style.display = 'block';
   }
 
   // Setup DOM Event Listeners
@@ -263,7 +253,7 @@ function filterAndRender() {
   const queryTerms = query.split(' ').filter(Boolean);
 
   for (const [id, product] of Object.entries(productDetailsDb)) {
-    const categories = productCategories[id] || [];
+    const categories = product.categories || productCategories[id] || [];
     const specValues = Object.entries(product.specs || {}).flatMap(([key, value]) => [key, value]);
     const searchableText = normalizeCatalogSearch([
       product.name,
@@ -285,18 +275,21 @@ function filterAndRender() {
 
   // 2. Sort products
   if (state.sortBy === 'price-asc') {
-    filteredProducts.sort((a, b) => a.price - b.price);
+    filteredProducts.sort((a, b) => (Number.isFinite(a.price) ? a.price : Infinity) - (Number.isFinite(b.price) ? b.price : Infinity));
   } else if (state.sortBy === 'price-desc') {
-    filteredProducts.sort((a, b) => b.price - a.price);
+    filteredProducts.sort((a, b) => (Number.isFinite(b.price) ? b.price : -Infinity) - (Number.isFinite(a.price) ? a.price : -Infinity));
   } else if (state.sortBy === 'rating') {
-    filteredProducts.sort((a, b) => b.rating - a.rating);
+    filteredProducts.sort((a, b) => (b.rating || 0) - (a.rating || 0));
   } else if (state.sortBy === 'name-asc') {
     filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
   }
   // 'featured' keeps original DB order
 
   // 3. Update count stat
-  if (resultsCount) resultsCount.textContent = filteredProducts.length;
+  if (resultsCount) {
+    resultsCount.textContent = filteredProducts.length;
+    resultsCount.setAttribute('aria-live', 'polite');
+  }
 
   // 4. Render
   if (filteredProducts.length === 0) {
@@ -308,20 +301,13 @@ function filterAndRender() {
     
     let html = '';
     filteredProducts.forEach(prod => {
-      const promo = productPromoData[prod.id] || { oldPrice: null, tag: null, tagClass: null };
       const specTags = getCardSpecTags(prod);
       
-      const tagHtml = promo.tag 
-        ? `<div class="product-tag ${promo.tagClass}">${promo.tag}</div>` 
-        : '';
+      const tagHtml = '';
         
-      const oldPriceHtml = promo.oldPrice 
-        ? `<span class="old-price">${formatPrice(promo.oldPrice)}</span>` 
-        : '';
+      const oldPriceHtml = '';
 
       const specsHtml = specTags.map(t => `<span class="spec-tag">${t}</span>`).join('');
-      const rating = Number(prod.rating || 0).toFixed(1);
-      const ratingCount = prod.ratingCount || 0;
 
       html += `
         <div class="product-card" tabindex="0" role="link" aria-label="Ver detalhes de ${prod.name}" data-id="${prod.id}" data-brand="${prod.brand}" data-name="${prod.name}" data-price="${prod.price}" data-category="${(productCategories[prod.id] || []).join(' ')}" data-image="${prod.image}">
@@ -330,7 +316,7 @@ function filterAndRender() {
               <img src="${catalogAdjustPath(prod.image)}" alt="${prod.name}" class="product-image" loading="lazy" decoding="async" />
             </div>
             ${tagHtml}
-            <div class="product-availability"><span aria-hidden="true"></span> Disponível</div>
+            <div class="product-availability">${isValidAffiliateUrl(prod.affiliateUrl) ? 'Consulte o anúncio' : 'Link em breve'}</div>
             <div class="product-hover-overlay">
               <span class="view-details-btn">Ver detalhes <span aria-hidden="true">→</span></span>
             </div>
@@ -338,9 +324,6 @@ function filterAndRender() {
           <div class="product-info">
             <div class="product-meta-row">
               <div class="product-brand">${prod.brand}</div>
-              <div class="product-rating" aria-label="Avaliação ${rating} de 5">
-                <span aria-hidden="true">★</span> ${rating} <small>(${ratingCount})</small>
-              </div>
             </div>
             <h3 class="product-name">${prod.name}</h3>
             <div class="product-specs">
@@ -353,11 +336,7 @@ function filterAndRender() {
                 <span class="product-payment-note">Compra, pagamento e entrega pelo Mercado Livre</span>
               </div>
               <button class="btn-cart-add" aria-label="Consultar ${prod.name} no Mercado Livre">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                  <circle cx="9" cy="20" r="1" /><circle cx="19" cy="20" r="1" />
-                  <path d="M3 4h2l2.4 10.2a2 2 0 0 0 2 1.55h7.8a2 2 0 0 0 1.95-1.55L21 7H6" />
-                  <path d="M15 9v4M13 11h4" />
-                </svg>
+                <span aria-hidden="true">↗</span>
               </button>
             </div>
           </div>

@@ -725,3 +725,5 @@ select.settings-input {
 @media (max-width: 480px) {
   .kpi-grid { grid-template-columns: 1fr; }
 }
+
+.demo-notice { padding: 14px 20px; border: 1px solid #F59E0B; color: #FDE68A; background: #292310; border-radius: 8px; margin: 16px; line-height: 1.5; }

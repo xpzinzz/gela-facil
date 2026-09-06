@@ -71,7 +71,7 @@
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
-  border: 1px solid rgba(74, 145, 196, 0.06);
+  border: 1px solid rgba(0, 89, 187, 0.06);
 }
 
 .chk-item-img img {
@@ -248,7 +248,7 @@
 .form-group select:focus {
   border-color: var(--blue);
   outline: none;
-  box-shadow: 0 0 0 4px rgba(74, 145, 196, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 0 0 4px rgba(0, 89, 187, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 /* Payment Method Tabs */
@@ -283,7 +283,7 @@
 .payment-tab.active {
   background: var(--ice);
   border-color: var(--blue);
-  box-shadow: 0 6px 15px rgba(74, 145, 196, 0.12);
+  box-shadow: 0 6px 15px rgba(0, 89, 187, 0.12);
 }
 
 .tab-icon {
@@ -452,7 +452,7 @@
   font-size: 1.1rem;
   font-weight: 800;
   padding: 16px;
-  box-shadow: 0 4px 16px rgba(74, 145, 196, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 89, 187, 0.35);
 }
 
 /* Processing Dialog Overlay - Light themed blur */
@@ -756,7 +756,7 @@
   background: var(--blue);
   color: var(--white);
   border-color: var(--blue);
-  box-shadow: 0 4px 10px rgba(74, 145, 196, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 89, 187, 0.25);
 }
 
 .wizard-step.completed {
@@ -1005,4 +1005,26 @@
   font-size: 0.92rem;
   font-style: italic;
   letter-spacing: 1px;
+}
+
+/* Keep previous/next actions aligned, including wrapped mobile rows. */
+.wizard-actions { gap: 12px; flex-wrap: wrap; }
+.wizard-actions button { justify-content: center; min-height: 48px; line-height: 20px; }
+.checkout-form-col .wizard-actions .btn-ghost { margin-left: 0; }
+
+/* Stack checkout content without a nested viewport-height scroll area. */
+.checkout-grid > *, .form-row > *, .chk-item-info { min-width: 0; }
+@media (max-width: 992px) {
+  .payment-page-container .checkout-grid { grid-template-columns: minmax(0, 1fr); max-height: none; overflow: visible; }
+}
+@media (max-width: 600px) {
+  .payment-page-container { margin-top: 100px; padding-inline: 16px; }
+  .checkout-summary-col, .checkout-form-col { padding: 20px 16px; }
+  .wizard-actions button { width: 100%; padding-inline: 16px; }
+  .payment-methods-tabs { flex-wrap: wrap; }
+  .payment-tab { flex: 1 1 100px; }
+  .card-side { padding: 14px; }
+  .card-number-display { font-size: clamp(13px, 4vw, 18px); letter-spacing: 1px; }
+  .checkout-form-col input, .checkout-form-col select { font-size: 16px; }
+  .pix-key-copy-row { min-width: 0; overflow-wrap: anywhere; }
 }
