@@ -87,34 +87,18 @@ if (navbar) {
 }
 
 // Toggle Mobile Menu
-function setMenuOpen(open) {
-  if (!menuToggle || !navLinksContainer) return;
-  menuToggle.classList.toggle('active', open);
-  navLinksContainer.classList.toggle('active', open);
-  menuToggle.setAttribute('aria-expanded', String(open));
-  menuToggle.setAttribute('aria-label', open ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
-}
-if (menuToggle && navLinksContainer) {
-  menuToggle.setAttribute('aria-controls', 'nav-links');
-  setMenuOpen(false);
+if (menuToggle) {
   menuToggle.addEventListener('click', () => {
-    setMenuOpen(!navLinksContainer.classList.contains('active'));
-  });
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && navLinksContainer.classList.contains('active')) {
-      setMenuOpen(false);
-      menuToggle.focus();
-    }
-  });
-  document.addEventListener('click', event => {
-    if (!navLinksContainer.contains(event.target) && !menuToggle.contains(event.target)) setMenuOpen(false);
+    menuToggle.classList.toggle('active');
+    navLinksContainer.classList.toggle('active');
   });
 }
 
 // Close Mobile Menu when clicking on links
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
-    setMenuOpen(false);
+    menuToggle.classList.remove('active');
+    navLinksContainer.classList.remove('active');
   });
 });
 
@@ -136,11 +120,6 @@ function showSlide(n) {
   
   if (slides[slideIndex]) slides[slideIndex].classList.add('active');
   if (dots[slideIndex]) dots[slideIndex].classList.add('active');
-  slides.forEach((slide, index) => {
-    slide.inert = index !== slideIndex;
-    slide.setAttribute('aria-hidden', String(index !== slideIndex));
-  });
-  dots.forEach((dot, index) => dot.setAttribute('aria-current', String(index === slideIndex)));
 }
 
 function nextSlide() {
@@ -152,8 +131,6 @@ function prevSlide() {
 }
 
 function startCarouselAutoplay() {
-  stopCarouselAutoplay();
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || document.hidden) return;
   if (!slides || slides.length === 0) return;
   carouselInterval = setInterval(nextSlide, 7000); // changes slide every 7 seconds
 }
@@ -191,18 +168,11 @@ dots.forEach(dot => {
 
 // Initialize Carousel Autoplay if slides exist
 if (slides && slides.length > 0) {
-  showSlide(0);
   startCarouselAutoplay();
-  document.addEventListener('visibilitychange', () => document.hidden ? stopCarouselAutoplay() : startCarouselAutoplay());
-  const carousel = slides[0].closest('.hero-carousel');
-  carousel?.addEventListener('focusin', stopCarouselAutoplay);
-  carousel?.addEventListener('mouseenter', stopCarouselAutoplay);
-  carousel?.addEventListener('mouseleave', startCarouselAutoplay);
 }
 
 // ── PRODUCT CATALOG FILTERS ─────────────────────────────
 const filterTabs = document.querySelectorAll('.filter-tab');
-const productCards = document.querySelectorAll('.product-card');
 
 filterTabs.forEach(tab => {
   tab.addEventListener('click', () => {
@@ -211,340 +181,159 @@ filterTabs.forEach(tab => {
     tab.classList.add('active');
     
     const filterValue = tab.getAttribute('data-filter');
-    
-    // Filter cards
-    productCards.forEach(card => {
-      const categories = card.getAttribute('data-category').split(' ');
-      if (filterValue === 'all' || categories.includes(filterValue)) {
-        card.style.display = 'flex';
-        // Add a micro animation class
-        card.style.animation = 'fadeInCard 0.4s ease forwards';
-      } else {
-        card.style.display = 'none';
-      }
-    });
+    applyProductFilter(filterValue);
   });
 });
 
 // ── PRODUCT DETAILS DATABASE ────────────────────────────
-const productDetailsDb = {
-  "ventisol-clin16": {
-    name: "Climatizador evaporativo CLIN16 16 litros",
-    brand: "Ventisol",
-    price: null,
-    affiliateUrl: "https://meli.la/1isvNAZ",
-    sourceUrl: "https://www.ventisol.com.br/climatizador-16l-ventisol-130w-clin16",
-    marketplaceProductId: "MLB26208174",
-    categories: ["climatizador", "evaporativo"],
-    image: "assets/produtos/ventisol_clin16.jpg",
-    gallery: ["assets/produtos/ventisol_clin16.jpg", "assets/produtos/ventisol_clin16_2.jpg", "assets/produtos/ventisol_clin16_3.jpg"],
-    desc: "O Ventisol CLIN16 é um climatizador evaporativo com reservatório de 16 litros e potência de 130 W. Possui filtro tipo colmeia e três velocidades para ajustar a ventilação. O reservatório superior permite adicionar gelo, conforme as orientações do fabricante. Confira no anúncio a voltagem disponível e as condições de compra.",
-    specs: {
-      "Modelo": "CLIN16",
-      "Tipo": "Climatizador evaporativo",
-      "Capacidade": "16 litros",
-      "Potência": "130 W",
-      "Velocidades": "3",
-      "Filtro": "Tipo colmeia",
-      "Voltagem": "Versões 127 V e 220 V; confira no anúncio",
-      "Dimensões (C × L × A)": "39 × 30 × 74 cm"
-    }
-  },
-  "1": {
-    name: "WindFree Inverter 12.000 BTU",
-    brand: "Samsung",
-    price: 2399,
-    image: "assets/produtos/samsung_windfree.png",
-    rating: 5.0,
-    ratingCount: 34,
-    gallery: [
-      "assets/produtos/samsung_windfree.png",
-      "assets/produtos/banner-climatizacao-premium.png"
-    ],
-    desc: "O ar-condicionado Samsung WindFree proporciona um resfriamento suave sem vento direto, mantendo o ambiente confortavelmente frio sem correntes de ar frio incômodas. Economiza até 77% de energia em comparação com modelos tradicionais através da tecnologia Digital Inverter Ultra.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A+++",
-      "Gás Ecológico": "R-32",
-      "Garantia": "10 anos (compressor)",
-      "Capacidade": "12.000 BTUs",
-      "Tecnologia": "WindFree Inverter"
-    },
-    reviews: [
-      { author: "Carlos Eduardo", stars: 5, date: "14/05/2026", comment: "Excelente ar-condicionado. A tecnologia WindFree realmente funciona e não gera vento direto na cama. Muito silencioso!" },
-      { author: "Ana Beatriz", stars: 5, date: "28/04/2026", comment: "Economia de energia perceptível na primeira conta. O app SmartThings ajuda muito a controlar pelo celular." }
-    ]
-  },
-  "2": {
-    name: "DUAL Inverter Voice 9.000 BTU",
-    brand: "LG",
-    price: 1999,
-    image: "assets/produtos/lg_dual_inverter.png",
-    rating: 4.8,
-    ratingCount: 42,
-    gallery: [
-      "assets/produtos/lg_dual_inverter.png",
-      "assets/produtos/banner-climatizacao-premium.png"
-    ],
-    desc: "O LG DUAL Inverter Voice garante até 70% de economia de energia e refrigeração até 40% mais rápida. Com controle de voz via Google Assistente e Alexa, você comanda o clima de qualquer lugar. Super silencioso, ideal para quartos e escritórios.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A",
-      "Gás Ecológico": "R-410A",
-      "Garantia": "10 anos (compressor)",
-      "Capacidade": "9.000 BTUs",
-      "Tecnologia": "Dual Inverter"
-    },
-    reviews: [
-      { author: "Juliano Lima", stars: 5, date: "03/05/2026", comment: "Muito silencioso e conecta perfeitamente na Alexa. Recomendo bastante." },
-      { author: "Mariana Silva", stars: 4, date: "15/04/2026", comment: "Esfria rápido demais. Só achei o controle remoto simples, mas pelo app é excelente." }
-    ]
-  },
-  "3": {
-    name: "Xtreme Save Inverter 18.000 BTU",
-    brand: "Midea",
-    price: 3299,
-    image: "assets/produtos/midea_xtreme_save.png",
-    rating: 4.9,
-    ratingCount: 28,
-    gallery: [
-      "assets/produtos/midea_xtreme_save.png",
-      "assets/produtos/banner-climatizacao-premium.png"
-    ],
-    desc: "O split Midea Xtreme Save traz excelente eficiência energética com a tecnologia Inverter. Possui filtro com tripla filtragem que elimina até 99.9% dos vírus e bactérias do ar, mantendo sua família protegida e o ar sempre puro.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A++",
-      "Gás Ecológico": "R-410A",
-      "Garantia": "2 anos (compressor)",
-      "Capacidade": "18.000 BTUs",
-      "Tecnologia": "Inverter"
-    },
-    reviews: [
-      { author: "Rodrigo Assis", stars: 5, date: "11/05/2026", comment: "Instalado na minha sala de 25m² e dá conta perfeitamente. Fluxo de ar bem distribuído." }
-    ]
-  },
-  "4": {
-    name: "Eco Inverter Plus 24.000 BTU",
-    brand: "Elgin",
-    price: 4199,
-    image: "assets/produtos/elgin_eco_inverter.png",
-    rating: 4.7,
-    ratingCount: 19,
-    gallery: [
-      "assets/produtos/elgin_eco_inverter.png",
-      "assets/produtos/banner-climatizacao-premium.png"
-    ],
-    desc: "Ideal para grandes ambientes comerciais ou residenciais, o Elgin Eco Inverter Plus oferece refrigeração e aquecimento eficientes. Tem baixo nível de ruído e utiliza gás ecológico que não agride a camada de ozônio.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A",
-      "Gás Ecológico": "R-410A",
-      "Garantia": "3 anos (compressor)",
-      "Capacidade": "24.000 BTUs",
-      "Tecnologia": "Eco Inverter"
-    },
-    reviews: [
-      { author: "Fernando G.", stars: 5, date: "02/05/2026", comment: "Excelente robustez, fluxo de vento muito forte. Excelente para comércios." }
-    ]
-  },
-  "5": {
-    name: "Springer Silentia de Janela 7.500 BTU",
-    brand: "Springer Midea",
-    price: 1499,
-    image: "assets/produtos/springer_silentia.png",
-    rating: 4.6,
-    ratingCount: 31,
-    gallery: [
-      "assets/produtos/springer_silentia.png"
-    ],
-    desc: "O Springer Silentia une simplicidade e eficiência para pequenos ambientes. Possui operação silenciosa, design discreto e excelente fluxo de ar direcionável, garantindo um ambiente fresco rapidamente.",
-    specs: {
-      "Voltagem": "110V / 220V",
-      "Selo Procel": "A",
-      "Gás Ecológico": "R-410A",
-      "Garantia": "1 ano",
-      "Capacidade": "7.500 BTUs",
-      "Tecnologia": "Janela"
-    },
-    reviews: [
-      { author: "Pedro Henrique", stars: 4, date: "09/04/2026", comment: "Ar de janela clássico e eficiente. O ruído é bem menor que os antigos." }
-    ]
-  },
-  "6": {
-    name: "Portátil Philco 12.000 BTU",
-    brand: "Philco",
-    price: 2799,
-    image: "assets/produtos/philco_portable.png",
-    rating: 4.5,
-    ratingCount: 25,
-    gallery: [
-      "assets/produtos/philco_portable.png"
-    ],
-    desc: "O Ar Condicionado Portátil Philco é ideal para quem não quer ou não pode quebrar a parede. Com rodinhas de fácil transporte, ele refrigera rapidamente qualquer cômodo da casa. Possui funções de ventilação, desumidificação e controle remoto prático.",
-    specs: {
-      "Voltagem": "110V",
-      "Selo Procel": "A",
-      "Gás Ecológico": "R-410A",
-      "Garantia": "1 ano",
-      "Capacidade": "12.000 BTUs",
-      "Tecnologia": "Portátil"
-    },
-    reviews: [
-      { author: "Aline Costa", stars: 4, date: "23/04/2026", comment: "Prático, levo para o quarto e para a sala. Precisa colocar o duto na janela, mas esfria muito bem." }
-    ]
-  },
-  "b1": {
-    name: "Frigobar Efficient 122L",
-    brand: "Electrolux",
-    price: 1299,
-    image: "assets/clima-bebidas/electrolux_frigobar.png",
-    rating: 4.8,
-    ratingCount: 38,
-    gallery: [
-      "assets/clima-bebidas/electrolux_frigobar.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "Compacto, elegante e super eficiente. O Frigobar Electrolux 122L possui prateleiras reguláveis e compartimento para latas e garrafas grandes, mantendo suas bebidas geladas com o menor consumo de energia da categoria.",
-    specs: {
-      "Voltagem": "110V",
-      "Selo Procel": "A+++",
-      "Capacidade": "122 Litros",
-      "Garantia": "1 ano",
-      "Cor": "Branco",
-      "Tipo": "Frigobar Efficient"
-    },
-    reviews: [
-      { author: "Marcos V.", stars: 5, date: "29/04/2026", comment: "Excelente espaço interno para latinhas e petiscos. Silencioso para deixar no quarto." }
-    ]
-  },
-  "b2": {
-    name: "Cervejeira Digital Premium 100L",
-    brand: "Electrolux",
-    price: 2499,
-    image: "assets/clima-bebidas/electrolux_cervejeira.png",
-    rating: 4.9,
-    ratingCount: 47,
-    gallery: [
-      "assets/clima-bebidas/electrolux_cervejeira.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "A cerveja no ponto ideal para receber os amigos! Com controle de temperatura digital de -5°C a 10°C, porta de vidro triplo anti-embaçante e iluminação em LED interna. Design Home Bar premium.",
-    specs: {
-      "Voltagem": "110V",
-      "Selo Procel": "A",
-      "Capacidade": "100 Litros",
-      "Garantia": "1 ano",
-      "Degelo": "Frost Free",
-      "Tipo": "Cervejeira Digital"
-    },
-    reviews: [
-      { author: "Tiago Schultz", stars: 5, date: "04/05/2026", comment: "Gela super rápido e fica linda na área gourmet. Temperatura de -5 graus deixa a cerveja trincando!" }
-    ]
-  },
-  "b3": {
-    name: "Cervejeira Blue Light 102L",
-    brand: "Venax",
-    price: 2299,
-    image: "assets/clima-bebidas/venax_cervejeira.png",
-    rating: 4.8,
-    ratingCount: 16,
-    gallery: [
-      "assets/clima-bebidas/venax_cervejeira.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "Destaque visual incomparável com a iluminação interna Blue Light. A cervejeira Venax possui regulador eletrônico de temperatura, porta de vidro com moldura preta e prateleiras reguláveis de alta resistência.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A",
-      "Capacidade": "102 Litros",
-      "Garantia": "1 ano",
-      "Iluminação": "LED Blue Light",
-      "Tipo": "Cervejeira Exclusiva"
-    },
-    reviews: [
-      { author: "Maurício L.", stars: 5, date: "19/04/2026", comment: "O design com LED azul chama muita atenção. Espaço excelente." }
-    ]
-  },
-  "b4": {
-    name: "Torre de Chopp Home Bar 100L",
-    brand: "Electrolux",
-    price: 3999,
-    image: "assets/clima-bebidas/electrolux_chopp.png",
-    rating: 5.0,
-    ratingCount: 12,
-    gallery: [
-      "assets/clima-bebidas/electrolux_chopp.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "O ápice do churrasco em casa. Esta cervejeira inovadora integra uma torre de chopp na parte superior, permitindo extrair chopp gelado diretamente do barril instalado dentro do gabinete de 100L. Praticidade extrema.",
-    specs: {
-      "Voltagem": "110V",
-      "Selo Procel": "A",
-      "Capacidade": "100L + Chopeira",
-      "Garantia": "1 ano",
-      "Degelo": "Frost Free",
-      "Tipo": "Torre de Chopp"
-    },
-    reviews: [
-      { author: "Gabriel N.", stars: 5, date: "01/05/2026", comment: "Melhor aquisição que fiz. Chopp gelado e cremoso na hora, sem complicação." }
-    ]
-  },
-  "b5": {
-    name: "Frigobar Efficient 122L - 220V",
-    brand: "Electrolux",
-    price: 1209,
-    image: "assets/clima-bebidas/electrolux_frigobar.png",
-    rating: 4.8,
-    ratingCount: 31,
-    gallery: [
-      "assets/clima-bebidas/electrolux_frigobar.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "Versão 220V do frigobar Efficient com 122 litros, prateleiras reguláveis e espaço otimizado para latas, garrafas e alimentos.",
-    specs: {
-      "Voltagem": "220V",
-      "Selo Procel": "A+++",
-      "Capacidade": "122 Litros",
-      "Garantia": "1 ano",
-      "Cor": "Branco",
-      "Tipo": "Frigobar Efficient"
-    },
-    reviews: [
-      { author: "Camila R.", stars: 5, date: "08/05/2026", comment: "Ótimo espaço interno e funcionamento bem silencioso." }
-    ]
-  },
-  "b6": {
-    name: "Cervejeira Blue Light 102L - 110V",
-    brand: "Venax",
-    price: 2529,
-    image: "assets/clima-bebidas/venax_cervejeira.png",
-    rating: 4.9,
-    ratingCount: 22,
-    gallery: [
-      "assets/clima-bebidas/venax_cervejeira.png",
-      "assets/clima-bebidas/seção-de-cards-da-ultima-seção.png"
-    ],
-    desc: "Versão 110V da cervejeira Blue Light, com controle eletrônico de temperatura, porta de vidro e iluminação interna em LED azul.",
-    specs: {
-      "Voltagem": "110V",
-      "Selo Procel": "A",
-      "Capacidade": "102 Litros",
-      "Garantia": "1 ano",
-      "Iluminação": "LED Blue Light",
-      "Tipo": "Cervejeira Exclusiva"
-    },
-    reviews: [
-      { author: "Renato P.", stars: 5, date: "09/05/2026", comment: "Bonita, espaçosa e mantém as bebidas na temperatura certa." }
-    ]
+// Produtos são carregados exclusivamente da API e cadastrados pelo painel.
+const productDetailsDb = {};
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;',
+  }[char]));
+}
+
+function isValidAffiliateUrl(value) {
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase();
+    return url.protocol === 'https:' && (
+      host === 'meli.la' ||
+      host === 'mercadolivre.com.br' ||
+      host.endsWith('.mercadolivre.com.br')
+    );
+  } catch {
+    return false;
   }
-};
+}
+
+function productSpecsToTags(specs) {
+  return String(specs || '')
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+function productCategoriesFor(product) {
+  const categories = [product.category].filter(Boolean);
+  if (product.category === 'inverter') categories.push('split');
+  return categories;
+}
+
+function normalizeProductImage(path) {
+  if (!path) return 'assets/produtos/banner-climatizacao-premium.png';
+  return path;
+}
+
+function renderHomeProductCard(product, index) {
+  const id = String(product.id);
+  const image = normalizeProductImage(product.image);
+  const categories = productCategoriesFor(product);
+  const specTags = productSpecsToTags(product.specs);
+  const oldPriceHtml = product.oldPrice ? `<span class="old-price">${formatPrice(product.oldPrice)}</span>` : '';
+  const tagHtml = product.oldPrice && index < 3 ? '<div class="product-tag promo">Oferta</div>' : '';
+  const safeName = escapeHtml(product.name);
+  const safeBrand = escapeHtml(product.brand);
+  const safeImage = escapeHtml(image);
+  const safeCategories = escapeHtml(categories.join(' '));
+  const specsHtml = specTags.map(tag => `<span class="spec-tag">${escapeHtml(tag)}</span>`).join('');
+
+  productDetailsDb[id] = {
+    name: product.name,
+    brand: product.brand,
+    category: product.category,
+    price: product.price,
+    image,
+    affiliateUrl: product.affiliateUrl || '',
+    rating: 5,
+    ratingCount: 0,
+    gallery: [image],
+    desc: product.specs || '',
+    specs: Object.fromEntries(specTags.map((tag, tagIndex) => [`Info ${tagIndex + 1}`, tag])),
+    reviews: []
+  };
+
+  return `
+    <div class="product-card" data-id="${id}" data-brand="${safeBrand}" data-name="${safeName}"
+      data-price="${product.price}" data-category="${safeCategories}" data-image="${safeImage}">
+      <div class="product-img-wrap">
+        <div class="product-icon-container">
+          <img src="${safeImage}" alt="${safeName}" class="product-image" loading="lazy" decoding="async" />
+        </div>
+        ${tagHtml}
+        <div class="product-hover-overlay"><span class="view-details-btn">Ver detalhes</span></div>
+      </div>
+      <div class="product-info">
+        <div class="product-brand">${safeBrand}</div>
+        <h3 class="product-name">${safeName}</h3>
+        <div class="product-specs">${specsHtml}</div>
+        <div class="product-footer">
+          <div class="product-price-wrap">${oldPriceHtml}<span class="product-price">${formatPrice(product.price)}</span></div>
+          <button class="btn-cart-add" aria-label="Ver produto e consultar link do Mercado Livre">↗</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+async function loadHomeProductsFromApi() {
+  const grid = document.getElementById('products-grid');
+  const drinksTrack = document.getElementById('clima-bebidas-track');
+  if (!grid || !drinksTrack || !window.location.protocol.startsWith('http')) return;
+
+  try {
+    const response = await fetch('/api/products');
+    if (!response.ok) throw new Error('Falha ao carregar produtos.');
+
+    const products = await response.json();
+    if (!Array.isArray(products) || products.length === 0) {
+      grid.innerHTML = '<p class="products-loading-state">Nenhum produto ativo cadastrado.</p>';
+      drinksTrack.innerHTML = '<p class="products-loading-state">Nenhum produto para bebidas cadastrado.</p>';
+      return;
+    }
+
+    Object.keys(productDetailsDb).forEach(id => delete productDetailsDb[id]);
+    const airConditioners = products.filter(product => product.category !== 'bebidas');
+    const drinks = products.filter(product => product.category === 'bebidas');
+
+    grid.innerHTML = airConditioners.length
+      ? airConditioners.map(renderHomeProductCard).join('')
+      : '<p class="products-loading-state">Nenhum ar-condicionado ativo cadastrado.</p>';
+    drinksTrack.innerHTML = drinks.length
+      ? drinks.map(renderHomeProductCard).join('')
+      : '<p class="products-loading-state">Nenhum produto para bebidas cadastrado.</p>';
+
+    const activeFilter = document.querySelector('.filter-tab.active')?.getAttribute('data-filter') || 'all';
+    applyProductFilter(activeFilter);
+  } catch (err) {
+    grid.innerHTML = '<p class="products-loading-state">Não foi possível carregar os produtos.</p>';
+    drinksTrack.innerHTML = '<p class="products-loading-state">Não foi possível carregar os produtos.</p>';
+  }
+}
+
+function applyProductFilter(filterValue) {
+  document.querySelectorAll('#products-grid .product-card').forEach(card => {
+    const categories = card.getAttribute('data-category').split(' ');
+    if (filterValue === 'all' || categories.includes(filterValue)) {
+      card.style.display = 'flex';
+      card.style.animation = 'fadeInCard 0.4s ease forwards';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 
 // ── SHOPPING CART STATE & MANAGEMENT ────────────────────
-// Legacy cart data must never prevent the affiliate storefront from loading.
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('gela_facil_cart') || '[]');
 
 function saveCart() {
+  localStorage.setItem('gela_facil_cart', JSON.stringify(cart));
   updateCartCounters();
 }
 
@@ -690,9 +479,9 @@ window.goToCheckout = function() {
 };
 
 // Affiliate storefront: product sales happen on Mercado Livre, never on this site.
-window.openMercadoLivreProduct = function(productId) {
-  const product = Object.hasOwn(productDetailsDb, String(productId)) ? productDetailsDb[String(productId)] : null;
-  const affiliateUrl = product && product.affiliateUrl;
+window.openMercadoLivreProduct = function(productId, directAffiliateUrl = '') {
+  const product = productDetailsDb[String(productId)];
+  const affiliateUrl = directAffiliateUrl || (product && product.affiliateUrl);
   if (isValidAffiliateUrl(affiliateUrl)) {
     window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
     return;
@@ -700,15 +489,10 @@ window.openMercadoLivreProduct = function(productId) {
   showToast('Link deste produto no Mercado Livre em breve.');
 };
 
-function isValidAffiliateUrl(value) {
-  try {
-    const url = new URL(value);
-    return url.protocol === 'https:' && !url.username && !url.password &&
-      ['mercadolivre.com.br', 'mercadolivre.com', 'mercadolibre.com', 'meli.la'].some(host => url.hostname === host || url.hostname.endsWith('.' + host));
-  } catch { return false; }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  document.title = 'Gela Fácil | Produtos no Mercado Livre e serviços em Linhares-ES';
+  const metaDescription = document.querySelector('meta[name="description"]');
+  if (metaDescription) metaDescription.content = 'Encontre produtos anunciados no Mercado Livre e contrate instalação ou manutenção de ar-condicionado com a Gela Fácil em Linhares-ES e região.';
 
   // Keep every existing contact shortcut pointed at the official number.
   document.querySelectorAll('a[href*="wa.me/5527999999999"]').forEach(link => {
@@ -733,8 +517,15 @@ document.addEventListener('DOMContentLoaded', () => {
     notice.innerHTML = `
       <strong>Compra segura pelo Mercado Livre</strong>
       <span>Pagamento, entrega, troca e garantia do produto são tratados diretamente pelo Mercado Livre e pelo vendedor. A Gela Fácil apenas indica os produtos como afiliada.</span>
-      <span><b>Serviço separado:</b> venda, instalação, manutenção e higienização de ar-condicionado, geladeira e freezer. Base em Bebedouro, Linhares–ES. Consulte atendimento para sua cidade.</span>`;
-    main.parentNode.insertBefore(notice, main);
+      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares-ES e região. Não atendemos outros refrigeradores.</span>`;
+    if (main.classList.contains('product-detail-container')) {
+      // Na página de detalhes, o aviso precisa ficar dentro da área com
+      // espaçamento próprio, abaixo da barra fixa de navegação.
+      main.classList.add('has-affiliate-disclosure');
+      main.prepend(notice);
+    } else {
+      main.parentNode.insertBefore(notice, main);
+    }
   }
 
   const firstHeroTitle = document.querySelector('.carousel-slide:first-child h1');
@@ -761,10 +552,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const catalogTitle = document.querySelector('.catalog-title');
   const catalogSubtitle = document.querySelector('.catalog-subtitle');
   if (catalogTitle) catalogTitle.textContent = 'Produtos selecionados para você';
-  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes e acesse os anúncios disponíveis no Mercado Livre para confirmar preço, voltagem e entrega.';
+  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes aqui e finalize a compra diretamente no Mercado Livre. Os links de afiliado serão disponibilizados em breve.';
+
+  await loadHomeProductsFromApi();
 
   document.querySelectorAll('.footer-brand > p').forEach(p => {
-    p.textContent = 'Produtos indicados no Mercado Livre e serviços de ar-condicionado, geladeira e freezer. Base em Bebedouro, Linhares–ES. Consulte sua cidade.';
+    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares-ES e região.';
   });
   document.querySelectorAll('.footer-contact a').forEach(link => {
     if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares-ES e região';
@@ -775,10 +568,10 @@ document.addEventListener('DOMContentLoaded', () => {
     bento.innerHTML = `
       <div class="bento-grid">
         <div class="bento-card card-vrf">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Venda e instalação. Base em Bebedouro, Linhares–ES.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20de%20venda%20ou%20instala%C3%A7%C3%A3o%20de%20ar-condicionado%2C%20geladeira%20ou%20freezer."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional em Linhares-ES e região.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
         </div>
         <div class="bento-card card-camaras">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Manutenção e higienização de ar-condicionado, geladeira e freezer.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20higieniza%C3%A7%C3%A3o%20de%20ar-condicionado%2C%20geladeira%20ou%20freezer."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção preventiva ou corretiva de ar-condicionado.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
         </div>
       </div>`;
   }
@@ -795,48 +588,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
   relabelProductActions(document);
+  new MutationObserver(() => relabelProductActions(document)).observe(document.body, { childList: true, subtree: true });
 });
 
 // ── PRODUCT CARD EVENT LISTENER ADJUSTMENT ──────────────
-productCards.forEach(card => {
-  card.setAttribute('tabindex', '0');
-  card.setAttribute('role', 'link');
-  card.setAttribute('aria-label', `Ver detalhes de ${card.dataset.name}`);
-  card.addEventListener('keydown', event => {
-    if (event.target === card && event.key === 'Enter') card.click();
-  });
-  card.addEventListener('click', (e) => {
-    // Prevent redirect if parent track was dragged
-    const track = card.closest('.clima-bebidas-track');
-    if (track && track.getAttribute('data-dragged') === 'true') {
-      setTimeout(() => track.setAttribute('data-dragged', 'false'), 50);
-      return;
-    }
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.product-card');
+  if (!card) return;
 
-    // If user clicked on the Quick Cart button "+", don't open details page
-    if (e.target.closest('.btn-cart-add')) {
-      return;
-    }
-    const id = card.dataset.id;
-    if (window.location.pathname.includes('/pages/')) {
-      window.location.href = `./product-detail.html?id=${id}`;
-    } else {
-      window.location.href = `./pages/product-detail.html?id=${id}`;
-    }
-  });
-});
+  const track = card.closest('.clima-bebidas-track');
+  if (track && track.getAttribute('data-dragged') === 'true') {
+    setTimeout(() => track.setAttribute('data-dragged', 'false'), 50);
+    return;
+  }
 
-// Quick Add button click listener
-const quickAddBtns = document.querySelectorAll('.btn-cart-add');
-quickAddBtns.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation(); // prevent modal opening
-    const card = btn.closest('.product-card');
-    if (!card) return;
-    const dataset = card.dataset;
-    
-    openMercadoLivreProduct(dataset.id);
-  });
+  if (e.target.closest('.btn-cart-add')) {
+    e.stopPropagation();
+    openMercadoLivreProduct(card.dataset.id);
+    return;
+  }
+
+  const id = card.dataset.id;
+  if (!id) return;
+
+  if (window.location.pathname.includes('/pages/')) {
+    window.location.href = `./product-detail.html?id=${id}`;
+  } else {
+    window.location.href = `./pages/product-detail.html?id=${id}`;
+  }
 });
 
 function scrollToProducts() {
@@ -848,12 +627,11 @@ function scrollToProducts() {
 
 // Helper: Format number to BRL Currency
 function formatPrice(value) {
-  if (!Number.isFinite(value)) return 'Consulte no Mercado Livre';
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(value);
 }
 
@@ -862,8 +640,6 @@ function showToast(message) {
   const toast = document.createElement('div');
   toast.className = 'toast-notification';
   toast.textContent = message;
-  toast.setAttribute('role', 'status');
-  toast.setAttribute('aria-live', 'polite');
   
   document.body.appendChild(toast);
   
@@ -891,12 +667,12 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const href = this.getAttribute('href');
     if (href === '#') return;
     
-    const target = document.getElementById(href.slice(1));
+    const target = document.querySelector(href);
     if (target) {
       e.preventDefault();
       
       // Calculate navbar height offset
-      const navHeight = navbar?.offsetHeight || 70;
+      const navHeight = navbar.offsetHeight || 70;
       const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight + 5;
       
       window.scrollTo({
@@ -924,7 +700,6 @@ function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = nu
   });
 
   track.addEventListener('mousedown', (e) => {
-    if (e.button !== 0) return;
     isDown = true;
     track.classList.add('active-dragging');
     track.setAttribute('data-dragged', 'false');
@@ -932,11 +707,6 @@ function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = nu
     scrollLeft = track.scrollLeft;
     wasDragged = false;
   });
-
-  track.addEventListener('touchstart', () => {
-    wasDragged = false;
-    track.setAttribute('data-dragged', 'false');
-  }, { passive: true });
 
   track.addEventListener('mouseleave', () => {
     if (isDown) {
@@ -967,21 +737,17 @@ function setupSliderDragAndNav(trackId, prevBtnId, nextBtnId, clickCallback = nu
     track.scrollLeft = scrollLeft - walk;
   });
 
-  // Tap/Click handling on children (prevent actions when dragged)
-  const childCards = track.querySelectorAll('.destaque-card, .product-card');
-  childCards.forEach(card => {
-    card.addEventListener('click', (e) => {
-      const timeSinceScroll = Date.now() - lastScrollTime;
-      // If we dragged, or scroll momentum is running, prevent event
-      if (track.getAttribute('data-dragged') === 'true' || wasDragged || timeSinceScroll < 150) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      if (clickCallback) {
-        clickCallback(card);
-      }
-    });
+  // Event delegation keeps drag protection working for cards loaded from the API.
+  track.addEventListener('click', (e) => {
+    const card = e.target.closest('.destaque-card, .product-card');
+    if (!card || !track.contains(card)) return;
+    const timeSinceScroll = Date.now() - lastScrollTime;
+    if (track.getAttribute('data-dragged') === 'true' || wasDragged || timeSinceScroll < 150) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (clickCallback) clickCallback(card);
   });
 
   // Prev / Next button navigation
@@ -1022,6 +788,42 @@ function scrollToProducts() {
 
 // Initialize remaining generic sliders
 setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
+
+// ── BEBIDAS COUNTDOWN TIMER ──────────────────────────────
+function startCountdown() {
+  const hoursEl = document.getElementById('timer-hours');
+  const minutesEl = document.getElementById('timer-minutes');
+  const secondsEl = document.getElementById('timer-seconds');
+  
+  if (!hoursEl || !minutesEl || !secondsEl) return;
+  
+  let totalSeconds = localStorage.getItem('clima_countdown_seconds');
+  if (totalSeconds === null || totalSeconds <= 0) {
+    totalSeconds = 2 * 3600 + 33 * 60 + 23; // 2h 33m 23s
+  } else {
+    totalSeconds = parseInt(totalSeconds);
+  }
+
+  function updateTimer() {
+    if (totalSeconds <= 0) {
+      totalSeconds = 3 * 3600; // Reset to 3 hours
+    }
+    
+    totalSeconds--;
+    localStorage.setItem('clima_countdown_seconds', totalSeconds);
+    
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    
+    hoursEl.textContent = String(h).padStart(2, '0');
+    minutesEl.textContent = String(m).padStart(2, '0');
+    secondsEl.textContent = String(s).padStart(2, '0');
+  }
+  
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
 
 // ── DESTAQUES CAROUSEL DRAG & ARROWS ─────────────────────
 function initDestaquesCarousel() {
@@ -1118,6 +920,7 @@ function initDestaquesCarousel() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  startCountdown();
   updateCartCounters();
   initDestaquesCarousel();
   

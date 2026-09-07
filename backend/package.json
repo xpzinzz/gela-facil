@@ -1,0 +1,24 @@
+{
+  "name": "gela-facil",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Vitrine e painel administrativo da Gela Facil.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "import:index-products": "node scripts/import-index-products.js",
+    "check": "node --check server.js && node --check ../admin/admin.js && node --check ../admin/login.js && node --check ../js/products-catalog.js && node --check ../js/product-detail.js && node --check ../js/script.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "multer": "^2.3.0",
+    "ws": "^8.21.3"
+  }
+}
+

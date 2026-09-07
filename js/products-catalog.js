@@ -70,6 +70,56 @@ const state = {
   sortBy: 'featured'
 };
 
+function specsTextToObject(specs) {
+  return String(specs || '')
+    .split(',')
+    .map(item => item.trim())
+    .filter(Boolean)
+    .reduce((acc, value, index) => {
+      acc[`Info ${index + 1}`] = value;
+      return acc;
+    }, {});
+}
+
+async function loadProductsFromApi() {
+  if (!window.location.protocol.startsWith('http')) return;
+
+  try {
+    const response = await fetch('/api/products');
+    if (!response.ok) return;
+
+    const products = await response.json();
+    if (!Array.isArray(products) || products.length === 0) return;
+
+    Object.keys(productDetailsDb).forEach(id => delete productDetailsDb[id]);
+    Object.keys(productCategories).forEach(id => delete productCategories[id]);
+
+    products.forEach(product => {
+      const id = String(product.id);
+      const categoryList = [product.category];
+      if (product.category === 'inverter') categoryList.push('split');
+
+      productCategories[id] = categoryList.filter(Boolean);
+      productDetailsDb[id] = {
+        name: product.name,
+        brand: product.brand,
+        category: product.category,
+        price: product.price,
+        image: product.image,
+        affiliateUrl: product.affiliateUrl || '',
+        rating: 5,
+        ratingCount: 0,
+        gallery: [product.image].filter(Boolean),
+        desc: product.specs || '',
+        specs: specsTextToObject(product.specs),
+        reviews: []
+      };
+    });
+  } catch (error) {
+    console.error('Nao foi possivel carregar os produtos do banco.', error);
+  }
+}
+
 function updateCustomSortUI(value) {
   const nativeSelect = document.getElementById('sort-select');
   const valueLabel = document.getElementById('custom-sort-value');
@@ -98,7 +148,7 @@ function closeCustomSort(restoreFocus = false) {
   if (restoreFocus) trigger.focus();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Preserve links that arrive with search, brand or category in the URL.
   const params = new URLSearchParams(window.location.search);
   const initialSearch = params.get('search') || params.get('brand') || params.get('category') || '';
@@ -109,6 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearButton = document.getElementById('search-clear-btn');
     if (clearButton) clearButton.style.display = 'block';
   }
+
+  await loadProductsFromApi();
 
   // Setup DOM Event Listeners
   setupEventListeners();
@@ -307,13 +359,17 @@ function filterAndRender() {
         
       const oldPriceHtml = '';
 
-      const specsHtml = specTags.map(t => `<span class="spec-tag">${t}</span>`).join('');
+      const safeName = escapeHtml(prod.name);
+      const safeBrand = escapeHtml(prod.brand);
+      const safeImage = escapeHtml(catalogAdjustPath(prod.image));
+      const safeCategories = escapeHtml((productCategories[prod.id] || []).join(' '));
+      const specsHtml = specTags.map(t => `<span class="spec-tag">${escapeHtml(t)}</span>`).join('');
 
       html += `
-        <div class="product-card" tabindex="0" role="link" aria-label="Ver detalhes de ${prod.name}" data-id="${prod.id}" data-brand="${prod.brand}" data-name="${prod.name}" data-price="${prod.price}" data-category="${(productCategories[prod.id] || []).join(' ')}" data-image="${prod.image}">
+        <div class="product-card" tabindex="0" role="link" aria-label="Ver detalhes de ${safeName}" data-id="${prod.id}" data-brand="${safeBrand}" data-name="${safeName}" data-price="${prod.price}" data-category="${safeCategories}" data-image="${safeImage}">
           <div class="product-img-wrap">
             <div class="product-icon-container">
-              <img src="${catalogAdjustPath(prod.image)}" alt="${prod.name}" class="product-image" loading="lazy" decoding="async" />
+              <img src="${safeImage}" alt="${safeName}" class="product-image" loading="lazy" decoding="async" />
             </div>
             ${tagHtml}
             <div class="product-availability">${isValidAffiliateUrl(prod.affiliateUrl) ? 'Consulte o anúncio' : 'Link em breve'}</div>
@@ -323,9 +379,9 @@ function filterAndRender() {
           </div>
           <div class="product-info">
             <div class="product-meta-row">
-              <div class="product-brand">${prod.brand}</div>
+              <div class="product-brand">${safeBrand}</div>
             </div>
-            <h3 class="product-name">${prod.name}</h3>
+            <h3 class="product-name">${safeName}</h3>
             <div class="product-specs">
               ${specsHtml}
             </div>
@@ -335,7 +391,7 @@ function filterAndRender() {
                 <span class="product-price">${formatPrice(prod.price)}</span>
                 <span class="product-payment-note">Compra, pagamento e entrega pelo Mercado Livre</span>
               </div>
-              <button class="btn-cart-add" aria-label="Consultar ${prod.name} no Mercado Livre">
+              <button class="btn-cart-add" aria-label="Consultar ${safeName} no Mercado Livre">
                 <span aria-hidden="true">↗</span>
               </button>
             </div>

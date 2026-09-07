@@ -3,25 +3,35 @@
 Vitrine de produtos indicados por afiliado do Mercado Livre e apresentação dos serviços locais da Gela Fácil.
 
 - Produtos: pagamento, entrega, troca e garantia são de responsabilidade do Mercado Livre e do vendedor.
-- Serviços Gela Fácil: venda, instalação, manutenção e higienização de ar-condicionado, geladeira e freezer. Base em Bebedouro, Linhares–ES; disponibilidade para outras cidades sob consulta.
+- Serviços Gela Fácil: instalação e manutenção apenas de ar-condicionado em Linhares-ES e região.
+- Outros refrigeradores: não possuem instalação ou manutenção oferecida pela Gela Fácil.
 - WhatsApp: (27) 99973-5745.
 
 ## Links de afiliado
 
-Os links ainda estão pendentes. Para ativar um produto, adicione a propriedade `affiliateUrl` ao item correspondente em `productDetailsDb`, dentro de `js/script.js`:
+No painel administrativo, crie ou edite o produto e preencha **Link de afiliado do Mercado Livre**. O frontend busca esse dado pela API e o botão “Ver no Mercado Livre” abre somente URLs HTTPS do Mercado Livre ou `meli.la`.
 
-```js
-affiliateUrl: "https://mercadolivre.com.br/seu-link-de-afiliado",
+## Backend e Supabase
+
+O backend fica em `backend/` e serve o site, o admin e a API.
+
+1. No Supabase, rode o SQL de `backend/sql/schema.sql`.
+2. Crie `backend/.env` usando `backend/.env.example` como base.
+3. Preencha `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SESSION_SECRET`, `ADMIN_USER` e `ADMIN_PASSWORD`. `SESSION_SECRET` deve ter pelo menos 32 caracteres aleatórios; não use credenciais padrão.
+4. Crie um bucket publico no Supabase Storage chamado `products`, ou ajuste `SUPABASE_PRODUCT_IMAGES_BUCKET` no `.env`.
+5. Instale e rode:
+
+```bash
+cd backend
+npm install
+npm start
 ```
 
-Enquanto a propriedade não existir, o botão informa ao visitante que o link estará disponível em breve.
+Depois acesse:
 
-Use links HTTPS do Mercado Livre ou do encurtador `meli.la`. Preços são referências e as condições finais devem ser conferidas no anúncio.
+- Site: `http://localhost:3000/`
+- Admin: `http://localhost:3000/admin/`
 
-## Atualização e verificação
+A chave `SUPABASE_SERVICE_ROLE_KEY` deve ficar somente no `backend/.env`. O frontend público acessa apenas `/api/products`, que não expõe estoque, SKU ou limites de estoque. Rode o SQL do schema para ativar RLS e revogar acesso direto dos papéis públicos do Supabase.
 
-O catálogo fica em `js/script.js`, no objeto `productDetailsDb`. Depois de alterar nomes ou preços, execute `node scripts/sync-catalog.cjs` para atualizar os cards da página inicial. Execute `node tests/site-audit.cjs` para verificar busca, ordenação, consistência de preços, imagens, links internos e casos de erro.
-
-O site é estático. `pages/payment.html` explica a compra pelo Mercado Livre e não coleta dados de cartão. O painel em `admin/` é demonstrativo, sem autenticação no servidor, persistência ou integração com o catálogo público. Não o utilize para dados reais de clientes.
-
-As verificações automatizadas não substituem a revisão visual em navegadores desktop e mobile. Os links reais de afiliado e a conferência das especificações no anúncio continuam necessários antes de anunciar ofertas.
+No cadastro de produto do admin, voce pode enviar uma imagem para o bucket ou colar uma URL pronta. Quando houver upload, o backend salva a imagem no Supabase Storage e grava a URL publica no produto.

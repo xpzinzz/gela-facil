@@ -6,6 +6,25 @@
   padding: 0 24px;
 }
 
+/* O aviso de afiliado pertence ao fluxo da página de detalhes; assim ele
+   nunca fica escondido atrás da navegação fixa. */
+.product-detail-container.has-affiliate-disclosure {
+  margin-top: 86px;
+}
+
+.product-detail-container .affiliate-disclosure {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  margin: 0 0 32px;
+  padding: 16px 20px;
+  border-radius: 12px;
+}
+
+.product-detail-container .affiliate-disclosure strong {
+  font-size: 1rem;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -620,11 +639,23 @@
 
 /* Product content must be allowed to shrink inside the grid. */
 .detail-grid > *, .reviews-grid > *, .form-group-row > * { min-width: 0; }
-.services-container-box { overflow-wrap: anywhere; }
+.services-container-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-wrap: anywhere;
+}
+.services-container-box p { margin: 0; line-height: 1.55; }
+.services-container-box .btn-primary {
+  display: inline-flex;
+  margin-top: 16px;
+}
 .thumbnails-row { max-width: 100%; overflow-x: auto; }
 .thumb-btn { flex-shrink: 0; }
 @media (max-width: 600px) {
   .product-detail-container { margin-top: 100px; padding-inline: 16px; }
+  .product-detail-container.has-affiliate-disclosure { margin-top: 76px; }
+  .product-detail-container .affiliate-disclosure { margin-bottom: 24px; padding: 15px 16px; }
   .gallery-container, .services-container-box, .write-review-box, .reviews-summary-card { padding: 16px; }
   .main-image-wrap { height: auto; aspect-ratio: 1; }
   .detail-grid { gap: 24px; }

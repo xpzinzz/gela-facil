@@ -64,15 +64,12 @@ const DB = {
   nextOrderId: 11,
 };
 
+// A tela nunca usa os exemplos locais: os produtos sao sempre lidos da API.
+DB.products = [];
+
 let charts = {};
 let currentOrderFilter = 'all';
 let editingProductId = null;
-
-function escapeHtml(value) {
-  return String(value ?? '').replace(/[&<>"']/g, char => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-  }[char]));
-}
 
 // ── HELPERS ───────────────────────────────────────────────
 const fmt = (n) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 0 });
@@ -80,6 +77,55 @@ const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
 const initials = (name) => name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase();
 const avatarColors = ['#4A91C4','#22C55E','#F59E0B','#EF4444','#8B5CF6','#EC4899','#06B6D4'];
 const avatarColor = (name) => avatarColors[name.charCodeAt(0) % avatarColors.length];
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, char => ({
+  '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
+}[char]));
+
+async function apiFetch(url, options = {}) {
+  const response = await fetch(url, {
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+    ...options,
+  });
+
+  if (response.status === 401) {
+    window.location.href = '/admin/login.html';
+    throw new Error('Nao autorizado.');
+  }
+
+  const data = response.status === 204 ? null : await response.json();
+  if (!response.ok) throw new Error(data?.error || 'Falha na requisicao.');
+  return data;
+}
+
+async function uploadProductImageIfNeeded() {
+  const fileInput = document.getElementById('prod-image-file');
+  const selectedFile = fileInput?.files?.[0];
+
+  if (!selectedFile) return document.getElementById('prod-image').value.trim();
+
+  const formData = new FormData();
+  formData.append('image', selectedFile);
+
+  const response = await fetch('/api/admin/upload', {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: formData,
+  });
+
+  if (response.status === 401) {
+    window.location.href = '/admin/login.html';
+    throw new Error('Nao autorizado.');
+  }
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data?.error || 'Falha ao enviar imagem.');
+  return data.url;
+}
+
+async function loadStoredProducts() {
+  DB.products = await apiFetch('/api/admin/products');
+}
 
 function showToast(msg, isError = false) {
   const t = document.getElementById('toast');
@@ -176,6 +222,8 @@ function setupNavigation() {
     pageTitle.textContent = pageTitles[pageId] || pageId;
     // Close mobile sidebar
     document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('mobile-sidebar-backdrop').classList.remove('visible');
+    document.getElementById('mobile-menu-btn').setAttribute('aria-expanded', 'false');
   }
 
   navItems.forEach(item => {
@@ -202,8 +250,22 @@ function setupNavigation() {
   });
 
   // Mobile menu
-  document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-    sidebar.classList.toggle('mobile-open');
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileBackdrop = document.getElementById('mobile-sidebar-backdrop');
+  const closeMobileMenu = () => {
+    sidebar.classList.remove('mobile-open');
+    mobileBackdrop.classList.remove('visible');
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+  };
+
+  mobileMenuBtn.addEventListener('click', () => {
+    const isOpen = sidebar.classList.toggle('mobile-open');
+    mobileBackdrop.classList.toggle('visible', isOpen);
+    mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+  });
+  mobileBackdrop.addEventListener('click', closeMobileMenu);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMobileMenu();
   });
 }
 
@@ -269,7 +331,7 @@ function renderStockAlerts() {
     <div class="stock-alert-item">
       <div class="stock-alert-icon ${iconCls}">${label}</div>
       <div class="stock-alert-info">
-        <div class="stock-alert-name">${escapeHtml(p.name)}</div>
+        <div class="stock-alert-name">${p.name}</div>
         <div class="stock-alert-qty">Qtd: ${p.stock} | Mín: ${p.minStock}</div>
       </div>
     </div>`;
@@ -284,13 +346,12 @@ function renderStockBadge() {
 }
 
 // ── CHARTS ────────────────────────────────────────────────
-if (typeof Chart !== 'undefined') {
+if (window.Chart) {
   Chart.defaults.color = '#8892A4';
   Chart.defaults.font.family = "'Inter', sans-serif";
 }
 
 function renderCharts() {
-  if (typeof Chart === 'undefined') return;
   renderRevenueChart();
   renderCategoryChart();
 }
@@ -370,7 +431,6 @@ function renderCategoryChart() {
 
 // Reports Charts
 function renderReportCharts() {
-  if (typeof Chart === 'undefined') return;
   renderTopProductsChart();
   renderWeeklyChart();
   renderPaymentChart();
@@ -478,18 +538,23 @@ function renderProducts() {
   tbody.innerHTML = list.map(p => {
     const st = getStockStatus(p);
     const letter = (p.brand[0] || 'P').toUpperCase();
+    const name = escapeHtml(p.name);
+    const brand = escapeHtml(p.brand);
+    const sku = escapeHtml(p.sku);
+    const image = escapeHtml(p.image);
+    const category = escapeHtml(p.category);
     return `
     <tr>
       <td>
         <div class="product-thumb">
-          <div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${letter}</div>
+          ${p.image ? `<img src="${image}" alt="${name}" class="product-thumb-img" />` : `<div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${escapeHtml(letter)}</div>`}
           <div class="product-thumb-info">
-            <strong>${escapeHtml(p.name)}</strong>
-            <span>${escapeHtml(p.brand)} · ${escapeHtml(p.sku)}</span>
+            <strong>${name}</strong>
+            <span>${brand} · ${sku}</span>
           </div>
         </div>
       </td>
-      <td>${p.category.charAt(0).toUpperCase() + p.category.slice(1)}</td>
+      <td>${category.charAt(0).toUpperCase() + category.slice(1)}</td>
       <td><strong>${fmt(p.price)}</strong>${p.oldPrice ? `<br><small style="color:var(--admin-muted);text-decoration:line-through">${fmt(p.oldPrice)}</small>` : ''}</td>
       <td>
         <div class="stock-progress-wrap">
@@ -530,45 +595,71 @@ function openEditProduct(id) {
   document.getElementById('prod-price').value = p.price;
   document.getElementById('prod-old-price').value = p.oldPrice || '';
   document.getElementById('prod-stock').value = p.stock;
+  document.getElementById('prod-min-stock').value = p.minStock;
+  document.getElementById('prod-image-file').value = '';
+  document.getElementById('prod-image').value = p.image || '';
+  document.getElementById('prod-affiliate-url').value = p.affiliateUrl || '';
   document.getElementById('prod-sku').value = p.sku;
   document.getElementById('prod-specs').value = p.specs;
   openModal('product-modal-overlay');
 }
-function deleteProduct(id) {
-  if (!confirm('Tem certeza que deseja excluir este produto?')) return;
-  const idx = DB.products.findIndex(p => p.id === id);
-  if (idx !== -1) { DB.products.splice(idx, 1); renderProducts(); renderStockAlerts(); renderStockBadge(); showToast('Produto excluído com sucesso.'); }
+async function deleteProduct(id) {
+  if (!confirm('Tem certeza que deseja remover este produto?')) return;
+  try {
+    await apiFetch(`/api/admin/products/${id}`, { method: 'DELETE' });
+    await loadStoredProducts();
+    renderProducts();
+    renderStock();
+    renderStockBadge();
+    populateStockProductSelect();
+    showToast('Produto removido com sucesso.');
+  } catch (err) {
+    showToast(err.message, true);
+  }
 }
 
 function setupProductForm() {
   document.getElementById('btn-add-product').addEventListener('click', openAddProduct);
-  document.getElementById('product-form').addEventListener('submit', (e) => {
+  document.getElementById('product-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const data = {
-      name: document.getElementById('prod-name').value.trim(),
-      brand: document.getElementById('prod-brand').value.trim(),
-      category: document.getElementById('prod-category').value,
-      status: document.getElementById('prod-status').value,
-      price: parseFloat(document.getElementById('prod-price').value),
-      oldPrice: parseFloat(document.getElementById('prod-old-price').value) || null,
-      stock: parseInt(document.getElementById('prod-stock').value),
-      sku: document.getElementById('prod-sku').value.trim(),
-      specs: document.getElementById('prod-specs').value.trim(),
-      minStock: 3,
-    };
-    if (editingProductId) {
-      const idx = DB.products.findIndex(p => p.id === editingProductId);
-      if (idx !== -1) Object.assign(DB.products[idx], data);
-      showToast('Produto atualizado com sucesso!');
-    } else {
-      DB.products.push({ id: DB.nextProductId++, ...data, image: '' });
-      showToast('Produto adicionado com sucesso!');
+    try {
+      const data = {
+        name: document.getElementById('prod-name').value.trim(),
+        brand: document.getElementById('prod-brand').value.trim(),
+        category: document.getElementById('prod-category').value,
+        status: document.getElementById('prod-status').value,
+        price: parseFloat(document.getElementById('prod-price').value),
+        oldPrice: parseFloat(document.getElementById('prod-old-price').value) || null,
+        stock: parseInt(document.getElementById('prod-stock').value),
+        minStock: parseInt(document.getElementById('prod-min-stock').value) || 3,
+        sku: document.getElementById('prod-sku').value.trim(),
+        image: await uploadProductImageIfNeeded(),
+        affiliateUrl: document.getElementById('prod-affiliate-url').value.trim(),
+        specs: document.getElementById('prod-specs').value.trim(),
+      };
+
+      if (editingProductId) {
+        await apiFetch(`/api/admin/products/${editingProductId}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+        });
+        showToast('Produto atualizado com sucesso!');
+      } else {
+        await apiFetch('/api/admin/products', {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
+        showToast('Produto adicionado com sucesso!');
+      }
+      await loadStoredProducts();
+      closeModal('product-modal-overlay');
+      renderProducts();
+      renderStock();
+      renderStockBadge();
+      populateStockProductSelect();
+    } catch (err) {
+      showToast(err.message, true);
     }
-    closeModal('product-modal-overlay');
-    renderProducts();
-    renderStockAlerts();
-    renderStockBadge();
-    populateStockProductSelect();
   });
   ['product-search','product-category-filter','product-sort'].forEach(id => {
     document.getElementById(id).addEventListener('input', renderProducts);
@@ -602,16 +693,20 @@ function renderStock() {
   tbody.innerHTML = list.map(p => {
     const st = getStockStatus(p);
     const pct = Math.min(100, (p.stock / Math.max(p.minStock*2, 1)) * 100);
+    const name = escapeHtml(p.name);
+    const brand = escapeHtml(p.brand);
+    const sku = escapeHtml(p.sku);
+    const category = escapeHtml(p.category);
     return `
     <tr>
       <td>
         <div class="product-thumb">
-          <div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${p.brand[0]}</div>
-          <div class="product-thumb-info"><strong>${escapeHtml(p.name)}</strong><span>${escapeHtml(p.brand)}</span></div>
+          <div class="product-thumb-fallback" style="background:${avatarColor(p.brand)}22;color:${avatarColor(p.brand)}">${escapeHtml(p.brand[0])}</div>
+          <div class="product-thumb-info"><strong>${name}</strong><span>${brand}</span></div>
         </div>
       </td>
-      <td><code style="background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:5px;font-size:0.78rem">${escapeHtml(p.sku)}</code></td>
-      <td>${escapeHtml(p.category)}</td>
+      <td><code style="background:rgba(255,255,255,0.05);padding:3px 8px;border-radius:5px;font-size:0.78rem">${sku}</code></td>
+      <td>${category}</td>
       <td>
         <div class="stock-progress-wrap">
           <div class="stock-progress-bar"><div class="stock-progress-fill fill-${st}" style="width:${pct}%"></div></div>
@@ -624,6 +719,9 @@ function renderStock() {
         <div class="action-btns">
           <button class="btn-action" title="Ajustar estoque" onclick="openStockAdjust(${p.id})">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button class="btn-action danger" title="Remover produto" onclick="deleteProduct(${p.id})">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           </button>
         </div>
       </td>
@@ -665,7 +763,7 @@ function setupStockForm() {
     populateStockProductSelect();
     openModal('stock-modal-overlay');
   });
-  document.getElementById('stock-form').addEventListener('submit', (e) => {
+  document.getElementById('stock-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const productId = parseInt(document.getElementById('stock-product-select').value);
     const type = document.getElementById('stock-type').value;
@@ -674,18 +772,17 @@ function setupStockForm() {
 
     const product = DB.products.find(p => p.id === productId);
     if (!product) return;
-    if (!Number.isSafeInteger(qty) || qty < 0 || (type !== 'adjust' && qty === 0)) {
-      showToast('Informe uma quantidade válida.', true);
-      return;
-    }
-    if (type === 'out' && qty > product.stock) {
-      showToast('Saída maior que o estoque disponível.', true);
-      return;
-    }
 
-    if (type === 'in') product.stock += qty;
-    else if (type === 'out') product.stock = Math.max(0, product.stock - qty);
-    else if (type === 'adjust') product.stock = qty;
+    try {
+      await apiFetch(`/api/admin/products/${productId}/stock`, {
+        method: 'PATCH',
+        body: JSON.stringify({ type, qty }),
+      });
+      await loadStoredProducts();
+    } catch (err) {
+      showToast(err.message, true);
+      return;
+    }
 
     DB.stockHistory.unshift({
       date: new Date().toISOString().split('T')[0],
@@ -698,9 +795,8 @@ function setupStockForm() {
     closeModal('stock-modal-overlay');
     document.getElementById('stock-form').reset();
     renderStock();
-    renderStockAlerts();
     renderStockBadge();
-    renderDashboard();
+    renderProducts();
     showToast('Estoque atualizado com sucesso!');
   });
 
@@ -873,18 +969,12 @@ function setupReports() {
 function exportCSV() {
   const rows = [['ID','Produto','Marca','Categoria','Preço','Estoque','Status']];
   DB.products.forEach(p => rows.push([p.id, p.name, p.brand, p.category, p.price, p.stock, p.status]));
-  const csv = '\uFEFF' + rows.map(r => r.map(csvCell).join(';')).join('\r\n');
+  const csv = rows.map(r => r.join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href = url; a.download = 'gelafacil_produtos.csv'; a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  URL.revokeObjectURL(url);
   showToast('CSV exportado com sucesso!');
-}
-
-function csvCell(value) {
-  let text = String(value ?? '');
-  if (/^[\s]*[=+@-]/.test(text)) text = "'" + text;
-  return '"' + text.replace(/"/g, '""') + '"';
 }
 
 // ── EXPORT BUTTON ─────────────────────────────────────────
@@ -930,42 +1020,30 @@ function setupNotifications() {
 // ── SETTINGS ──────────────────────────────────────────────
 function setupSettings() {
   document.querySelectorAll('.settings-form button.btn-primary-admin').forEach(btn => {
-    btn.addEventListener('click', event => {
-      event.preventDefault();
-      showToast('Painel demonstrativo: configurações ainda não são salvas.', true);
-    });
+    btn.addEventListener('click', () => showToast('Configurações salvas com sucesso!'));
   });
 }
 
 // ── APP INIT ──────────────────────────────────────────────
-function initApp() {
-  renderDashboard();
+async function initApp() {
+  await loadStoredProducts();
   renderProducts();
   renderStock();
-  renderOrders();
-  renderCustomers();
-  setupPageObserver();
+  renderStockBadge();
 }
 
 // ── BOOT ────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  // Logout apenas redireciona para uma página ou faz reload (sem login por enquanto)
-  document.getElementById('btn-logout').addEventListener('click', () => {
-    if (confirm('Deseja sair do painel?')) location.href = '../index.html';
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    if (!confirm('Deseja sair do painel?')) return;
+    await fetch('/api/admin/logout', { method: 'POST', credentials: 'same-origin' });
+    window.location.href = '/admin/login.html';
   });
 
   setupNavigation();
   setupProductForm();
   setupStockForm();
-  setupOrders();
-  setupCustomers();
-  setupReports();
-  setupExport();
-  setupGlobalSearch();
   setupModals();
-  setupNotifications();
-  setupSettings();
 
-  // Inicializa o app direto (sem login)
-  initApp();
+  initApp().catch(err => showToast(err.message, true));
 });
