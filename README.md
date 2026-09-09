@@ -3,7 +3,7 @@
 Vitrine de produtos indicados por afiliado do Mercado Livre e apresentação dos serviços locais da Gela Fácil.
 
 - Produtos: pagamento, entrega, troca e garantia são de responsabilidade do Mercado Livre e do vendedor.
-- Serviços Gela Fácil: instalação e manutenção apenas de ar-condicionado em Linhares-ES e região.
+- Serviços Gela Fácil: instalação e manutenção apenas de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal.
 - Outros refrigeradores: não possuem instalação ou manutenção oferecida pela Gela Fácil.
 - WhatsApp: (27) 99973-5745.
 

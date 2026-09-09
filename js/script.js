@@ -490,9 +490,9 @@ window.openMercadoLivreProduct = function(productId, directAffiliateUrl = '') {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  document.title = 'Gela Fácil | Produtos no Mercado Livre e serviços em Linhares-ES';
+  document.title = 'Gela Fácil | Produtos no Mercado Livre e climatização no ES';
   const metaDescription = document.querySelector('meta[name="description"]');
-  if (metaDescription) metaDescription.content = 'Encontre produtos anunciados no Mercado Livre e contrate instalação ou manutenção de ar-condicionado com a Gela Fácil em Linhares-ES e região.';
+  if (metaDescription) metaDescription.content = 'Encontre produtos anunciados no Mercado Livre e contrate instalação ou manutenção de ar-condicionado com a Gela Fácil em Linhares, Sooretama, Aracruz e Rio Bananal.';
 
   // Keep every existing contact shortcut pointed at the official number.
   document.querySelectorAll('a[href*="wa.me/5527999999999"]').forEach(link => {
@@ -517,7 +517,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     notice.innerHTML = `
       <strong>Compra segura pelo Mercado Livre</strong>
       <span>Pagamento, entrega, troca e garantia do produto são tratados diretamente pelo Mercado Livre e pelo vendedor. A Gela Fácil apenas indica os produtos como afiliada.</span>
-      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares-ES e região. Não atendemos outros refrigeradores.</span>`;
+      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal. Não atendemos outros refrigeradores.</span>`;
     if (main.classList.contains('product-detail-container')) {
       // Na página de detalhes, o aviso precisa ficar dentro da área com
       // espaçamento próprio, abaixo da barra fixa de navegação.
@@ -531,13 +531,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const firstHeroTitle = document.querySelector('.carousel-slide:first-child h1');
   const firstHeroText = document.querySelector('.carousel-slide:first-child .hero-sub');
   if (firstHeroTitle) firstHeroTitle.innerHTML = 'Escolha seu <em>ar-condicionado</em><br>e compre pelo<br>Mercado Livre.';
-  if (firstHeroText) firstHeroText.textContent = 'Compare modelos selecionados e finalize a compra com pagamento e entrega pelo Mercado Livre. Em Linhares-ES e região, você também pode contratar nossa instalação e manutenção separadamente.';
+  if (firstHeroText) firstHeroText.textContent = 'Compare modelos selecionados e finalize a compra com pagamento e entrega pelo Mercado Livre. Em Linhares, Sooretama, Aracruz e Rio Bananal, você também pode contratar nossa instalação e manutenção separadamente.';
   const commercialText = document.querySelector('.carousel-slide:nth-child(3) .hero-sub');
-  if (commercialText) commercialText.textContent = 'Instalação, dimensionamento e manutenção de sistemas de ar-condicionado para empresas em Linhares-ES e região. Fale conosco para avaliar seu projeto.';
+  if (commercialText) commercialText.textContent = 'Instalação, dimensionamento e manutenção de sistemas de ar-condicionado para empresas em Linhares, Sooretama, Aracruz e Rio Bananal. Fale conosco para avaliar seu projeto.';
 
   const statCopies = [
     ['Mercado Livre', 'Pagamento e entrega'],
-    ['Linhares-ES', 'Atendimento local'],
+    ['4 cidades', 'Atendimento no ES'],
     ['Sob consulta', 'Orçamento do serviço'],
     ['Equipe local', 'Instalação e manutenção']
   ];
@@ -557,10 +557,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadHomeProductsFromApi();
 
   document.querySelectorAll('.footer-brand > p').forEach(p => {
-    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares-ES e região.';
+    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal.';
   });
   document.querySelectorAll('.footer-contact a').forEach(link => {
-    if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares-ES e região';
+    if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares, Sooretama, Aracruz e Rio Bananal';
   });
 
   const bento = document.querySelector('.bento-section .bento-container');
@@ -568,10 +568,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     bento.innerHTML = `
       <div class="bento-grid">
         <div class="bento-card card-vrf">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional em Linhares-ES e região.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional <span class="service-accent">para o seu conforto.</span></h3><p class="service-description">Atendimento em Linhares, Sooretama, Aracruz e Rio Bananal.</p><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></i></a></div>
         </div>
         <div class="bento-card card-camaras">
-          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção preventiva ou corretiva de ar-condicionado.</h3><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true">→</i></a></div>
+          <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção <span class="service-accent">para respirar melhor.</span></h3><p class="service-description">Cuide do seu ar-condicionado com atendimento em Linhares, Sooretama, Aracruz e Rio Bananal.</p><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></i></a></div>
         </div>
       </div>`;
   }

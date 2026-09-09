@@ -13,7 +13,7 @@
 }
 
 #navbar.scrolled .logo-img {
-  height: 46px;
+  height: 40px;
   filter: brightness(0) invert(1);
   opacity: 0.92;
 }
