@@ -228,8 +228,11 @@ function productCategoriesFor(product) {
 }
 
 function normalizeProductImage(path) {
-  if (!path) return 'assets/produtos/banner-climatizacao-premium.png';
-  return path;
+  const imagePath = path || 'assets/produtos/banner-climatizacao-premium.png';
+  // Imagens cadastradas usam "assets/...". Torná-las absolutas evita que a
+  // mesma referência vire /pages/assets/... quando renderizada em subpáginas.
+  if (imagePath.startsWith('assets/')) return '/' + imagePath;
+  return imagePath;
 }
 
 function renderHomeProductCard(product, index) {

@@ -43,6 +43,10 @@ app.use(helmet({
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       'script-src': ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+      // O front-end ainda usa handlers declarados no HTML (onclick, onsubmit
+      // e onblur). Helmet define script-src-attr como 'none' por padrão, o
+      // que bloqueava esses controles apesar de script-src permitir inline.
+      'script-src-attr': ["'unsafe-inline'"],
       'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
       'font-src': ["'self'", 'https://fonts.gstatic.com'],
       'img-src': ["'self'", 'data:', 'https:'],

@@ -7,6 +7,7 @@ function catalogAdjustPath(path) {
   if (path.startsWith('http') || path.startsWith('/') || path.startsWith('..')) {
     return path;
   }
+  if (path.startsWith('assets/')) return '/' + path;
   return '../' + path;
 }
 
