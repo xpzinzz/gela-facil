@@ -20,9 +20,9 @@
   --page-gutter: clamp(18px, 3vw, 56px);
 
   /* Typography system: display, supporting and reading roles */
-  --font-title: 'Outfit', sans-serif;
-  --font-subtitle: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-title: 'Poppins', sans-serif;
+  --font-subtitle: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
   
   /* Layout Rules */
   --r: 16px;
@@ -1136,7 +1136,7 @@ textarea {
   transform: scale(1.00);
 }
 .logo-img {
-  height: 46px;
+  height: 40px;
   width: auto;
   object-fit: contain;
   filter: brightness(0) invert(1); /* Logo starts white */
@@ -1211,7 +1211,7 @@ textarea {
   box-shadow: 0 10px 30px rgba(13, 31, 45, 0.1);
 }
 #navbar.scrolled .logo-img {
-  height: 46px;
+  height: 40px;
   filter: none; /* Logo in original color on white background */
 }
 #navbar.scrolled .nav-links a {
@@ -3889,78 +3889,6 @@ footer {
   gap: 16px;
 }
 
-/* Countdown Card - Redesigned to match image */
-.countdown-card {
-  background: var(--white);
-  border: 1px solid var(--border-clr);
-  border-radius: 18px;
-  padding: 20px clamp(16px, 4vw, 40px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 8px 30px rgba(13, 31, 45, 0.04);
-  width: 100%;
-  max-width: 480px;
-}
-
-.countdown-badge {
-  font-size: 0.85rem; /* Increased badge font size */
-  font-weight: 800;
-  color: var(--blue);
-  background: var(--ice);
-  padding: 8px 24px; /* Increased badge padding */
-  border-radius: 99px;
-  margin-bottom: 20px;
-  letter-spacing: 0.8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.countdown-timer {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Increased gap */
-}
-
-.timer-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.timer-num {
-  font-family: var(--font-title);
-  font-size: 2.8rem; /* Increased number font size */
-  font-weight: 800;
-  color: var(--blue);
-  background: var(--ice);
-  border: 1px solid rgba(0, 89, 187, 0.25);
-  border-radius: 12px;
-  width: 82px; /* Increased box width */
-  height: 68px; /* Increased box height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 2px 4px rgba(0, 89, 187, 0.05);
-}
-
-.timer-lbl {
-  font-size: 0.75rem; /* Increased label font size */
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.5px;
-  margin-top: 4px;
-}
-
-.timer-colon {
-  font-size: 2.8rem; /* Increased colon font size */
-  font-weight: 800;
-  color: var(--blue);
-  margin-bottom: 30px; /* Adjusted alignment margin */
-}
-
 /* Slider Controls */
 .clima-bebidas-nav {
   display: flex;
@@ -5062,13 +4990,13 @@ footer {
 .bento-section .card-vrf {
   background-image:
     linear-gradient(90deg, rgba(239, 248, 255, .98) 0%, rgba(239, 248, 255, .91) 37%, rgba(239, 248, 255, .18) 67%, rgba(239, 248, 255, 0) 100%),
-    url('../assets/bento/banner-instalacao-ar-condicionado.png');
+    url('../assets/bento/banner-instalacao-v2.png');
 }
 
 .bento-section .card-camaras {
   background-image:
     linear-gradient(90deg, rgba(231, 245, 255, .98) 0%, rgba(231, 245, 255, .9) 37%, rgba(231, 245, 255, .16) 67%, rgba(231, 245, 255, 0) 100%),
-    url('../assets/bento/banner-manutencao-ar-condicionado.png');
+    url('../assets/bento/banner-manutencao-v2.png');
 }
 
 .bento-section .card-vrf::after,
@@ -5112,13 +5040,15 @@ footer {
   border-radius: 999px;
   background: linear-gradient(135deg, #2f91cc 0%, #216fa5 100%);
   color: #fff;
-  font-size: .84rem;
+  font-size: .95rem;
+  font-weight: 700;
   letter-spacing: -.01em;
   box-shadow: 0 10px 24px rgba(32, 112, 166, .3), inset 0 1px 0 rgba(255, 255, 255, .2);
   transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
 }
 
 .bento-section .service-banner-btn i {
+  flex-shrink: 0;
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -5162,8 +5092,8 @@ footer {
   .bento-section .card-camaras {
     background-image: linear-gradient(180deg, rgba(239, 248, 255, .98) 0%, rgba(239, 248, 255, .9) 42%, rgba(239, 248, 255, .08) 76%), var(--service-banner);
   }
-  .bento-section .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-ar-condicionado.png'); }
-  .bento-section .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-ar-condicionado.png'); }
+  .bento-section .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.png'); }
+  .bento-section .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.png'); }
   .bento-section .card-vrf .bento-card-content,
   .bento-section .card-camaras .bento-card-content { max-width: 100%; height: auto; }
 }
@@ -5273,9 +5203,6 @@ html { scroll-padding-top: 110px; }
   .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .footer-bottom { flex-wrap: wrap; gap: 12px; text-align: center; }
   .clima-bebidas-header .header-right { width: 100%; min-width: 0; }
-  .countdown-card { width: 100%; max-width: 100%; padding: 16px; }
-  .countdown-timer { gap: 6px; justify-content: center; }
-  .timer-num { width: clamp(48px, 17vw, 70px); font-size: 1.8rem; }
   .bento-section .card-vrf .bento-card-content,
   .bento-section .card-camaras .bento-card-content { max-width: 100%; }
   .bento-section .service-banner-btn { gap: 8px; }
@@ -5300,4 +5227,21 @@ html { scroll-padding-top: 110px; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto !important; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* Service banners inspired by content.png. */
+.bento-section .card-vrf, .bento-section .card-camaras { padding: clamp(24px, 2.6vw, 38px); border-radius: 26px; background-position: center; box-shadow: 0 12px 32px rgba(0,71,171,.09); }
+.bento-section .card-vrf { background-image: url('../assets/bento/banner-instalacao-v2.png'); }
+.bento-section .card-camaras { background-image: url('../assets/bento/banner-manutencao-v2.png'); }
+.bento-section .card-vrf .bento-card-content, .bento-section .card-camaras .bento-card-content { max-width: 51%; }
+.bento-section .bento-tag { color: #0059d6; font-size: 10px; letter-spacing: .06em; border-color: #bcdcff; background: rgba(245,251,255,.9); }
+.bento-section .card-vrf h3, .bento-section .card-camaras h3 { margin: 16px 0 12px; color: #07245b; font-size: clamp(25px,2.3vw,34px); font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }
+.bento-section h3 .service-accent { color: #0060e6; }
+.bento-section .service-description { margin: 0 0 20px; color: #30445e; font-size: 14px; line-height: 1.5; }
+.bento-section .service-banner-btn { background: linear-gradient(135deg,#079de0,#0052d4); box-shadow: 0 10px 24px rgba(0,103,215,.25); }
+@media (max-width: 560px) {
+ .bento-section .card-vrf, .bento-section .card-camaras { min-height: 540px; padding: 26px; background-size: auto 65%; background-position: right bottom; background-color: #eff8ff; background-image: linear-gradient(180deg,#eff8ff 0%,rgba(239,248,255,.95) 12%,rgba(239,248,255,0) 55%),var(--service-banner); }
+ .bento-section .card-vrf .bento-card-content, .bento-section .card-camaras .bento-card-content { max-width: 100%; }
+ .bento-section .card-vrf h3, .bento-section .card-camaras h3 { max-width: 310px; font-size: 30px; }
+ .bento-section .service-description { max-width: 280px; }
 }

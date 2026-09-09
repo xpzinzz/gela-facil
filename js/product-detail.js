@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (servicesBox) {
     servicesBox.innerHTML = isAirConditioner ? `
       <div class="services-section-title">Serviços Gela Fácil (contratação separada):</div>
-      <p>Instalação e manutenção de ar-condicionado em Linhares-ES e região. Solicite avaliação e orçamento pelo WhatsApp.</p>
+      <p>Instalação e manutenção de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal. Solicite avaliação e orçamento pelo WhatsApp.</p>
       <a class="btn-primary" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Vi%20um%20ar-condicionado%20no%20site%20e%20gostaria%20de%20um%20or%C3%A7amento%20de%20instala%C3%A7%C3%A3o%20ou%20manuten%C3%A7%C3%A3o.">Pedir orçamento de serviço</a>` : `
       <div class="services-section-title">Importante sobre este produto</div>
       <p>A Gela Fácil não oferece instalação nem manutenção para geladeiras, frigobares, cervejeiras ou outros refrigeradores. Compra, entrega e demais responsabilidades ficam com o Mercado Livre e o vendedor.</p>`;

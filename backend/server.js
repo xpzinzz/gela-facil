@@ -256,6 +256,7 @@ app.get('/admin/login.html', (_req, res) => {
 });
 app.use('/admin/login.js', express.static(path.join(rootDir, 'admin', 'login.js')));
 app.use('/admin/admin.css', express.static(path.join(rootDir, 'admin', 'admin.css')));
+app.use('/admin/refresh.css', express.static(path.join(rootDir, 'admin', 'refresh.css')));
 app.use('/admin/admin.js', requireAdmin, express.static(path.join(rootDir, 'admin', 'admin.js')));
 app.get(['/admin', '/admin/', '/admin/index.html'], (req, res) => {
   if (!req.session || req.session.admin !== true) return res.redirect('/admin/login.html');
