@@ -3889,78 +3889,6 @@ footer {
   gap: 16px;
 }
 
-/* Countdown Card - Redesigned to match image */
-.countdown-card {
-  background: var(--white);
-  border: 1px solid var(--border-clr);
-  border-radius: 18px;
-  padding: 20px clamp(16px, 4vw, 40px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 8px 30px rgba(13, 31, 45, 0.04);
-  width: 100%;
-  max-width: 480px;
-}
-
-.countdown-badge {
-  font-size: 0.85rem; /* Increased badge font size */
-  font-weight: 800;
-  color: var(--blue);
-  background: var(--ice);
-  padding: 8px 24px; /* Increased badge padding */
-  border-radius: 99px;
-  margin-bottom: 20px;
-  letter-spacing: 0.8px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.countdown-timer {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Increased gap */
-}
-
-.timer-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.timer-num {
-  font-family: var(--font-title);
-  font-size: 2.8rem; /* Increased number font size */
-  font-weight: 800;
-  color: var(--blue);
-  background: var(--ice);
-  border: 1px solid rgba(0, 89, 187, 0.25);
-  border-radius: 12px;
-  width: 82px; /* Increased box width */
-  height: 68px; /* Increased box height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: inset 0 2px 4px rgba(0, 89, 187, 0.05);
-}
-
-.timer-lbl {
-  font-size: 0.75rem; /* Increased label font size */
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.5px;
-  margin-top: 4px;
-}
-
-.timer-colon {
-  font-size: 2.8rem; /* Increased colon font size */
-  font-weight: 800;
-  color: var(--blue);
-  margin-bottom: 30px; /* Adjusted alignment margin */
-}
-
 /* Slider Controls */
 .clima-bebidas-nav {
   display: flex;
@@ -5275,9 +5203,6 @@ html { scroll-padding-top: 110px; }
   .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   .footer-bottom { flex-wrap: wrap; gap: 12px; text-align: center; }
   .clima-bebidas-header .header-right { width: 100%; min-width: 0; }
-  .countdown-card { width: 100%; max-width: 100%; padding: 16px; }
-  .countdown-timer { gap: 6px; justify-content: center; }
-  .timer-num { width: clamp(48px, 17vw, 70px); font-size: 1.8rem; }
   .bento-section .card-vrf .bento-card-content,
   .bento-section .card-camaras .bento-card-content { max-width: 100%; }
   .bento-section .service-banner-btn { gap: 8px; }

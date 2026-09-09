@@ -789,42 +789,6 @@ function scrollToProducts() {
 // Initialize remaining generic sliders
 setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
 
-// ── BEBIDAS COUNTDOWN TIMER ──────────────────────────────
-function startCountdown() {
-  const hoursEl = document.getElementById('timer-hours');
-  const minutesEl = document.getElementById('timer-minutes');
-  const secondsEl = document.getElementById('timer-seconds');
-  
-  if (!hoursEl || !minutesEl || !secondsEl) return;
-  
-  let totalSeconds = localStorage.getItem('clima_countdown_seconds');
-  if (totalSeconds === null || totalSeconds <= 0) {
-    totalSeconds = 2 * 3600 + 33 * 60 + 23; // 2h 33m 23s
-  } else {
-    totalSeconds = parseInt(totalSeconds);
-  }
-
-  function updateTimer() {
-    if (totalSeconds <= 0) {
-      totalSeconds = 3 * 3600; // Reset to 3 hours
-    }
-    
-    totalSeconds--;
-    localStorage.setItem('clima_countdown_seconds', totalSeconds);
-    
-    const h = Math.floor(totalSeconds / 3600);
-    const m = Math.floor((totalSeconds % 3600) / 60);
-    const s = totalSeconds % 60;
-    
-    hoursEl.textContent = String(h).padStart(2, '0');
-    minutesEl.textContent = String(m).padStart(2, '0');
-    secondsEl.textContent = String(s).padStart(2, '0');
-  }
-  
-  updateTimer();
-  setInterval(updateTimer, 1000);
-}
-
 // ── DESTAQUES CAROUSEL DRAG & ARROWS ─────────────────────
 function initDestaquesCarousel() {
   const track = document.getElementById('destaques-track');
@@ -920,7 +884,6 @@ function initDestaquesCarousel() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  startCountdown();
   updateCartCounters();
   initDestaquesCarousel();
   
