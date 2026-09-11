@@ -265,7 +265,8 @@ function renderProducts() {
 
 function openAddProduct() {
   editingProductId = null;
-  document.getElementById('product-modal-title').textContent = 'Novo Produto';
+  document.getElementById('product-modal-title').textContent = 'Adicionar produto';
+  document.getElementById('product-save-button').textContent = 'Adicionar produto';
   document.getElementById('product-form').reset();
   document.getElementById('prod-stock').value = 0;
   document.getElementById('prod-min-stock').value = 3;
@@ -275,7 +276,8 @@ function openEditProduct(id) {
   const p = DB.products.find(x => x.id === id);
   if (!p) return;
   editingProductId = id;
-  document.getElementById('product-modal-title').textContent = 'Editar Produto';
+  document.getElementById('product-modal-title').textContent = 'Editar produto';
+  document.getElementById('product-save-button').textContent = 'Salvar alterações';
   document.getElementById('prod-name').value = p.name;
   document.getElementById('prod-brand').value = p.brand;
   document.getElementById('prod-category').value = p.category;

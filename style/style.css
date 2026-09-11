@@ -3137,14 +3137,19 @@ footer {
     gap: 18px;
   }
   .filter-tabs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
-    overflow-x: auto;
+    min-width: 0;
+    gap: 4px;
     border-radius: 12px;
-    justify-content: flex-start;
   }
   .filter-tab {
-    flex-shrink: 0;
-    padding: 8px 16px;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 4px;
+    font-size: clamp(0.72rem, 3vw, 0.88rem);
+    text-align: center;
   }
   .products-grid {
     grid-template-columns: 1fr;

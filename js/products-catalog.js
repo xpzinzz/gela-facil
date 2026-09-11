@@ -86,7 +86,7 @@ async function loadProductsFromApi() {
   if (!window.location.protocol.startsWith('http')) return;
 
   try {
-    const response = await fetch('/api/products');
+    const response = await fetch(window.publicApiUrl('/api/products'));
     if (!response.ok) return;
 
     const products = await response.json();

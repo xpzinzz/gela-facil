@@ -47,7 +47,7 @@ async function loadDetailProductFromApi(id) {
   if (!window.location.protocol.startsWith('http')) return null;
 
   try {
-    const response = await fetch(`/api/products/${encodeURIComponent(id)}`);
+    const response = await fetch(window.publicApiUrl(`/api/products/${encodeURIComponent(id)}`));
     if (!response.ok) return null;
     return normalizeApiDetailProduct(await response.json());
   } catch {

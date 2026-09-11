@@ -1,0 +1,5 @@
+Tool: built-in image_gen
+References: banner-instalacao-mobile-compact.png, banner-manutencao-mobile-compact.png
+Outputs: banner-instalacao-mobile-blended.png, banner-manutencao-mobile-blended.png
+
+undefined

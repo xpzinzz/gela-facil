@@ -1,6 +1,5 @@
-require('dotenv').config();
-
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const session = require('express-session');
 const helmet = require('helmet');
@@ -60,6 +59,7 @@ app.use(helmet({
   },
 }));
 app.use(express.json({ limit: '200kb' }));
+app.use(require('./src/public-preview-cors'));
 app.use(session({
   name: 'gela_admin_sid',
   secret: process.env.SESSION_SECRET,

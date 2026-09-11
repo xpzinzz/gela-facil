@@ -1,0 +1,65 @@
+/* Shared constraints for public pages. */
+.products-header > *, .clima-bebidas-header > *, .catalog-search-panel > *,
+.catalog-search-tools, .controls-top-row > *, .detail-grid > *, .footer-top > * { min-width: 0; }
+.footer-contact a { overflow-wrap: anywhere; }
+.section-title { overflow-wrap: break-word; }
+.product-name, .detail-title { overflow-wrap: anywhere; }
+
+/* One screen when content fits; grow naturally for zoom and short viewports. */
+#hero-section { min-height: 100svh; height: auto; }
+#hero-section .carousel-track-container { height: auto; }
+#hero-section .carousel-track { min-height: 100svh; height: auto; display: grid; }
+#hero-section .carousel-slide {
+  grid-area: 1 / 1;
+  position: relative;
+  inset: auto;
+  height: auto;
+  min-width: 0;
+  padding: clamp(108px, 15svh, 156px) max(6vw, calc((100vw - 1440px) / 2)) clamp(80px, 11svh, 120px);
+  background-size: cover;
+  background-position: center 35%;
+  align-items: center;
+}
+#hero-section .hero-content { width: 100%; max-width: 720px; min-width: 0; }
+#hero-section h1 { font-size: clamp(30px, min(4.3vw, 7svh), 64px); line-height: 1.1; margin-bottom: clamp(14px, 2.6svh, 26px); text-wrap: balance; }
+#hero-section .hero-sub { font-size: clamp(15px, min(1.35vw, 2.5svh), 19px); line-height: 1.55; max-width: 570px; margin-bottom: clamp(20px, 3.5svh, 36px); }
+#hero-section .hero-ctas { gap: 12px; }
+#hero-section .btn-hero { min-height: 48px; padding: 13px 24px; }
+#hero-section .carousel-dots { bottom: 28px; }
+#hero-section .scroll-indicator { bottom: 60px; }
+@media (min-width: 1600px) {
+  #hero-section .hero-content { max-width: 800px; }
+  #hero-section .hero-sub { max-width: 650px; }
+}
+@media (max-width: 1100px) {
+  .catalog-search-panel { grid-template-columns: minmax(0, 1fr); }
+  .catalog-search-tools .controls-top-row { grid-template-columns: minmax(0, 1fr) minmax(180px, .35fr); }
+}
+@media (max-width: 700px) {
+  #hero-section .carousel-slide { padding: 104px max(20px, env(safe-area-inset-right)) 82px max(20px, env(safe-area-inset-left)); }
+  #hero-section .carousel-slide:nth-child(1) { background-position: 28% center; }
+  #hero-section .carousel-slide:nth-child(2) { background-position: 62% center; }
+  #hero-section .carousel-slide:nth-child(3) { background-position: center; }
+  #hero-section h1 { font-size: clamp(28px, min(7.5vw, 6svh), 44px); line-height: 1.13; }
+  #hero-section .hero-sub { font-size: 16px; line-height: 1.5; }
+  #hero-section .btn-hero { width: 100%; }
+  #hero-section .scroll-indicator { display: none; }
+  #hero-section .carousel-dots { bottom: max(28px, env(safe-area-inset-bottom)); }
+  .clima-bebidas-header .header-left { min-width: 0; width: 100%; }
+  .clima-bebidas-track .product-card { min-width: 0; width: min(86%, 340px); }
+  .catalog-search-panel { position: relative; top: auto; }
+  .catalog-search-tools .controls-top-row { grid-template-columns: minmax(0, 1fr); }
+  .catalog-search-tools .sort-box { min-width: 0; width: 100%; }
+  .catalog-results-toolbar { flex-wrap: wrap; gap: 16px; }
+  .results-assurances { flex-wrap: wrap; }
+  .stats-container { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-item { min-width: 0; }
+  .section-title { font-size: clamp(26px, 7vw, 36px); line-height: 1.2; }
+}
+@media (max-height: 600px) {
+  #hero-section .carousel-slide { padding-top: 100px; padding-bottom: 66px; }
+  #hero-section h1 { font-size: clamp(26px, 5.6svh, 34px); margin-bottom: 14px; }
+  #hero-section .hero-sub { margin-bottom: 18px; }
+  #hero-section .scroll-indicator { display: none; }
+  #hero-section .carousel-dots { bottom: 22px; }
+}

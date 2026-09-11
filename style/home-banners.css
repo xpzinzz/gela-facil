@@ -1,0 +1,81 @@
+/* Keep slides in the same grid cell so the tallest copy sets the height. */
+#hero-section { height: auto; min-height: 100svh; }
+#hero-section .carousel-track-container { height: auto; }
+#hero-section .carousel-track { display: grid; height: auto; min-height: 100svh; }
+#hero-section .carousel-slide { position: relative; inset: auto; grid-area: 1 / 1; min-width: 0; height: auto; padding: 140px max(8vw, 76px) 150px; }
+#hero-section .hero-content { width: 100%; min-width: 0; }
+#hero-section h1 { font-size: clamp(32px, 4.5vw, 56px); line-height: 1.14; overflow-wrap: break-word; }
+#hero-section .hero-ctas { flex-wrap: wrap; }
+#hero-section .btn-hero { min-height: 48px; }
+
+/* Service banners keep their own image area when stacked on narrow screens. */
+#instalacao .bento-grid { grid-auto-rows: auto; align-items: stretch; }
+#instalacao .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.png'); }
+#instalacao .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.png'); }
+#instalacao :is(.card-vrf, .card-camaras) {
+  min-width: 0;
+  min-height: 380px;
+  padding: clamp(24px, 2.5vw, 38px);
+  background-color: #eff8ff;
+  background-image: linear-gradient(90deg, #eff8ff 0%, rgba(239,248,255,.94) 35%, transparent 65%), var(--service-banner);
+  background-size: cover;
+  background-position: center;
+}
+#instalacao :is(.card-vrf, .card-camaras) .bento-card-content { width: 56%; max-width: none; height: auto; flex: 1; }
+#instalacao :is(.card-vrf, .card-camaras) h3 { font-size: clamp(25px, 2.2vw, 34px); line-height: 1.15; overflow-wrap: break-word; }
+#instalacao .service-description { max-width: none; }
+#instalacao .service-banner-btn { max-width: 100%; min-height: 48px; white-space: normal; gap: 10px; }
+#instalacao .service-banner-btn > span { min-width: 0; }
+#instalacao .home-service-image { display: none; }
+#instalacao :is(.installation-mobile-banner, .maintenance-mobile-banner) { display: none; }
+@media (max-width: 1100px) {
+  #instalacao .bento-grid { grid-template-columns: minmax(0, 1fr); }
+  #instalacao :is(.card-vrf, .card-camaras) { min-height: 350px; }
+  #instalacao :is(.card-vrf, .card-camaras) .bento-card-content { width: 52%; }
+}
+@media (max-width: 700px) {
+  #hero-section .carousel-slide { padding: 116px 24px 100px; background-position: 60% center; }
+  #hero-section .hero-sub { font-size: 16px; line-height: 1.6; margin-bottom: 26px; }
+  #hero-section .hero-ctas { width: 100%; }
+  #hero-section .btn-hero { width: 100%; padding: 14px 16px; }
+  #hero-section > .carousel-control { top: auto; bottom: 22px; width: 44px; height: 44px; transform: none; }
+  #hero-section > .carousel-control.prev { left: 24px; }
+  #hero-section > .carousel-control.next { right: 24px; }
+  #hero-section .carousel-dots { bottom: 38px; }
+  #hero-section .scroll-indicator { display: none; }
+  #instalacao .bento-grid { gap: 24px; }
+  #instalacao :is(.card-vrf, .card-camaras) {
+    min-height: 0;
+    padding: 26px 24px 0;
+    border-radius: 20px;
+    background: #eff8ff;
+  }
+  #instalacao :is(.card-vrf, .card-camaras) .bento-card-content { width: 100%; max-width: none; flex: none; }
+  #instalacao :is(.card-vrf, .card-camaras) h3 { max-width: 460px; font-size: clamp(26px, 5.6vw, 34px); }
+  #instalacao .service-description { max-width: 460px; }
+  #instalacao .service-banner-btn { width: 100%; justify-content: space-between; }
+  #instalacao .home-service-image {
+    order: 2;
+    display: block;
+    width: calc(100% + 48px);
+    max-width: none;
+    height: clamp(200px, 55vw, 320px);
+    flex-shrink: 0;
+    margin: 18px -24px 0;
+    object-fit: cover;
+    object-position: right center;
+  }
+}
+@media (max-height: 600px) and (min-width: 701px) {
+  #hero-section .carousel-slide { padding-top: 120px; padding-bottom: 110px; }
+  #hero-section .scroll-indicator { display: none; }
+}
+
+@media (max-width: 700px) {
+  #instalacao :is(.card-vrf, .card-camaras) { padding: 0; min-height: 0; background: #eff8ff; border: 2px solid #79b8e8; box-shadow: 0 8px 24px rgba(0, 71, 171, .12); }
+  #instalacao :is(.card-vrf, .card-camaras) > .bento-card-content,
+  #instalacao :is(.card-vrf, .card-camaras) > .home-service-image { display: none; }
+  #instalacao :is(.installation-mobile-banner, .maintenance-mobile-banner) { display: block; width: 100%; line-height: 0; }
+  #instalacao :is(.installation-mobile-banner, .maintenance-mobile-banner) img { display: block; width: 100%; max-width: 100%; height: auto; }
+  #instalacao :is(.installation-mobile-banner, .maintenance-mobile-banner):focus-visible { outline: 3px solid #0059bb; outline-offset: -5px; }
+}

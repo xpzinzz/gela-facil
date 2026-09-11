@@ -32,6 +32,8 @@ Depois acesse:
 - Site: `http://localhost:3000/`
 - Admin: `http://localhost:3000/admin/`
 
+O Live Server nas portas 5500–5599 também pode ser usado para visualizar o site. Nessas portas, as páginas públicas consultam o backend no mesmo host, na porta 3000. Mantenha `npm start` rodando em `backend/`, com o `.env` configurado. O Live Server sozinho não fornece a API de produtos. Em produção, a API continua no mesmo endereço do site.
+
 A chave `SUPABASE_SERVICE_ROLE_KEY` deve ficar somente no `backend/.env`. O frontend público acessa apenas `/api/products`, que não expõe estoque, SKU ou limites de estoque. Rode o SQL do schema para ativar RLS e revogar acesso direto dos papéis públicos do Supabase.
 
 No cadastro de produto do admin, voce pode enviar uma imagem para o bucket ou colar uma URL pronta. Quando houver upload, o backend salva a imagem no Supabase Storage e grava a URL publica no produto.

@@ -15,6 +15,8 @@
     rel="stylesheet">
   <link rel="stylesheet" href="../style/style.css">
   <link rel="stylesheet" href="../style/products.css">
+  <link rel="stylesheet" href="../style/maintenance-banner.css">
+  <link rel="stylesheet" href="../style/responsive.css">
 </head>
 
 <body>
@@ -69,6 +71,21 @@
 
   <!-- ── MAIN CATALOG GRID & FILTERS ──────────────────────── -->
   <main class="catalog-container">
+
+      <aside class="maintenance-banner" aria-label="Manutenção de ar-condicionado" hidden>
+        <button class="maintenance-banner-close" type="button" aria-label="Fechar banner de manutenção"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
+        <div class="maintenance-banner-copy">
+          <div class="maintenance-banner-brand"><img src="../assets/brand/logo-transparente.svg" alt="Gela Fácil" width="1333" height="690"><span>Conforto<br>em boas mãos</span></div>
+          <h2>Manutenção de<br><span>Ar-Condicionado</span></h2>
+          <p>Cuidado técnico, limpeza e revisão para o melhor desempenho do seu aparelho.</p>
+          <ul aria-label="Serviços">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z"/></svg>Limpeza</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"/></svg>Revisão</li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V3h10v18M14 11h6v10M8 7h2M8 11h2M8 15h2M2 21h20"/></svg>Residencial<br>e comercial</li>
+          </ul>
+          <a class="maintenance-banner-cta" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20manuten%C3%A7%C3%A3o%20de%20ar-condicionado." target="_blank" rel="noopener noreferrer">Agende sua manutenção <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></a>
+        </div>
+      </aside>
 
     <!-- PRODUCT SEARCH -->
     <section class="catalog-search-panel" aria-labelledby="catalog-search-title">
@@ -190,11 +207,11 @@
                 <path
                   d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
               </svg> (27) 99973-5745</a>
-            <a href="mailto:contato@gelafacil.com.br"><svg class="footer-icon-svg" width="14" height="14"
+            <a href="mailto:edson.amancio59@gmail.com"><svg class="footer-icon-svg" width="14" height="14"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                 <polyline points="22,6 12,13 2,6" />
-              </svg> contato@gelafacil.com.br</a>
+              </svg> edson.amancio59@gmail.com</a>
             <a href="#"><svg class="footer-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2.5">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -302,18 +319,13 @@
         <span>Total</span>
         <strong id="cart-total-val">R$ 0</strong>
       </div>
-      <button class="btn-primary cart-checkout-btn" id="cart-checkout-btn" onclick="goToCheckout()" disabled>
-        Finalizar Compra <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2.5" class="icon-svg">
-          <line x1="5" y1="12" x2="19" y2="12" />
-          <polyline points="12 5 19 12 12 19" />
-        </svg>
-      </button>
     </div>
   </div>
 
+  <script src="../js/public-api.js"></script>
   <script src="../js/script.js"></script>
   <script src="../js/products-catalog.js"></script>
+  <script src="../js/maintenance-banner.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,5 @@
+Tool: built-in image_gen
+References: banner-instalacao-mobile.webp and banner-manutencao-mobile.png (one edit per image).
+Outputs: banner-instalacao-mobile-compact.png and banner-manutencao-mobile-compact.png
+
+undefined

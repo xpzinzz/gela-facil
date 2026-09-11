@@ -1,0 +1,5 @@
+Tool: built-in image_gen
+Reference: banner.webp (style reference)
+Output: assets/hero/products-maintenance-banner.png
+
+Use case: ads-marketing. Create a new wide photographic website banner background inspired by the provided reference (reference only, not an edit target). Aspect ratio 2.5:1. Match the clean white and ice blue palette and flowing subtle blue arcs. On the RIGHT half, a professional HVAC technician seen from behind in navy uniform and cap with light blue piping, maintaining an open white wall-mounted air conditioner in a bright modern interior. Realistic anatomy and professional photography. LEFT 55 percent must remain very light almost white negative space for HTML heading and button. No text, no letters, no logos, no watermark, no buttons. Keep technician and AC within right half; polished blue-and-white Gela Fácil maintenance campaign mood.

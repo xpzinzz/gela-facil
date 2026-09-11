@@ -291,7 +291,7 @@ async function loadHomeProductsFromApi() {
   if (!grid || !drinksTrack || !window.location.protocol.startsWith('http')) return;
 
   try {
-    const response = await fetch('/api/products');
+    const response = await fetch(window.publicApiUrl('/api/products'));
     if (!response.ok) throw new Error('Falha ao carregar produtos.');
 
     const products = await response.json();
@@ -475,12 +475,6 @@ window.closeCartDrawer = function() {
   document.body.style.overflow = '';
 };
 
-// ── CHECKOUT & PAYMENT LOGIC ────────────────────────────
-window.goToCheckout = function() {
-  closeCartDrawer();
-  showToast('A compra e o pagamento serão feitos no Mercado Livre. Links em breve.');
-};
-
 // Affiliate storefront: product sales happen on Mercado Livre, never on this site.
 window.openMercadoLivreProduct = function(productId, directAffiliateUrl = '') {
   const product = productDetailsDb[String(productId)];
@@ -571,9 +565,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     bento.innerHTML = `
       <div class="bento-grid">
         <div class="bento-card card-vrf">
+          <a class="installation-mobile-banner" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado." target="_blank" rel="noopener noreferrer" aria-label="Pedir orçamento de instalação de ar-condicionado pelo WhatsApp">
+            <img src="assets/bento/banner-instalacao-mobile-blended.png" width="1088" height="1446" alt="Instalação profissional para o seu conforto. Atendimento em Linhares, Sooretama, Aracruz e Rio Bananal. Instalação segura, equipe especializada e mais desempenho. Pedir orçamento." loading="lazy" decoding="async">
+          </a>
+          <img class="home-service-image" src="assets/bento/banner-instalacao-v2.png" alt="Instalação profissional de ar-condicionado" loading="lazy" decoding="async">
           <div class="bento-card-content"><div class="bento-tag yellow-text">AR-CONDICIONADO</div><h3>Instalação profissional <span class="service-accent">para o seu conforto.</span></h3><p class="service-description">Atendimento em Linhares, Sooretama, Aracruz e Rio Bananal.</p><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20um%20or%C3%A7amento%20para%20instala%C3%A7%C3%A3o%20de%20ar-condicionado."><span>Pedir orçamento</span><i aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></i></a></div>
         </div>
         <div class="bento-card card-camaras">
+          <a class="maintenance-mobile-banner" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado." target="_blank" rel="noopener noreferrer" aria-label="Agendar limpeza e manutenção de ar-condicionado pelo WhatsApp">
+            <img src="assets/bento/banner-manutencao-mobile-blended.png" width="1120" height="1404" alt="Limpeza e manutenção para respirar melhor. Atendimento em Linhares, Sooretama, Aracruz e Rio Bananal. Limpeza completa, equipe especializada e mais eficiência. Agendar atendimento." loading="lazy" decoding="async">
+          </a>
+          <img class="home-service-image" src="assets/bento/banner-manutencao-v2.png" alt="Limpeza e manutenção de ar-condicionado" loading="lazy" decoding="async">
           <div class="bento-card-content"><div class="bento-tag yellow-text">ASSISTÊNCIA TÉCNICA</div><h3>Limpeza e manutenção <span class="service-accent">para respirar melhor.</span></h3><p class="service-description">Cuide do seu ar-condicionado com atendimento em Linhares, Sooretama, Aracruz e Rio Bananal.</p><a class="bento-btn-sm service-banner-btn" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Gostaria%20de%20agendar%20manuten%C3%A7%C3%A3o%20ou%20limpeza%20de%20ar-condicionado."><span>Agendar atendimento</span><i aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></i></a></div>
         </div>
       </div>`;

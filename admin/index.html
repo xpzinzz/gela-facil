@@ -250,87 +250,92 @@
 
 <!-- Product Modal -->
 <div class="modal-overlay" id="product-modal-overlay">
-  <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title" tabindex="-1">
+  <div class="modal" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="product-modal-title" aria-describedby="product-modal-description" tabindex="-1">
     <div class="modal-header">
-      <h3 id="product-modal-title">Novo Produto</h3>
+      <div><span class="eyebrow">CATÁLOGO</span><h3 id="product-modal-title">Adicionar produto</h3><p id="product-modal-description">Preencha os dados abaixo. Campos com * são obrigatórios.</p></div>
       <button class="modal-close" aria-label="Fechar janela" data-modal="product-modal-overlay">&times;</button>
     </div>
     <div class="modal-body">
-      <p class="form-help modal-intro">Produtos ativos aparecem no site. Confira o link de afiliado antes de divulgar.</p><form id="product-form">
-        <div class="form-row">
-          <div class="form-group">
+      <form id="product-form">
+        <div class="product-form-sections">
+        <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">01</span>Identificação do produto</legend>
+          <p class="product-section-description">Dados que ajudam o cliente a encontrar o produto.</p>
+          <div class="product-fields"><div class="form-group">
             <label for="prod-name">Nome do Produto *</label>
             <input type="text" id="prod-name" placeholder="Ex: Samsung WindFree 12.000 BTU" class="settings-input" required />
           </div>
-          <div class="form-group">
+<div class="form-group">
             <label for="prod-brand">Marca *</label>
             <input type="text" id="prod-brand" placeholder="Ex: Samsung" class="settings-input" required />
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
+<div class="form-group">
             <label for="prod-category">Categoria *</label>
-            <select id="prod-category" class="settings-input">
+            <select required id="prod-category" class="settings-input">
               <option value="inverter">Inverter</option>
               <option value="split">Split</option>
               <option value="portatil">Portátil</option>
               <option value="bebidas">Clima Bebidas</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="prod-status">Status</label>
-            <select id="prod-status" class="settings-input">
+<div class="form-group">
+          <label for="prod-specs">Características (opcional)</label>
+          <input type="text" id="prod-specs" placeholder="Inverter, 12.000 BTU, A+++" class="settings-input" aria-describedby="prod-specs-help" />
+        <small class="form-help" id="prod-specs-help">Separe por vírgulas. Ex.: Inverter, 12.000 BTU, 220 V.</small></div></div>
+        </fieldset>
+        <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">02</span>Preço e publicação</legend>
+          <p class="product-section-description">Defina a oferta e a visibilidade no catálogo.</p>
+          <div class="product-fields"><div class="form-group">
+            <label for="prod-price">Preço atual (R$) *</label>
+            <input type="number" id="prod-price" min="0" placeholder="0.00" class="settings-input" step="0.01" required />
+          </div>
+<div class="form-group">
+            <label for="prod-old-price">Preço anterior (R$, opcional)</label>
+            <input type="number" id="prod-old-price" min="0" placeholder="0.00" class="settings-input" aria-describedby="prod-old-price-help" step="0.01" />
+          <small class="form-help" id="prod-old-price-help">Preencha se houver desconto, com um valor maior que o preço atual.</small></div>
+<div class="form-group">
+            <label for="prod-status">Visibilidade no site</label>
+            <select id="prod-status" class="settings-input" aria-describedby="prod-status-help">
               <option value="active">Ativo</option>
               <option value="inactive">Inativo</option>
             </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="prod-price">Preço de Venda (R$) *</label>
-            <input type="number" id="prod-price" min="0" placeholder="0.00" class="settings-input" step="0.01" required />
-          </div>
-          <div class="form-group">
-            <label for="prod-old-price">Preço Original (R$)</label>
-            <input type="number" id="prod-old-price" min="0" placeholder="0.00" class="settings-input" step="0.01" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="prod-stock">Quantidade em Estoque *</label>
+          <small class="form-help" id="prod-status-help">Ativo: aparece no catálogo. Inativo: fica oculto do site.</small></div>
+<div class="form-group">
+          <label for="prod-affiliate-url">Link de afiliado (opcional)</label>
+          <input type="url" id="prod-affiliate-url" placeholder="https://mercadolivre.com.br/..." class="settings-input" aria-describedby="prod-affiliate-url-help" />
+
+        <small class="form-help" id="prod-affiliate-url-help">Destino do botão “Ver no Mercado Livre”. Confira o link antes de publicar.</small></div></div>
+        </fieldset>
+        <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">03</span>Imagem do produto</legend>
+          <p class="product-section-description">Envie um arquivo ou informe o endereço da imagem.</p>
+          <div class="product-fields"><div class="form-group">
+            <label for="prod-image-file">Enviar imagem (opcional)</label>
+            <input type="file" id="prod-image-file" class="settings-input" aria-describedby="prod-image-file-help" accept="image/jpeg,image/png,image/webp" />
+          <small class="form-help" id="prod-image-file-help">JPEG, PNG ou WebP, até 5 MB. O arquivo enviado tem prioridade sobre o endereço da imagem.</small></div>
+<div class="form-group">
+          <label for="prod-image">Endereço da imagem (opcional)</label>
+          <input type="text" id="prod-image" placeholder="https://... ou assets/produtos/produto.png" class="settings-input" aria-describedby="prod-image-help" />
+        <small class="form-help" id="prod-image-help">Use uma URL completa ou um caminho como assets/produtos/produto.png.</small></div></div>
+        </fieldset>
+        <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">04</span>Controle de estoque</legend>
+          <p class="product-section-description">Informações internas para acompanhar a disponibilidade.</p>
+          <div class="product-fields"><div class="form-group">
+            <label for="prod-stock">Quantidade em estoque *</label>
             <input type="number" id="prod-stock" placeholder="0" class="settings-input" min="0" required />
           </div>
-          <div class="form-group">
-            <label for="prod-min-stock">Mínimo Recomendado</label>
-            <input type="number" id="prod-min-stock" placeholder="3" class="settings-input" min="0" />
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="prod-sku">SKU</label>
-            <input type="text" id="prod-sku" placeholder="GF-001" class="settings-input" />
-          </div>
-          <div class="form-group">
-            <label for="prod-image-file">Imagem do Produto</label>
-            <input type="file" id="prod-image-file" class="settings-input" accept="image/jpeg,image/png,image/webp" /><small class="form-help">JPEG, PNG ou WebP · até 5 MB</small>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="prod-image">URL da Imagem</label>
-          <input type="text" id="prod-image" placeholder="https://... ou assets/produtos/produto.png" class="settings-input" />
-        </div>
-        <div class="form-group">
-          <label for="prod-affiliate-url">Link de afiliado do Mercado Livre</label>
-          <input type="url" id="prod-affiliate-url" placeholder="https://mercadolivre.com.br/..." class="settings-input" />
-          <small class="form-help">Este link é aberto pelo botão “Ver no Mercado Livre” no site.</small>
-        </div>
-        <div class="form-group">
-          <label for="prod-specs">Especificações (separadas por vírgula)</label>
-          <input type="text" id="prod-specs" placeholder="Inverter, 12.000 BTU, A+++" class="settings-input" />
+<div class="form-group">
+            <label for="prod-min-stock">Estoque mínimo (opcional)</label>
+            <input type="number" id="prod-min-stock" placeholder="3" class="settings-input" aria-describedby="prod-min-stock-help" min="0" />
+          <small class="form-help" id="prod-min-stock-help">O alerta aparece quando o estoque chega a este valor ou menos. Padrão: 3 unidades.</small></div>
+<div class="form-group">
+            <label for="prod-sku">Código do produto / SKU (opcional)</label>
+            <input type="text" id="prod-sku" placeholder="GF-001" class="settings-input" aria-describedby="prod-sku-help" />
+          <small class="form-help" id="prod-sku-help">Código interno de identificação. Ex.: GF-001.</small></div></div>
+        </fieldset>
         </div>
         <div class="modal-footer">
+          <span class="product-save-note">Confira os dados antes de salvar.</span>
           <button type="button" class="btn-cancel" data-modal="product-modal-overlay">Cancelar</button>
-          <button type="submit" class="btn-primary-admin">Salvar Produto</button>
+          <button type="submit" class="btn-primary-admin" id="product-save-button">Adicionar produto</button>
         </div>
       </form>
     </div>
