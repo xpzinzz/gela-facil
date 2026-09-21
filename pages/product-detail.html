@@ -154,12 +154,25 @@
   <section class="extra-details-section">
     <div class="tabs-header">
       <button class="tab-nav-btn active" onclick="switchTab('specs')">Especificações Técnicas</button>
+      <button class="tab-nav-btn" id="reviews-tab-button" onclick="switchTab('reviews')">Avaliações do Mercado Livre</button>
     </div>
 
     <!-- Specs Tab -->
     <div class="tab-content active" id="tab-specs">
       <div class="specs-table-grid" id="detail-specs-grid">
         <!-- Specs populated dynamically -->
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-reviews">
+      <div class="reviews-grid">
+        <div class="reviews-summary-card">
+          <h4>Avaliações no Mercado Livre</h4>
+          <div class="average-score" id="average-score-val">0.0</div>
+          <div class="stars-large" id="average-stars-row"></div>
+          <p class="rating-total-txt" id="average-total-text">Nenhuma avaliação encontrada</p>
+        </div>
+        <div class="reviews-list-col" id="reviews-list"></div>
       </div>
     </div>
 

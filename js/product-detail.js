@@ -27,6 +27,9 @@ function specsTextToDetailObject(specs) {
 
 function normalizeApiDetailProduct(product) {
   const image = product.image || 'assets/produtos/banner-climatizacao-premium.webp';
+  const attributes = product.attributes && Object.keys(product.attributes).length
+    ? product.attributes
+    : specsTextToDetailObject(product.specs);
   return {
     name: product.name,
     brand: product.brand,
@@ -34,12 +37,15 @@ function normalizeApiDetailProduct(product) {
     price: product.price,
     image,
     affiliateUrl: product.affiliateUrl || '',
-    rating: 5,
-    ratingCount: 0,
-    gallery: [image],
-    desc: product.specs || '',
-    specs: specsTextToDetailObject(product.specs),
-    reviews: []
+    mercadoLivreId: product.mercadoLivreId || '',
+    sourceStatus: product.sourceStatus || '',
+    sourceSyncedAt: product.sourceSyncedAt || null,
+    rating: Number(product.rating || 0),
+    ratingCount: Number(product.ratingCount || 0),
+    gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [image],
+    desc: product.description || product.specs || '',
+    specs: attributes,
+    reviews: Array.isArray(product.reviews) ? product.reviews : []
   };
 }
 
@@ -149,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('installments-preview-txt').textContent = `ou em até 10x sem juros de ${formatPrice(installmentVal)} no cartão`;
   
   // Populate Rating Summary
-  detailProduct.rating = Number(detailProduct.rating || 5);
+  detailProduct.rating = Number(detailProduct.rating || 0);
   detailProduct.ratingCount = Number(detailProduct.ratingCount || 0);
   const starsString = '★'.repeat(Math.round(detailProduct.rating)) + '☆'.repeat(5 - Math.round(detailProduct.rating));
   document.getElementById('product-stars').textContent = starsString;
@@ -170,8 +176,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderSpecs();
   
   // Render reviews
-  const reviewsTab = document.querySelector("[onclick=\"switchTab('reviews')\"]");
-  if (reviewsTab) reviewsTab.style.display = 'none';
+  const reviewsTab = document.getElementById('reviews-tab-button');
+  const hasReviews = detailProduct.ratingCount > 0 || detailProduct.reviews.length > 0;
+  if (reviewsTab) reviewsTab.hidden = !hasReviews;
+  if (hasReviews) renderReviews();
   
   // Services are quoted separately and are never added to the product price.
   
@@ -200,15 +208,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   const buyNowBtn = document.getElementById('modal-buy-now-btn');
   if (buyNowBtn) {
-    buyNowBtn.textContent = 'Ver no Mercado Livre';
-    buyNowBtn.addEventListener('click', () => {
-      openMercadoLivreProduct(currentProduct.id, currentProduct.affiliateUrl);
-    });
+    const unavailable = detailProduct.sourceStatus && detailProduct.sourceStatus !== 'active';
+    buyNowBtn.textContent = unavailable ? 'Anúncio indisponível' : 'Ver no Mercado Livre';
+    buyNowBtn.disabled = unavailable;
+    if (!unavailable) {
+      buyNowBtn.addEventListener('click', () => {
+        openMercadoLivreProduct(currentProduct.id, currentProduct.affiliateUrl);
+      });
+    }
   }
 
   const summaryBox = document.querySelector('.detail-summary-box');
   if (summaryBox) {
-    summaryBox.innerHTML = '<strong>Valor anunciado no Mercado Livre</strong><p style="margin:8px 0 0">O preço, parcelamento, disponibilidade e frete devem ser confirmados no anúncio. Serviços da Gela Fácil não estão incluídos.</p>';
+    const availability = detailProduct.sourceStatus === 'active' ? 'Produto disponível' : (detailProduct.sourceStatus ? 'Anúncio indisponível' : 'Consulte a disponibilidade');
+    summaryBox.innerHTML = `<strong>Valor anunciado no Mercado Livre</strong><p style="margin:8px 0 0"><b>${availability}.</b> O preço, parcelamento, estoque e frete devem ser confirmados no anúncio. Serviços da Gela Fácil não estão incluídos.</p>`;
   }
   
   // Recalculate totals
@@ -277,24 +290,30 @@ function renderReviews() {
   
   const reviews = detailProduct.reviews || [];
   if (reviews.length === 0) {
-    list.innerHTML = '<p style="color: rgba(255,255,255,0.4); text-align: center; padding: 20px 0;">Este produto ainda não possui avaliações. Seja o primeiro a avaliar!</p>';
+    list.textContent = 'A nota geral foi importada, mas o Mercado Livre não retornou comentários para exibição.';
     return;
   }
   
   reviews.forEach(rev => {
     const card = document.createElement('div');
     card.className = 'review-card';
-    card.innerHTML = `
-      <div class="review-card-header">
-        <div class="reviewer-name">
-          ${rev.author}
-          <span class="verified-badge">Compra Verificada</span>
-        </div>
-        <div class="stars">${'★'.repeat(rev.stars)}${'☆'.repeat(5 - rev.stars)}</div>
-      </div>
-      <div class="review-date">Avaliado em ${rev.date}</div>
-      <div class="review-comment" style="margin-top: 8px;">${rev.comment}</div>
-    `;
+    const header = document.createElement('div');
+    header.className = 'review-card-header';
+    const title = document.createElement('div');
+    title.className = 'reviewer-name';
+    title.textContent = rev.title || 'Avaliação de comprador';
+    const stars = document.createElement('div');
+    stars.className = 'stars';
+    stars.textContent = `${'★'.repeat(rev.stars)}${'☆'.repeat(5 - rev.stars)}`;
+    header.append(title, stars);
+    const date = document.createElement('div');
+    date.className = 'review-date';
+    date.textContent = rev.date ? `Avaliado em ${new Date(rev.date).toLocaleDateString('pt-BR')}` : 'Avaliação publicada no Mercado Livre';
+    const comment = document.createElement('div');
+    comment.className = 'review-comment';
+    comment.style.marginTop = '8px';
+    comment.textContent = rev.comment || 'Sem comentário escrito.';
+    card.append(header, date, comment);
     list.appendChild(card);
   });
 }

@@ -17,6 +17,15 @@ create table if not exists public.products (
   status text not null default 'active',
   image text,
   affiliate_url text,
+  mercado_livre_id text,
+  description text,
+  gallery jsonb not null default '[]'::jsonb,
+  source_attributes jsonb not null default '{}'::jsonb,
+  rating numeric(3, 2) not null default 0,
+  rating_count integer not null default 0,
+  reviews jsonb not null default '[]'::jsonb,
+  source_status text,
+  source_synced_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
 
@@ -29,7 +38,15 @@ create table if not exists public.products (
   constraint products_old_price_check check (old_price is null or old_price >= 0),
   constraint products_stock_check check (stock >= 0),
   constraint products_min_stock_check check (min_stock >= 0),
-  constraint products_status_check check (status in ('active', 'inactive'))
+  constraint products_status_check check (status in ('active', 'inactive')),
+  constraint products_mercado_livre_id_check check (
+    mercado_livre_id is null or mercado_livre_id ~ '^MLB[0-9]{6,}$'
+  ),
+  constraint products_rating_check check (rating >= 0 and rating <= 5),
+  constraint products_rating_count_check check (rating_count >= 0),
+  constraint products_gallery_check check (jsonb_typeof(gallery) = 'array'),
+  constraint products_source_attributes_check check (jsonb_typeof(source_attributes) = 'object'),
+  constraint products_reviews_check check (jsonb_typeof(reviews) = 'array')
 );
 
 create table if not exists public.admin_users (
@@ -54,6 +71,10 @@ create index if not exists products_category_idx
 create index if not exists products_sku_idx
   on public.products (sku)
   where sku is not null and btrim(sku) <> '';
+
+create unique index if not exists products_mercado_livre_id_idx
+  on public.products (mercado_livre_id)
+  where mercado_livre_id is not null;
 
 create or replace function public.set_updated_at()
 returns trigger

@@ -1,13 +1,15 @@
 const fs = require('fs');
+const path = require('path');
 const vm = require('vm');
 const assert = require('node:assert/strict');
+const projectRoot = path.resolve(__dirname, '..');
 const elements = new Map();
 const get = id => {
  if (!elements.has(id)) elements.set(id, { value: '', textContent: '', innerHTML: '', style: {}, hidden: false, disabled: false, listeners: {}, setAttribute() {}, removeAttribute() {}, addEventListener(type, fn) { this.listeners[type] = fn; }, querySelector() { return get(id + '-child'); } });
  return elements.get(id);
 };
 const context = vm.createContext({ document: { getElementById: get, addEventListener() {} }, window: {}, console, setTimeout, fetch: async () => ({ok:true,json:async()=>[]}) });
-vm.runInContext(fs.readFileSync('admin/admin.js','utf8'), context);
+vm.runInContext(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'),'utf8'), context);
 for (const id of ['product-category-filter','product-status-filter','stock-status-filter']) get(id).value='all';
 get('product-sort').value='name';
 vm.runInContext(`DB.products = [
@@ -47,7 +49,7 @@ assert.match(get('stock-body').innerHTML,/Nenhum produto/);
  assert.equal(calls,1); assert.equal(get('test-form-child').disabled,true);
  finish(); await pending;
  assert.equal(get('test-form-child').disabled,false);
- const html=fs.readFileSync('admin/index.html','utf8');
+ const html=fs.readFileSync(path.join(projectRoot, 'admin', 'index.html'),'utf8');
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(ids).size,ids.length,'Duplicate HTML ids');
  assert.ok(!html.includes('page-orders'));

@@ -1,6 +1,7 @@
 // Gela Fácil: catálogo e estoque conectados à API.
 const DB = { products: [], stockHistory: [] };
 let editingProductId = null;
+let mercadoLivreSnapshot = null;
 
 const fmt = (n) => 'R$ ' + n.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
 const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
@@ -247,9 +248,10 @@ function renderProducts() {
           <span class="stock-progress-num">${p.stock}</span>
         </div>
       </td>
-      <td>${getStatusBadge(p.status)}<small class="affiliate-state ${p.affiliateUrl ? 'ready' : 'pending'}">${p.affiliateUrl ? 'Link cadastrado' : 'Sem link de afiliado'}</small></td>
+      <td>${getStatusBadge(p.status)}<small class="affiliate-state ${p.affiliateUrl ? 'ready' : 'pending'}">${p.mercadoLivreId ? `${escapeHtml(p.mercadoLivreId)} sincronizado` : (p.affiliateUrl ? 'Link cadastrado' : 'Sem link de afiliado')}</small></td>
       <td>
         <div class="action-btns">
+          ${p.mercadoLivreId ? `<button class="btn-action" title="Atualizar dados do Mercado Livre" aria-label="Atualizar ${name} pelo Mercado Livre" onclick="syncMercadoLivreProduct(${p.id})">&#8635;</button>` : ''}
           <button class="btn-action" title="Editar" onclick="openEditProduct(${p.id})">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
@@ -265,17 +267,94 @@ function renderProducts() {
 
 function openAddProduct() {
   editingProductId = null;
+  mercadoLivreSnapshot = null;
   document.getElementById('product-modal-title').textContent = 'Adicionar produto';
   document.getElementById('product-save-button').textContent = 'Adicionar produto';
   document.getElementById('product-form').reset();
   document.getElementById('prod-stock').value = 0;
   document.getElementById('prod-min-stock').value = 3;
+  setMercadoLivreImportFeedback('O estoque exato não é fornecido para afiliados.');
   openModal('product-modal-overlay');
 }
+
+function mercadoLivreDataFromProduct(product) {
+  if (!product?.mercadoLivreId) return null;
+  return {
+    mercadoLivreId: product.mercadoLivreId,
+    description: product.description || '',
+    gallery: product.gallery || [],
+    attributes: product.attributes || {},
+    rating: product.rating || 0,
+    ratingCount: product.ratingCount || 0,
+    reviews: product.reviews || [],
+    sourceStatus: product.sourceStatus || '',
+    sourceSyncedAt: product.sourceSyncedAt || null,
+  };
+}
+
+function setMercadoLivreImportFeedback(message, type = '') {
+  const feedback = document.getElementById('prod-ml-import-status');
+  feedback.textContent = message;
+  feedback.className = `form-help mercado-livre-import-status ${type}`.trim();
+}
+
+function applyMercadoLivreSnapshot(snapshot) {
+  mercadoLivreSnapshot = snapshot;
+  document.getElementById('prod-name').value = snapshot.name || '';
+  document.getElementById('prod-brand').value = snapshot.brand || '';
+  document.getElementById('prod-category').value = snapshot.category || 'split';
+  document.getElementById('prod-price').value = snapshot.price || 0;
+  document.getElementById('prod-old-price').value = snapshot.oldPrice || '';
+  document.getElementById('prod-image').value = snapshot.image || '';
+  document.getElementById('prod-specs').value = snapshot.specs || '';
+  if (snapshot.affiliateUrl) document.getElementById('prod-affiliate-url').value = snapshot.affiliateUrl;
+  document.getElementById('prod-status').value = snapshot.available ? 'active' : 'inactive';
+  const warning = snapshot.warnings?.length ? ` ${snapshot.warnings.join(' ')}` : '';
+  setMercadoLivreImportFeedback(`${snapshot.mercadoLivreId} importado. ${snapshot.ratingCount || 0} avaliações encontradas.${warning}`, 'success');
+}
+
+async function importMercadoLivreIntoForm() {
+  const reference = document.getElementById('prod-ml-reference').value.trim();
+  if (!reference) {
+    setMercadoLivreImportFeedback('Cole um link ou ID MLB antes de buscar.', 'error');
+    return;
+  }
+  const button = document.getElementById('prod-ml-import-button');
+  button.disabled = true;
+  button.textContent = 'Buscando...';
+  setMercadoLivreImportFeedback('Consultando a API oficial do Mercado Livre...');
+  try {
+    applyMercadoLivreSnapshot(await apiFetch('/api/admin/mercado-livre/import', {
+      method: 'POST',
+      body: JSON.stringify({ reference }),
+    }));
+  } catch (error) {
+    setMercadoLivreImportFeedback(error.message, 'error');
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Buscar dados do anúncio';
+  }
+}
+
+async function syncMercadoLivreProduct(id) {
+  try {
+    showToast('Atualizando dados do Mercado Livre...');
+    await apiFetch(`/api/admin/products/${id}/sync-mercado-livre`, { method: 'POST' });
+    await loadStoredProducts();
+    renderProducts();
+    renderStock();
+    renderStockBadge();
+    showToast('Produto sincronizado com o Mercado Livre.');
+  } catch (error) {
+    showToast(error.message, true);
+  }
+}
+
 function openEditProduct(id) {
   const p = DB.products.find(x => x.id === id);
   if (!p) return;
   editingProductId = id;
+  mercadoLivreSnapshot = mercadoLivreDataFromProduct(p);
   document.getElementById('product-modal-title').textContent = 'Editar produto';
   document.getElementById('product-save-button').textContent = 'Salvar alterações';
   document.getElementById('prod-name').value = p.name;
@@ -291,6 +370,10 @@ function openEditProduct(id) {
   document.getElementById('prod-affiliate-url').value = p.affiliateUrl || '';
   document.getElementById('prod-sku').value = p.sku;
   document.getElementById('prod-specs').value = p.specs;
+  document.getElementById('prod-ml-reference').value = p.affiliateUrl || p.mercadoLivreId || '';
+  setMercadoLivreImportFeedback(p.mercadoLivreId
+    ? `${p.mercadoLivreId} · última sincronização: ${p.sourceSyncedAt ? new Date(p.sourceSyncedAt).toLocaleString('pt-BR') : 'não informada'}`
+    : 'O estoque exato não é fornecido para afiliados.');
   openModal('product-modal-overlay');
 }
 async function deleteProduct(id) {
@@ -310,6 +393,7 @@ async function deleteProduct(id) {
 
 function setupProductForm() {
   document.getElementById('btn-add-product').addEventListener('click', openAddProduct);
+  document.getElementById('prod-ml-import-button').addEventListener('click', importMercadoLivreIntoForm);
   bindBusyForm('product-form', async (e) => {
     e.preventDefault();
     const productId = editingProductId;
@@ -326,6 +410,17 @@ function setupProductForm() {
         sku: document.getElementById('prod-sku').value.trim(),
         affiliateUrl: document.getElementById('prod-affiliate-url').value.trim(),
         specs: document.getElementById('prod-specs').value.trim(),
+        ...(mercadoLivreSnapshot ? {
+          mercadoLivreId: mercadoLivreSnapshot.mercadoLivreId,
+          description: mercadoLivreSnapshot.description,
+          gallery: mercadoLivreSnapshot.gallery,
+          attributes: mercadoLivreSnapshot.attributes,
+          rating: mercadoLivreSnapshot.rating,
+          ratingCount: mercadoLivreSnapshot.ratingCount,
+          reviews: mercadoLivreSnapshot.reviews,
+          sourceStatus: mercadoLivreSnapshot.sourceStatus,
+          sourceSyncedAt: mercadoLivreSnapshot.sourceSyncedAt,
+        } : {}),
       };
 
       data.image = await uploadProductImageIfNeeded();

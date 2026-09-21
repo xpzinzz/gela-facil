@@ -66,7 +66,30 @@ function toDbProduct(product) {
     status: product.status,
     image: product.image,
     affiliate_url: product.affiliateUrl || null,
+    mercado_livre_id: product.mercadoLivreId || null,
+    description: product.description || null,
+    gallery: product.gallery || [],
+    source_attributes: product.attributes || {},
+    rating: product.rating || 0,
+    rating_count: product.ratingCount || 0,
+    reviews: product.reviews || [],
+    source_status: product.sourceStatus || null,
+    source_synced_at: product.sourceSyncedAt || null,
   };
+}
+
+function toLegacyDbProduct(product) {
+  const data = toDbProduct(product);
+  delete data.mercado_livre_id;
+  delete data.description;
+  delete data.gallery;
+  delete data.source_attributes;
+  delete data.rating;
+  delete data.rating_count;
+  delete data.reviews;
+  delete data.source_status;
+  delete data.source_synced_at;
+  return data;
 }
 
 function fromDbProduct(row) {
@@ -84,6 +107,15 @@ function fromDbProduct(row) {
     status: row.status,
     image: normalizeImageReference(row.image),
     affiliateUrl: row.affiliate_url || '',
+    mercadoLivreId: row.mercado_livre_id || '',
+    description: row.description || '',
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
+    attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
+    rating: Number(row.rating || 0),
+    ratingCount: Number(row.rating_count || 0),
+    reviews: Array.isArray(row.reviews) ? row.reviews : [],
+    sourceStatus: row.source_status || '',
+    sourceSyncedAt: row.source_synced_at || null,
   };
 }
 
@@ -98,14 +130,27 @@ function fromPublicDbProduct(row) {
     specs: row.specs,
     image: normalizeImageReference(row.image),
     affiliateUrl: row.affiliate_url || '',
+    mercadoLivreId: row.mercado_livre_id || '',
+    description: row.description || '',
+    gallery: Array.isArray(row.gallery) ? row.gallery : [],
+    attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
+    rating: Number(row.rating || 0),
+    ratingCount: Number(row.rating_count || 0),
+    reviews: Array.isArray(row.reviews) ? row.reviews : [],
+    sourceStatus: row.source_status || '',
+    sourceSyncedAt: row.source_synced_at || null,
   };
 }
 
-const publicProductColumns = 'id, brand, name, category, price, old_price, specs, image, affiliate_url';
+const publicProductColumns = 'id, brand, name, category, price, old_price, specs, image, affiliate_url, mercado_livre_id, description, gallery, source_attributes, rating, rating_count, reviews, source_status, source_synced_at';
 const publicProductColumnsWithoutAffiliate = 'id, brand, name, category, price, old_price, specs, image';
 
-function isMissingAffiliateColumn(error) {
-  return error?.code === '42703' && /affiliate_url/i.test(error.message || '');
+function isMissingCatalogColumn(error) {
+  return ['42703', 'PGRST204'].includes(error?.code) && /(affiliate_url|mercado_livre_id|source_attributes|source_status|gallery|rating_count)/i.test(error.message || '');
+}
+
+function migrationRequiredError() {
+  return new Error('Aplique supabase/migrations/202609200003_mercado_livre_catalog.sql antes de salvar produtos importados.');
 }
 
 function throwIfError(error) {
@@ -188,7 +233,7 @@ const productRepo = {
       .select(publicProductColumns)
       .eq('status', 'active')
       .order('id', { ascending: false });
-    if (isMissingAffiliateColumn(error)) {
+    if (isMissingCatalogColumn(error)) {
       ({ data, error } = await supabase
         .from('products')
         .select(publicProductColumnsWithoutAffiliate)
@@ -205,7 +250,7 @@ const productRepo = {
       .eq('id', id)
       .eq('status', 'active')
       .maybeSingle();
-    if (isMissingAffiliateColumn(error)) {
+    if (isMissingCatalogColumn(error)) {
       ({ data, error } = await supabase
         .from('products')
         .select(publicProductColumnsWithoutAffiliate)
@@ -217,21 +262,83 @@ const productRepo = {
     return data ? fromPublicDbProduct(data) : null;
   },
   async create(product) {
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('products')
       .insert(toDbProduct(product))
       .select('*')
       .single();
+    if (isMissingCatalogColumn(error)) {
+      if (product.mercadoLivreId) throw migrationRequiredError();
+      ({ data, error } = await supabase
+        .from('products')
+        .insert(toLegacyDbProduct(product))
+        .select('*')
+        .single());
+    }
     throwIfError(error);
     return fromDbProduct(data);
   },
   async update(id, product) {
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from('products')
       .update(toDbProduct(product))
       .eq('id', id)
       .select('*')
       .maybeSingle();
+    if (isMissingCatalogColumn(error)) {
+      if (product.mercadoLivreId) throw migrationRequiredError();
+      ({ data, error } = await supabase
+        .from('products')
+        .update(toLegacyDbProduct(product))
+        .eq('id', id)
+        .select('*')
+        .maybeSingle());
+    }
+    throwIfError(error);
+    return data ? fromDbProduct(data) : null;
+  },
+  async getAdmin(id) {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+    throwIfError(error);
+    return data ? fromDbProduct(data) : null;
+  },
+  async updateMercadoLivreData(id, snapshot) {
+    const update = toDbProduct({
+      ...snapshot,
+      stock: 0,
+      minStock: 0,
+      sku: '',
+      status: 'active',
+    });
+    const allowedFields = {
+      name: update.name,
+      brand: update.brand,
+      category: update.category,
+      price: update.price,
+      old_price: update.old_price,
+      specs: update.specs,
+      image: update.image,
+      mercado_livre_id: update.mercado_livre_id,
+      description: update.description,
+      gallery: update.gallery,
+      source_attributes: update.source_attributes,
+      rating: update.rating,
+      rating_count: update.rating_count,
+      reviews: update.reviews,
+      source_status: update.source_status,
+      source_synced_at: update.source_synced_at,
+    };
+    const { data, error } = await supabase
+      .from('products')
+      .update(allowedFields)
+      .eq('id', id)
+      .select('*')
+      .maybeSingle();
+    if (isMissingCatalogColumn(error)) throw migrationRequiredError();
     throwIfError(error);
     return data ? fromDbProduct(data) : null;
   },

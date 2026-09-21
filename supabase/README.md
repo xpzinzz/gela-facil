@@ -23,4 +23,7 @@ O `schema.sql` cria:
 
 No primeiro início, o backend cria o primeiro registro em `admin_users` usando `ADMIN_USER` e `ADMIN_PASSWORD`. A senha é convertida em hash bcrypt antes de ser gravada; o valor original não é armazenado no banco. Depois dessa criação, as duas variáveis de bootstrap podem ser removidas. `SESSION_SECRET` continua apenas no `backend/.env`.
 
-Se você já executou o schema anterior, rode somente [`migrations/202609200002_admin_users.sql`](./migrations/202609200002_admin_users.sql) antes de reiniciar o backend.
+Se você já executou o schema anterior, aplique as migrações pendentes em ordem:
+
+1. [`migrations/202609200002_admin_users.sql`](./migrations/202609200002_admin_users.sql), caso a tabela de administradores ainda não exista;
+2. [`migrations/202609200003_mercado_livre_catalog.sql`](./migrations/202609200003_mercado_livre_catalog.sql), para armazenar descrição, galeria, ficha técnica, avaliações e status dos anúncios importados.

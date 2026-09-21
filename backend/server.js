@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const { initDb, adminRepo, productRepo, uploadProductImage } = require('./src/db');
+const { MercadoLivreError, importMercadoLivreProduct } = require('./src/mercado-livre');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -146,6 +147,9 @@ function escapeXml(value) {
 }
 
 function normalizeProductPayload(body) {
+  const gallery = Array.isArray(body.gallery) ? body.gallery.slice(0, 12).map(value => String(value || '').trim()).filter(Boolean) : [];
+  const attributes = body.attributes && typeof body.attributes === 'object' && !Array.isArray(body.attributes) ? body.attributes : {};
+  const reviews = Array.isArray(body.reviews) ? body.reviews.slice(0, 5) : [];
   return {
     name: String(body.name || '').trim(),
     brand: String(body.brand || '').trim(),
@@ -159,6 +163,15 @@ function normalizeProductPayload(body) {
     image: String(body.image || '').trim(),
     affiliateUrl: String(body.affiliateUrl || '').trim(),
     specs: String(body.specs || '').trim(),
+    mercadoLivreId: String(body.mercadoLivreId || '').trim().toUpperCase(),
+    description: String(body.description || '').trim(),
+    gallery,
+    attributes,
+    rating: Number(body.rating || 0),
+    ratingCount: Number.parseInt(body.ratingCount || 0, 10),
+    reviews,
+    sourceStatus: String(body.sourceStatus || '').trim(),
+    sourceSyncedAt: body.sourceSyncedAt ? String(body.sourceSyncedAt) : null,
   };
 }
 
@@ -176,7 +189,13 @@ function validateProduct(product) {
   if (!Number.isInteger(product.stock) || product.stock < 0) return 'Estoque invalido.';
   if (!Number.isInteger(product.minStock) || product.minStock < 0) return 'Estoque minimo invalido.';
   if (!isSafeImageReference(product.image)) return 'URL da imagem invalida.';
+  if (product.gallery.some(image => !isSafeImageReference(image))) return 'Uma imagem da galeria e invalida.';
   if (!isMercadoLivreAffiliateUrl(product.affiliateUrl)) return 'Link de afiliado do Mercado Livre invalido.';
+  if (product.mercadoLivreId && !/^MLB\d{6,}$/.test(product.mercadoLivreId)) return 'ID do Mercado Livre invalido.';
+  if (product.description.length > 10000) return 'Descricao excede o limite de 10000 caracteres.';
+  if (!Number.isFinite(product.rating) || product.rating < 0 || product.rating > 5) return 'Avaliacao invalida.';
+  if (!Number.isInteger(product.ratingCount) || product.ratingCount < 0) return 'Quantidade de avaliacoes invalida.';
+  if (Object.keys(product.attributes).length > 30) return 'Quantidade de atributos excedida.';
   return null;
 }
 
@@ -215,6 +234,12 @@ app.get('/api/admin/me', requireAdmin, (_req, res) => {
 app.post('/api/admin/upload', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Imagem obrigatoria.' });
   res.status(201).json(await uploadProductImage(req.file));
+}));
+
+app.post('/api/admin/mercado-livre/import', requireAdmin, asyncHandler(async (req, res) => {
+  const reference = String(req.body?.reference || '').trim();
+  if (!reference || reference.length > 2048) return res.status(400).json({ error: 'Informe um link ou ID valido.' });
+  res.json(await importMercadoLivreProduct(reference));
 }));
 
 app.get('/api/products', asyncHandler(async (_req, res) => {
@@ -276,6 +301,16 @@ app.put('/api/admin/products/:id', requireAdmin, asyncHandler(async (req, res) =
   res.json(updated);
 }));
 
+app.post('/api/admin/products/:id/sync-mercado-livre', requireAdmin, asyncHandler(async (req, res) => {
+  const id = parseProductId(req.params.id);
+  if (!id) return res.status(400).json({ error: 'ID invalido.' });
+  const product = await productRepo.getAdmin(id);
+  if (!product) return res.status(404).json({ error: 'Produto nao encontrado.' });
+  const reference = product.affiliateUrl || product.mercadoLivreId;
+  if (!reference) return res.status(400).json({ error: 'Cadastre um link ou ID do Mercado Livre primeiro.' });
+  res.json(await productRepo.updateMercadoLivreData(id, await importMercadoLivreProduct(reference)));
+}));
+
 app.patch('/api/admin/products/:id/stock', requireAdmin, asyncHandler(async (req, res) => {
   const id = parseProductId(req.params.id);
   if (!id) return res.status(400).json({ error: 'ID invalido.' });
@@ -317,6 +352,9 @@ app.get(['/', '/index.html'], (_req, res) => res.sendFile(path.join(rootDir, 'in
 
 app.use((err, _req, res, _next) => {
   console.error(err);
+  if (err instanceof MercadoLivreError) {
+    return res.status(err.statusCode).json({ error: err.message, code: err.code });
+  }
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 

@@ -255,12 +255,13 @@ function renderHomeProductCard(product, index) {
     price: product.price,
     image,
     affiliateUrl: product.affiliateUrl || '',
-    rating: 5,
-    ratingCount: 0,
-    gallery: [image],
-    desc: product.specs || '',
-    specs: Object.fromEntries(specTags.map((tag, tagIndex) => [`Info ${tagIndex + 1}`, tag])),
-    reviews: []
+    rating: Number(product.rating || 0),
+    ratingCount: Number(product.ratingCount || 0),
+    gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [image],
+    desc: product.description || product.specs || '',
+    specs: product.attributes && Object.keys(product.attributes).length ? product.attributes : Object.fromEntries(specTags.map((tag, tagIndex) => [`Info ${tagIndex + 1}`, tag])),
+    reviews: Array.isArray(product.reviews) ? product.reviews : [],
+    sourceStatus: product.sourceStatus || ''
   };
 
   return `

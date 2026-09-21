@@ -108,12 +108,13 @@ async function loadProductsFromApi() {
         price: product.price,
         image: product.image,
         affiliateUrl: product.affiliateUrl || '',
-        rating: 5,
-        ratingCount: 0,
-        gallery: [product.image].filter(Boolean),
-        desc: product.specs || '',
-        specs: specsTextToObject(product.specs),
-        reviews: []
+        rating: Number(product.rating || 0),
+        ratingCount: Number(product.ratingCount || 0),
+        gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [product.image].filter(Boolean),
+        desc: product.description || product.specs || '',
+        specs: product.attributes && Object.keys(product.attributes).length ? product.attributes : specsTextToObject(product.specs),
+        reviews: Array.isArray(product.reviews) ? product.reviews : [],
+        sourceStatus: product.sourceStatus || ''
       };
     });
   } catch (error) {
@@ -373,7 +374,7 @@ function filterAndRender() {
               <img src="${safeImage}" alt="${safeName}" class="product-image" loading="lazy" decoding="async" />
             </div>
             ${tagHtml}
-            <div class="product-availability">${isValidAffiliateUrl(prod.affiliateUrl) ? 'Consulte o anúncio' : 'Link em breve'}</div>
+            <div class="product-availability">${prod.sourceStatus === 'active' ? 'Disponível no Mercado Livre' : (prod.sourceStatus ? 'Anúncio indisponível' : (isValidAffiliateUrl(prod.affiliateUrl) ? 'Consulte o anúncio' : 'Link em breve'))}</div>
             <div class="product-hover-overlay">
               <span class="view-details-btn">Ver detalhes <span aria-hidden="true">→</span></span>
             </div>
