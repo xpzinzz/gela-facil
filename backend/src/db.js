@@ -20,17 +20,37 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 });
 
 const seedProducts = [
-  { brand: 'Samsung', name: 'WindFree Inverter 12.000 BTU', category: 'inverter', price: 2399, oldPrice: 2899, stock: 8, minStock: 5, sku: 'SAM-WF-12K', specs: 'Inverter, 12.000 BTU, A+++', status: 'active', image: 'assets/produtos/samsung_windfree.png', affiliateUrl: '' },
-  { brand: 'LG', name: 'Dual Inverter Voice 9.000 BTU', category: 'inverter', price: 1849, oldPrice: 2199, stock: 3, minStock: 5, sku: 'LG-DI-9K', specs: 'Inverter, 9.000 BTU, Wi-Fi', status: 'active', image: 'assets/produtos/lg_dual_inverter.png', affiliateUrl: '' },
-  { brand: 'Midea', name: 'Xtreme Save Inverter 18.000 BTU', category: 'inverter', price: 2899, oldPrice: 3499, stock: 12, minStock: 5, sku: 'MID-XS-18K', specs: 'Inverter, 18.000 BTU, A++', status: 'active', image: 'assets/produtos/midea_xtreme_save.png', affiliateUrl: '' },
-  { brand: 'Elgin', name: 'Eco Inverter Plus 24.000 BTU', category: 'inverter', price: 3699, oldPrice: 4299, stock: 5, minStock: 4, sku: 'ELG-EI-24K', specs: 'Inverter, 24.000 BTU, Quente/Frio', status: 'active', image: 'assets/produtos/elgin_eco_inverter.png', affiliateUrl: '' },
-  { brand: 'Springer', name: 'Silentia 7.500 BTU Split', category: 'split', price: 1299, oldPrice: 1699, stock: 0, minStock: 4, sku: 'SPR-SL-7.5K', specs: 'Split, 7.500 BTU, Silencioso', status: 'active', image: 'assets/produtos/springer_silentia.png', affiliateUrl: '' },
-  { brand: 'Philco', name: 'Portable Portatil 12.000 BTU', category: 'portatil', price: 1749, oldPrice: 2099, stock: 2, minStock: 3, sku: 'PHI-PB-12K', specs: 'Portatil, 12.000 BTU, Sem obra', status: 'active', image: 'assets/produtos/philco_portable.png', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Frigobar 122 Litros EM120', category: 'bebidas', price: 1209, oldPrice: 1809, stock: 7, minStock: 3, sku: 'ELX-FB-122L', specs: '122 Litros, Branco, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_frigobar.png', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Cervejeira Home Bar EB100', category: 'bebidas', price: 2229, oldPrice: 2729, stock: 4, minStock: 3, sku: 'ELX-CB-100L', specs: '100 Litros, Frost Free, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_cervejeira.png', affiliateUrl: '' },
-  { brand: 'Venax', name: 'Cervejeira Blue Light 102L', category: 'bebidas', price: 2529, oldPrice: 3423, stock: 1, minStock: 3, sku: 'VNX-BL-102L', specs: '102 Litros, Blue Light, 220V', status: 'inactive', image: 'assets/clima-bebidas/venax_cervejeira.png', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Cervejeira com Torre de Chopp EB10C', category: 'bebidas', price: 2799, oldPrice: 3693, stock: 0, minStock: 2, sku: 'ELX-TC-100L', specs: 'Torre de Chopp, 100 Litros, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_chopp.png', affiliateUrl: '' },
+  { brand: 'Samsung', name: 'WindFree Inverter 12.000 BTU', category: 'inverter', price: 2399, oldPrice: 2899, stock: 8, minStock: 5, sku: 'SAM-WF-12K', specs: 'Inverter, 12.000 BTU, A+++', status: 'active', image: 'assets/produtos/samsung_windfree.webp', affiliateUrl: '' },
+  { brand: 'LG', name: 'Dual Inverter Voice 9.000 BTU', category: 'inverter', price: 1849, oldPrice: 2199, stock: 3, minStock: 5, sku: 'LG-DI-9K', specs: 'Inverter, 9.000 BTU, Wi-Fi', status: 'active', image: 'assets/produtos/lg_dual_inverter.webp', affiliateUrl: '' },
+  { brand: 'Midea', name: 'Xtreme Save Inverter 18.000 BTU', category: 'inverter', price: 2899, oldPrice: 3499, stock: 12, minStock: 5, sku: 'MID-XS-18K', specs: 'Inverter, 18.000 BTU, A++', status: 'active', image: 'assets/produtos/midea_xtreme_save.webp', affiliateUrl: '' },
+  { brand: 'Elgin', name: 'Eco Inverter Plus 24.000 BTU', category: 'inverter', price: 3699, oldPrice: 4299, stock: 5, minStock: 4, sku: 'ELG-EI-24K', specs: 'Inverter, 24.000 BTU, Quente/Frio', status: 'active', image: 'assets/produtos/elgin_eco_inverter.webp', affiliateUrl: '' },
+  { brand: 'Springer', name: 'Silentia 7.500 BTU Split', category: 'split', price: 1299, oldPrice: 1699, stock: 0, minStock: 4, sku: 'SPR-SL-7.5K', specs: 'Split, 7.500 BTU, Silencioso', status: 'active', image: 'assets/produtos/springer_silentia.webp', affiliateUrl: '' },
+  { brand: 'Philco', name: 'Portable Portatil 12.000 BTU', category: 'portatil', price: 1749, oldPrice: 2099, stock: 2, minStock: 3, sku: 'PHI-PB-12K', specs: 'Portatil, 12.000 BTU, Sem obra', status: 'active', image: 'assets/produtos/philco_portable.webp', affiliateUrl: '' },
+  { brand: 'Electrolux', name: 'Frigobar 122 Litros EM120', category: 'bebidas', price: 1209, oldPrice: 1809, stock: 7, minStock: 3, sku: 'ELX-FB-122L', specs: '122 Litros, Branco, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_frigobar.webp', affiliateUrl: '' },
+  { brand: 'Electrolux', name: 'Cervejeira Home Bar EB100', category: 'bebidas', price: 2229, oldPrice: 2729, stock: 4, minStock: 3, sku: 'ELX-CB-100L', specs: '100 Litros, Frost Free, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_cervejeira.webp', affiliateUrl: '' },
+  { brand: 'Venax', name: 'Cervejeira Blue Light 102L', category: 'bebidas', price: 2529, oldPrice: 3423, stock: 1, minStock: 3, sku: 'VNX-BL-102L', specs: '102 Litros, Blue Light, 220V', status: 'inactive', image: 'assets/clima-bebidas/venax_cervejeira.webp', affiliateUrl: '' },
+  { brand: 'Electrolux', name: 'Cervejeira com Torre de Chopp EB10C', category: 'bebidas', price: 2799, oldPrice: 3693, stock: 0, minStock: 2, sku: 'ELX-TC-100L', specs: 'Torre de Chopp, 100 Litros, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_chopp.webp', affiliateUrl: '' },
 ];
+
+const localWebpReplacements = new Map([
+  ['assets/produtos/samsung_windfree.png', 'assets/produtos/samsung_windfree.webp'],
+  ['assets/produtos/lg_dual_inverter.png', 'assets/produtos/lg_dual_inverter.webp'],
+  ['assets/produtos/midea_xtreme_save.png', 'assets/produtos/midea_xtreme_save.webp'],
+  ['assets/produtos/elgin_eco_inverter.png', 'assets/produtos/elgin_eco_inverter.webp'],
+  ['assets/produtos/springer_silentia.png', 'assets/produtos/springer_silentia.webp'],
+  ['assets/produtos/philco_portable.png', 'assets/produtos/philco_portable.webp'],
+  ['assets/clima-bebidas/electrolux_frigobar.png', 'assets/clima-bebidas/electrolux_frigobar.webp'],
+  ['assets/clima-bebidas/electrolux_cervejeira.png', 'assets/clima-bebidas/electrolux_cervejeira.webp'],
+  ['assets/clima-bebidas/venax_cervejeira.png', 'assets/clima-bebidas/venax_cervejeira.webp'],
+  ['assets/clima-bebidas/electrolux_chopp.png', 'assets/clima-bebidas/electrolux_chopp.webp'],
+  ['assets/produtos/ventisol_clin16.jpg', 'assets/produtos/ventisol_clin16.webp'],
+  ['assets/produtos/ventisol_clin16_2.jpg', 'assets/produtos/ventisol_clin16_2.webp'],
+  ['assets/produtos/ventisol_clin16_3.jpg', 'assets/produtos/ventisol_clin16_3.webp'],
+]);
+
+function normalizeImageReference(image) {
+  return localWebpReplacements.get(image) || image;
+}
 
 function toDbProduct(product) {
   return {
@@ -62,7 +82,7 @@ function fromDbProduct(row) {
     sku: row.sku,
     specs: row.specs,
     status: row.status,
-    image: row.image,
+    image: normalizeImageReference(row.image),
     affiliateUrl: row.affiliate_url || '',
   };
 }
@@ -76,7 +96,7 @@ function fromPublicDbProduct(row) {
     price: Number(row.price),
     oldPrice: row.old_price === null ? null : Number(row.old_price),
     specs: row.specs,
-    image: row.image,
+    image: normalizeImageReference(row.image),
     affiliateUrl: row.affiliate_url || '',
   };
 }

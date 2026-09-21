@@ -10,8 +10,8 @@
 
 /* Service banners keep their own image area when stacked on narrow screens. */
 #instalacao .bento-grid { grid-auto-rows: auto; align-items: stretch; }
-#instalacao .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.png'); }
-#instalacao .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.png'); }
+#instalacao .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.webp'); }
+#instalacao .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.webp'); }
 #instalacao :is(.card-vrf, .card-camaras) {
   min-width: 0;
   min-height: 380px;

@@ -99,6 +99,18 @@ h4,h5,h6,
 .login-form input:focus { outline: none; border-color: var(--admin-blue); background: rgba(74,145,196,0.08); }
 .login-form input::placeholder { color: rgba(255,255,255,0.25); }
 
+.password-field { position: relative; }
+.password-field input { padding-right: 48px; }
+.password-toggle {
+  position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+  width: 36px; height: 36px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--admin-muted); background: transparent; border: 0; border-radius: 8px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.password-toggle:hover { color: var(--admin-blue); background: rgba(74,145,196,0.1); }
+.password-toggle:focus-visible { outline: 3px solid var(--admin-blue); outline-offset: 1px; }
+
 .login-error { color: var(--admin-danger); font-size: 0.85rem; margin-bottom: 14px; display: none; }
 .login-error.visible { display: block; }
 

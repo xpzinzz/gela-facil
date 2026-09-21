@@ -123,6 +123,28 @@ function parseProductId(value) {
   return Number.isInteger(id) && id > 0 ? id : null;
 }
 
+function publicBaseUrl(req) {
+  const configuredUrl = String(process.env.PUBLIC_SITE_URL || '').trim();
+  if (configuredUrl) {
+    try {
+      return new URL(configuredUrl).origin;
+    } catch {
+      throw new Error('PUBLIC_SITE_URL precisa ser uma URL absoluta valida.');
+    }
+  }
+  return `${req.protocol}://${req.get('host')}`;
+}
+
+function escapeXml(value) {
+  return String(value).replace(/[<>&'\"]/g, character => ({
+    '<': '&lt;',
+    '>': '&gt;',
+    '&': '&amp;',
+    "'": '&apos;',
+    '"': '&quot;',
+  }[character]));
+}
+
 function normalizeProductPayload(body) {
   return {
     name: String(body.name || '').trim(),
@@ -210,6 +232,30 @@ app.get('/api/products/:id', asyncHandler(async (req, res) => {
 
 app.get('/api/admin/products', requireAdmin, asyncHandler(async (_req, res) => {
   res.json(await productRepo.listAdmin());
+}));
+
+app.get('/robots.txt', (req, res) => {
+  const baseUrl = publicBaseUrl(req);
+  res.type('text/plain').send([
+    'User-agent: *',
+    'Allow: /',
+    'Disallow: /admin/',
+    'Disallow: /api/admin/',
+    `Sitemap: ${baseUrl}/sitemap.xml`,
+    '',
+  ].join('\n'));
+});
+
+app.get('/sitemap.xml', asyncHandler(async (req, res) => {
+  const baseUrl = publicBaseUrl(req);
+  const products = await productRepo.listPublic();
+  const urls = [
+    `${baseUrl}/`,
+    `${baseUrl}/pages/products.html`,
+    ...products.map(product => `${baseUrl}/pages/product-detail.html?id=${encodeURIComponent(product.id)}`),
+  ];
+  const body = urls.map(url => `  <url><loc>${escapeXml(url)}</loc></url>`).join('\n');
+  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`);
 }));
 
 app.post('/api/admin/products', requireAdmin, asyncHandler(async (req, res) => {

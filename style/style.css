@@ -1351,7 +1351,7 @@ textarea {
   letter-spacing: 0.8px;
 }
 
-.hero-content h1 {
+.hero-content :is(h1, h2) {
   font-family: var(--font-title);
   font-size: clamp(2.5rem, 5vw, 4.2rem);
   font-weight: 800;
@@ -1360,7 +1360,7 @@ textarea {
   margin-bottom: 24px;
   letter-spacing: -1px;
 }
-.hero-content h1 em {
+.hero-content :is(h1, h2) em {
   font-style: normal;
   color: var(--sky);
 }
@@ -3081,7 +3081,7 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .hero-content h1 {
+  .hero-content :is(h1, h2) {
     font-size: 2.2rem;
   }
   .hero-sub {
@@ -4995,13 +4995,13 @@ footer {
 .bento-section .card-vrf {
   background-image:
     linear-gradient(90deg, rgba(239, 248, 255, .98) 0%, rgba(239, 248, 255, .91) 37%, rgba(239, 248, 255, .18) 67%, rgba(239, 248, 255, 0) 100%),
-    url('../assets/bento/banner-instalacao-v2.png');
+    url('../assets/bento/banner-instalacao-v2.webp');
 }
 
 .bento-section .card-camaras {
   background-image:
     linear-gradient(90deg, rgba(231, 245, 255, .98) 0%, rgba(231, 245, 255, .9) 37%, rgba(231, 245, 255, .16) 67%, rgba(231, 245, 255, 0) 100%),
-    url('../assets/bento/banner-manutencao-v2.png');
+    url('../assets/bento/banner-manutencao-v2.webp');
 }
 
 .bento-section .card-vrf::after,
@@ -5097,8 +5097,8 @@ footer {
   .bento-section .card-camaras {
     background-image: linear-gradient(180deg, rgba(239, 248, 255, .98) 0%, rgba(239, 248, 255, .9) 42%, rgba(239, 248, 255, .08) 76%), var(--service-banner);
   }
-  .bento-section .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.png'); }
-  .bento-section .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.png'); }
+  .bento-section .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.webp'); }
+  .bento-section .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.webp'); }
   .bento-section .card-vrf .bento-card-content,
   .bento-section .card-camaras .bento-card-content { max-width: 100%; height: auto; }
 }
@@ -5106,14 +5106,14 @@ footer {
 /* Color and type roles from DESIGN (Gela Facil).md. */
 body { color: var(--black); font-size: 15px; line-height: 24px; }
 h1, h2, h3, h4, h5, h6 { font-family: var(--font-title); letter-spacing: -0.01em; }
-.hero-content h1 { font-size: 56px; font-weight: 700; line-height: 64px; letter-spacing: -0.02em; }
+.hero-content :is(h1, h2) { font-size: 56px; font-weight: 700; line-height: 64px; letter-spacing: -0.02em; }
 .hero-sub { font-size: 18px; line-height: 28px; letter-spacing: -0.005em; }
 .section-title, .destaques .section-title { font-size: 40px; font-weight: 700; line-height: 48px; letter-spacing: -0.015em; }
 .section-label { font-family: var(--font-body); font-size: 11px; font-weight: 600; line-height: 16px; letter-spacing: 0.05em; }
 .btn-primary { background: linear-gradient(135deg, #0070ea, #0056c6); border-radius: 12px; box-shadow: inset 0 1px 1px rgba(255,255,255,.35), 0 8px 20px rgba(0,123,255,.35); }
 :where(a, button, input, select, textarea):focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
 @media (max-width: 600px) {
-  .hero-content h1 { font-size: 36px; line-height: 44px; letter-spacing: -0.01em; }
+  .hero-content :is(h1, h2) { font-size: 36px; line-height: 44px; letter-spacing: -0.01em; }
   .section-title, .destaques .section-title { font-size: 28px; line-height: 36px; letter-spacing: -0.01em; }
 }
 
@@ -5185,7 +5185,7 @@ html { scroll-padding-top: 110px; }
   .carousel-track { display: grid; height: auto; min-height: 100svh; }
   .carousel-slide { position: relative; inset: auto; grid-area: 1 / 1; height: auto; min-width: 0; padding: 132px 7vw 104px; }
   .hero-content { width: 100%; max-width: 680px; }
-  .hero-content h1 { font-size: clamp(32px, 5.5vw, 52px); line-height: 1.15; }
+  .hero-content :is(h1, h2) { font-size: clamp(32px, 5.5vw, 52px); line-height: 1.15; }
   .hero-sub { font-size: clamp(16px, 2vw, 18px); line-height: 1.6; }
   .hero-carousel > .carousel-control { top: auto; bottom: 24px; transform: none; }
   .nav-links { visibility: hidden; max-height: calc(100dvh - 116px); overflow-y: auto; overscroll-behavior: contain; }
@@ -5236,8 +5236,8 @@ html { scroll-padding-top: 110px; }
 
 /* Service banners inspired by content.png. */
 .bento-section .card-vrf, .bento-section .card-camaras { padding: clamp(24px, 2.6vw, 38px); border-radius: 26px; background-position: center; box-shadow: 0 12px 32px rgba(0,71,171,.09); }
-.bento-section .card-vrf { background-image: url('../assets/bento/banner-instalacao-v2.png'); }
-.bento-section .card-camaras { background-image: url('../assets/bento/banner-manutencao-v2.png'); }
+.bento-section .card-vrf { background-image: url('../assets/bento/banner-instalacao-v2.webp'); }
+.bento-section .card-camaras { background-image: url('../assets/bento/banner-manutencao-v2.webp'); }
 .bento-section .card-vrf .bento-card-content, .bento-section .card-camaras .bento-card-content { max-width: 51%; }
 .bento-section .bento-tag { color: #0059d6; font-size: 10px; letter-spacing: .06em; border-color: #bcdcff; background: rgba(245,251,255,.9); }
 .bento-section .card-vrf h3, .bento-section .card-camaras h3 { margin: 16px 0 12px; color: #07245b; font-size: clamp(25px,2.3vw,34px); font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }

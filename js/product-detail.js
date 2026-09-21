@@ -26,7 +26,7 @@ function specsTextToDetailObject(specs) {
 }
 
 function normalizeApiDetailProduct(product) {
-  const image = product.image || 'assets/produtos/banner-climatizacao-premium.png';
+  const image = product.image || 'assets/produtos/banner-climatizacao-premium.webp';
   return {
     name: product.name,
     brand: product.brand,
@@ -41,6 +41,41 @@ function normalizeApiDetailProduct(product) {
     specs: specsTextToDetailObject(product.specs),
     reviews: []
   };
+}
+
+function updateProductSeo(id, product) {
+  const title = `${product.name} | Gela Fácil`;
+  const description = product.desc
+    ? `${product.name}: ${product.desc}. Consulte o anúncio no Mercado Livre.`
+    : `Confira ${product.name}, selecionado pela Gela Fácil, e acesse o anúncio no Mercado Livre.`;
+  const canonical = new URL('/pages/product-detail.html', window.location.origin);
+  canonical.searchParams.set('id', id);
+  const image = new URL(adjustImagePath(product.image), window.location.href).href;
+
+  document.title = title;
+  document.getElementById('meta-description')?.setAttribute('content', description);
+  document.getElementById('canonical-url')?.setAttribute('href', canonical.href);
+  document.getElementById('og-title')?.setAttribute('content', title);
+  document.getElementById('og-description')?.setAttribute('content', description);
+  document.getElementById('og-image')?.setAttribute('content', image);
+  document.getElementById('twitter-title')?.setAttribute('content', title);
+  document.getElementById('twitter-description')?.setAttribute('content', description);
+  document.getElementById('twitter-image')?.setAttribute('content', image);
+
+  const structuredData = document.createElement('script');
+  structuredData.type = 'application/ld+json';
+  structuredData.id = 'product-structured-data';
+  structuredData.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: [image],
+    description: product.desc || description,
+    brand: { '@type': 'Brand', name: product.brand },
+    url: canonical.href,
+  });
+  document.getElementById('product-structured-data')?.remove();
+  document.head.appendChild(structuredData);
 }
 
 async function loadDetailProductFromApi(id) {
@@ -73,6 +108,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 2000);
     return;
   }
+
+  updateProductSeo(id, detailProduct);
   
   // Set global currentProduct state for cart actions
   currentProduct = {

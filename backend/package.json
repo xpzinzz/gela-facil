@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "import:index-products": "node scripts/import-index-products.js",
-    "check": "node --check server.js && node --check ../admin/admin.js && node --check ../admin/login.js && node --check ../js/products-catalog.js && node --check ../js/product-detail.js && node --check ../js/script.js"
+    "check": "node --check server.js && node --check ../admin/admin.js && node --check ../admin/login.js && node --check ../js/products-catalog.js && node --check ../js/product-detail.js && node --check ../js/script.js",
+    "test": "npm run check && cd .. && node tests/admin-state.cjs && node tests/maintenance-banner.cjs && node tests/site-integrity.cjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.48.1",

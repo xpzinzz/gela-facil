@@ -1,3 +1,16 @@
+const passwordInput = document.getElementById('admin-pass');
+const passwordToggle = document.getElementById('password-toggle');
+
+passwordToggle.addEventListener('click', () => {
+  const shouldShowPassword = passwordInput.type === 'password';
+
+  passwordInput.type = shouldShowPassword ? 'text' : 'password';
+  passwordToggle.setAttribute('aria-label', shouldShowPassword ? 'Ocultar senha' : 'Mostrar senha');
+  passwordToggle.setAttribute('aria-pressed', String(shouldShowPassword));
+  passwordToggle.querySelector('.password-icon-show').hidden = shouldShowPassword;
+  passwordToggle.querySelector('.password-icon-hide').hidden = !shouldShowPassword;
+});
+
 document.getElementById('login-form').addEventListener('submit', async (event) => {
   event.preventDefault();
   const button = event.target.querySelector('button[type="submit"]');
@@ -8,7 +21,7 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
   const errorEl = document.getElementById('login-error');
   const payload = {
     user: document.getElementById('admin-user').value.trim(),
-    password: document.getElementById('admin-pass').value,
+    password: passwordInput.value,
   };
 
   errorEl.classList.remove('visible');

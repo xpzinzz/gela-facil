@@ -8,8 +8,20 @@
   margin-bottom: 36px;
   overflow: hidden;
   border-radius: 16px;
-  background: #f4faff url('../assets/hero/products-maintenance-banner.png') center / cover no-repeat;
+  background: #f4faff url('../assets/hero/products-maintenance-banner.webp') center / cover no-repeat;
   color: #073779;
+}
+.maintenance-banner.is-closing {
+  height: 0 !important;
+  margin-bottom: 0 !important;
+  opacity: 0;
+  transform: translateY(-10px) scale(.985);
+  pointer-events: none;
+  transition:
+    height 320ms cubic-bezier(.4, 0, .2, 1),
+    margin-bottom 320ms cubic-bezier(.4, 0, .2, 1),
+    opacity 180ms ease-out,
+    transform 260ms cubic-bezier(.4, 0, .2, 1);
 }
 .maintenance-banner[hidden] { display: none; }
 .maintenance-banner-copy { position: relative; width: 56%; padding: 3.2% 0 3.4% 4.2%; }
@@ -52,4 +64,7 @@
   .maintenance-banner li + li { padding-left: 8px; }
   .maintenance-banner li svg { width: 28px; height: 28px; padding: 6px; }
   .maintenance-banner-cta { width: 100%; box-sizing: border-box; max-width: 360px; font-size: 14px; padding-inline: 20px; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .maintenance-banner.is-closing { transition: none; }
 }

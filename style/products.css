@@ -67,7 +67,7 @@
   align-items: center;
   background-image:
     linear-gradient(90deg, rgba(3, 15, 34, 0.96) 0%, rgba(5, 30, 63, 0.86) 36%, rgba(8, 48, 91, 0.42) 58%, rgba(8, 48, 91, 0.06) 76%),
-    url('../assets/hero/catalog-products-hero.png');
+    url('../assets/hero/catalog-products-hero.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -493,7 +493,7 @@
     padding: 100px 6vw 54px;
     background-image:
       linear-gradient(90deg, rgba(3, 18, 40, 0.94) 0%, rgba(5, 30, 63, 0.76) 58%, rgba(7, 42, 79, 0.46) 100%),
-      url('../assets/hero/catalog-products-hero.png');
+      url('../assets/hero/catalog-products-hero.webp');
     background-position: 66% center;
   }
   .catalog-title {
