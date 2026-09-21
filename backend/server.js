@@ -43,7 +43,7 @@ const upload = multer({
   },
 });
 
-app.set('trust proxy', isProduction ? 1 : 0);
+app.set('trust proxy', isProduction ? true : false);
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -411,10 +411,14 @@ app.get('/admin/refresh.css', (_req, res) => {
 app.get('/admin/admin.js', requireAdmin, (_req, res) => {
   res.sendFile(path.join(rootDir, 'admin', 'admin.js'));
 });
-app.get(['/admin', '/admin/', '/admin/index.html'], (req, res) => {
+app.get('/admin', (_req, res) => res.redirect(301, '/admin/'));
+app.get(['/admin/', '/admin/index.html'], (req, res) => {
   if (!req.session || req.session.admin !== true) return res.redirect('/admin/login.html');
   return res.sendFile(path.join(rootDir, 'admin', 'index.html'));
 });
+app.get('/admin.css', (_req, res) => res.redirect(301, '/admin/admin.css'));
+app.get('/refresh.css', (_req, res) => res.redirect(301, '/admin/refresh.css'));
+app.get('/admin.js', (_req, res) => res.redirect(301, '/admin/admin.js'));
 
 app.use('/assets', express.static(path.join(rootDir, 'assets')));
 app.use('/js', express.static(path.join(rootDir, 'js')));

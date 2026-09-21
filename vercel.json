@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://gela-facil.onrender.com/api/:path*"
+    },
+    {
+      "source": "/oauth/:path*",
+      "destination": "https://gela-facil.onrender.com/oauth/:path*"
+    }
+  ]
+}
