@@ -93,6 +93,45 @@ function getStockStatus(product) {
   return 'ok';
 }
 
+async function loadMercadoLivreConnectionStatus() {
+  const box = document.getElementById('mercado-livre-connection');
+  const title = document.getElementById('mercado-livre-connection-title');
+  const status = document.getElementById('mercado-livre-connection-status');
+  const button = document.getElementById('mercado-livre-connect-button');
+  try {
+    const connection = await apiFetch('/api/admin/mercado-livre/oauth/status');
+    box.classList.toggle('connected', connection.connected);
+    box.classList.remove('error');
+    title.textContent = connection.connected ? 'Mercado Livre conectado' : 'Mercado Livre ainda não conectado';
+    status.textContent = connection.connected
+      ? `Autorização ativa${connection.expiresAt ? ` até ${new Date(connection.expiresAt).toLocaleString('pt-BR')}` : ''}; a renovação será automática.`
+      : 'Conecte a conta para consultar anúncios pela API oficial.';
+    button.textContent = connection.connected ? 'Reconectar conta' : 'Conectar Mercado Livre';
+    button.disabled = !connection.configured;
+  } catch (error) {
+    box.classList.remove('connected');
+    box.classList.add('error');
+    title.textContent = 'Conexão indisponível';
+    status.textContent = error.message;
+    button.disabled = false;
+  }
+}
+
+async function connectMercadoLivre() {
+  const button = document.getElementById('mercado-livre-connect-button');
+  button.disabled = true;
+  const label = button.textContent;
+  button.textContent = 'Abrindo autorização…';
+  try {
+    const { authorizationUrl } = await apiFetch('/api/admin/mercado-livre/oauth/start');
+    window.location.assign(authorizationUrl);
+  } catch (error) {
+    showToast(error.message, true);
+    button.disabled = false;
+    button.textContent = label;
+  }
+}
+
 // ── AUTHENTICATION ────────────────────────────────────────
 function setupNavigation() {
   const navItems = document.querySelectorAll('.nav-item');
@@ -310,7 +349,8 @@ function applyMercadoLivreSnapshot(snapshot) {
   if (snapshot.affiliateUrl) document.getElementById('prod-affiliate-url').value = snapshot.affiliateUrl;
   document.getElementById('prod-status').value = snapshot.available ? 'active' : 'inactive';
   const warning = snapshot.warnings?.length ? ` ${snapshot.warnings.join(' ')}` : '';
-  setMercadoLivreImportFeedback(`${snapshot.mercadoLivreId} importado. ${snapshot.ratingCount || 0} avaliações encontradas.${warning}`, 'success');
+  const affiliateReminder = snapshot.affiliateUrl ? '' : ' Adicione o link de afiliado antes de publicar.';
+  setMercadoLivreImportFeedback(`${snapshot.mercadoLivreId} importado. ${snapshot.ratingCount || 0} avaliações encontradas.${affiliateReminder}${warning}`, 'success');
 }
 
 async function importMercadoLivreIntoForm() {
@@ -613,10 +653,26 @@ document.addEventListener('DOMContentLoaded', () => {
   setupProductForm();
   setupStockForm();
   setupModals();
+  document.getElementById('mercado-livre-connect-button').addEventListener('click', connectMercadoLivre);
 
   document.getElementById('retry-products').addEventListener('click', refreshCatalog);
   refreshCatalog();
+  loadMercadoLivreConnectionStatus();
   apiFetch('/api/admin/me').then(data => { document.querySelector('.admin-name').textContent = data.user; }).catch(() => {});
+
+  const oauthResult = new URLSearchParams(window.location.search).get('ml_oauth');
+  if (oauthResult) {
+    const messages = {
+      connected: ['Mercado Livre conectado com sucesso.', false],
+      denied: ['A autorização do Mercado Livre foi cancelada.', true],
+      invalid_state: ['A autorização expirou ou não pertence a esta sessão. Tente novamente.', true],
+      missing_code: ['O Mercado Livre não enviou o código de autorização.', true],
+      failed: ['Não foi possível concluir a conexão com o Mercado Livre.', true],
+    };
+    const [message, isError] = messages[oauthResult] || ['Retorno desconhecido do Mercado Livre.', true];
+    showToast(message, isError);
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 });
 
 function renderCatalogSummary() {

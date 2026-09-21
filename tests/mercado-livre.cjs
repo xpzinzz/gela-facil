@@ -33,6 +33,7 @@ assert.equal(normalizeItemId('sem id'), null);
     fetchImpl: async (url, options = {}) => {
       calls.push({ url: String(url), authorization: options.headers?.Authorization });
       if (String(url).endsWith('/description')) return jsonResponse({ plain_text: 'Descricao oficial do produto.' });
+      if (String(url).includes('/sale_price')) return jsonResponse({ amount: 2299.9, regular_amount: 2799.9, currency_id: 'BRL' });
       if (String(url).includes('/reviews/item/')) return jsonResponse({
         rating_average: 4.8,
         paging: { total: 27 },
@@ -43,6 +44,7 @@ assert.equal(normalizeItemId('sem id'), null);
         title: 'Ar Condicionado LG Dual Inverter 12000 BTUs',
         price: 2399.9,
         original_price: 2799.9,
+        catalog_product_id: 'MLB12345',
         status: 'active',
         domain_id: 'MLB-AIR_CONDITIONERS',
         attributes: [
@@ -60,9 +62,12 @@ assert.equal(normalizeItemId('sem id'), null);
   assert.equal(product.category, 'inverter');
   assert.equal(product.available, true);
   assert.equal(product.description, 'Descricao oficial do produto.');
+  assert.equal(product.price, 2299.9);
+  assert.equal(product.oldPrice, 2799.9);
   assert.equal(product.rating, 4.8);
   assert.equal(product.ratingCount, 27);
   assert.equal(product.reviews.length, 1);
+  assert.ok(calls.some(call => call.url.includes('catalog_product_id=MLB12345')));
   assert.ok(calls.every(call => call.authorization === 'Bearer test-token'));
 
   await assert.rejects(

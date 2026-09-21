@@ -165,14 +165,20 @@ async function importMercadoLivreProduct(reference, options = {}) {
   const { itemId, sourceUrl } = await resolveItemReference(reference, fetchImpl);
   const item = await fetchApiJson(`/items/${encodeURIComponent(itemId)}`, { fetchImpl, accessToken });
   const warnings = [];
-  const [descriptionResult, reviewsResult] = await Promise.allSettled([
+  const reviewsQuery = item.catalog_product_id
+    ? `?limit=5&catalog_product_id=${encodeURIComponent(item.catalog_product_id)}`
+    : '?limit=5';
+  const [descriptionResult, reviewsResult, salePriceResult] = await Promise.allSettled([
     fetchApiJson(`/items/${encodeURIComponent(itemId)}/description`, { fetchImpl, accessToken, optional: true }),
-    fetchApiJson(`/reviews/item/${encodeURIComponent(itemId)}?limit=5`, { fetchImpl, accessToken, optional: true }),
+    fetchApiJson(`/reviews/item/${encodeURIComponent(itemId)}${reviewsQuery}`, { fetchImpl, accessToken, optional: true }),
+    fetchApiJson(`/items/${encodeURIComponent(itemId)}/sale_price?context=channel_marketplace`, { fetchImpl, accessToken, optional: true }),
   ]);
   const description = descriptionResult.status === 'fulfilled' ? descriptionResult.value : null;
   const reviews = reviewsResult.status === 'fulfilled' ? reviewsResult.value : null;
+  const salePrice = salePriceResult.status === 'fulfilled' ? salePriceResult.value : null;
   if (descriptionResult.status === 'rejected') warnings.push('A descricao nao pode ser importada agora.');
   if (reviewsResult.status === 'rejected') warnings.push('As avaliacoes nao podem ser importadas agora.');
+  if (salePriceResult.status === 'rejected') warnings.push('O preco atualizado nao pode ser consultado agora; foi usado o valor do anuncio.');
 
   const attributes = normalizeAttributes(item);
   const gallery = (item.pictures || [])
@@ -187,8 +193,10 @@ async function importMercadoLivreProduct(reference, options = {}) {
     name: String(item.title || '').trim(),
     brand,
     category: inferCategory(item),
-    price: Number(item.price || 0),
-    oldPrice: item.original_price == null ? null : Number(item.original_price),
+    price: Number(salePrice?.amount ?? item.price ?? 0),
+    oldPrice: salePrice?.regular_amount == null
+      ? (item.original_price == null ? null : Number(item.original_price))
+      : Number(salePrice.regular_amount),
     image,
     gallery,
     affiliateUrl: sourceUrl,

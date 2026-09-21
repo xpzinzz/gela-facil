@@ -262,10 +262,14 @@
         <div class="product-form-sections">
         <fieldset class="product-section mercado-livre-import"><legend><span class="product-section-number" aria-hidden="true">ML</span>Importar do Mercado Livre</legend>
           <p class="product-section-description">Cole o ID MLB, o link do anúncio ou o link de afiliado. O token permanece protegido no servidor.</p>
+          <div class="mercado-livre-connection" id="mercado-livre-connection">
+            <div><strong id="mercado-livre-connection-title">Verificando conexão…</strong><small id="mercado-livre-connection-status">A conta conectada permite consultar a API oficial.</small></div>
+            <button type="button" class="btn-action" id="mercado-livre-connect-button">Conectar Mercado Livre</button>
+          </div>
           <div class="product-fields mercado-livre-import-fields"><div class="form-group">
             <label for="prod-ml-reference">Link ou ID do anúncio</label>
             <input type="text" id="prod-ml-reference" placeholder="MLB1234567890 ou https://meli.la/..." class="settings-input" aria-describedby="prod-ml-reference-help" />
-            <small class="form-help" id="prod-ml-reference-help">Importa título, preço, fotos, descrição, ficha técnica, disponibilidade e avaliações.</small>
+            <small class="form-help" id="prod-ml-reference-help">Para preservar sua comissão, cole o link gerado no Portal de Afiliados. Importamos os dados e mantemos esse mesmo link no botão de compra.</small>
           </div><div class="form-group mercado-livre-import-action">
             <button type="button" class="btn-primary-admin" id="prod-ml-import-button">Buscar dados do anúncio</button>
             <small class="form-help mercado-livre-import-status" id="prod-ml-import-status" role="status" aria-live="polite">O estoque exato não é fornecido para afiliados.</small>

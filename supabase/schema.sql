@@ -62,6 +62,22 @@ create table if not exists public.admin_users (
   constraint admin_users_password_hash_not_blank check (btrim(password_hash) <> '')
 );
 
+create table if not exists public.mercado_livre_oauth_tokens (
+  integration text primary key,
+  access_token text not null,
+  refresh_token text not null,
+  token_type text not null default 'Bearer',
+  expires_at timestamptz not null,
+  user_id text,
+  scope text not null default '',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+
+  constraint mercado_livre_oauth_integration_check check (integration = 'catalog'),
+  constraint mercado_livre_oauth_access_token_check check (btrim(access_token) <> ''),
+  constraint mercado_livre_oauth_refresh_token_check check (btrim(refresh_token) <> '')
+);
+
 create index if not exists products_public_catalog_idx
   on public.products (status, id desc);
 
@@ -101,6 +117,7 @@ execute function public.set_updated_at();
 
 alter table public.products enable row level security;
 alter table public.admin_users enable row level security;
+alter table public.mercado_livre_oauth_tokens enable row level security;
 
 -- O navegador nunca acessa as tabelas diretamente. O backend valida a sessão
 -- administrativa e usa a service role, que ignora RLS.
@@ -108,15 +125,20 @@ revoke all on table public.products from anon, authenticated;
 revoke all on sequence public.products_id_seq from anon, authenticated;
 revoke all on table public.admin_users from anon, authenticated;
 revoke all on sequence public.admin_users_id_seq from anon, authenticated;
+revoke all on table public.mercado_livre_oauth_tokens from anon, authenticated;
 
 comment on table public.products is
   'Catálogo e estoque da vitrine Gela Fácil, administrados exclusivamente pelo backend.';
+
+comment on table public.mercado_livre_oauth_tokens is
+  'Tokens OAuth do Mercado Livre acessiveis exclusivamente pelo backend com service role.';
 
 comment on table public.admin_users is
   'Administradores do painel. Senhas são armazenadas somente como hash bcrypt.';
 
 -- Bucket usado por POST /api/admin/upload. A leitura é pública para que as
 -- imagens apareçam na vitrine; gravações continuam restritas à service role.
+
 insert into storage.buckets (
   id,
   name,

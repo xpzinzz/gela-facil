@@ -224,6 +224,52 @@ const adminRepo = {
   },
 };
 
+function mercadoLivreTokenMigrationError() {
+  return new Error('Aplique supabase/migrations/202609210001_mercado_livre_oauth.sql antes de conectar o Mercado Livre.');
+}
+
+function isMissingMercadoLivreTokenTable(error) {
+  return ['42P01', 'PGRST205'].includes(error?.code) || /mercado_livre_oauth_tokens/i.test(error?.message || '');
+}
+
+const mercadoLivreTokenRepo = {
+  async get() {
+    const { data, error } = await supabase
+      .from('mercado_livre_oauth_tokens')
+      .select('access_token, refresh_token, token_type, expires_at, user_id, scope')
+      .eq('integration', 'catalog')
+      .maybeSingle();
+    if (isMissingMercadoLivreTokenTable(error)) throw mercadoLivreTokenMigrationError();
+    throwIfError(error);
+    if (!data) return null;
+    return {
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+      tokenType: data.token_type,
+      expiresAt: data.expires_at,
+      userId: data.user_id,
+      scope: data.scope || '',
+    };
+  },
+
+  async save(tokens) {
+    const { error } = await supabase
+      .from('mercado_livre_oauth_tokens')
+      .upsert({
+        integration: 'catalog',
+        access_token: tokens.accessToken,
+        refresh_token: tokens.refreshToken,
+        token_type: tokens.tokenType || 'Bearer',
+        expires_at: tokens.expiresAt,
+        user_id: tokens.userId,
+        scope: tokens.scope || '',
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'integration' });
+    if (isMissingMercadoLivreTokenTable(error)) throw mercadoLivreTokenMigrationError();
+    throwIfError(error);
+  },
+};
+
 const productRepo = {
   async listAdmin() {
     const { data, error } = await supabase
@@ -411,4 +457,4 @@ async function uploadProductImage(file) {
   };
 }
 
-module.exports = { initDb, adminRepo, productRepo, uploadProductImage };
+module.exports = { initDb, adminRepo, mercadoLivreTokenRepo, productRepo, uploadProductImage };

@@ -15,6 +15,7 @@ O `schema.sql` cria:
 
 - a tabela `public.products` com as colunas usadas pelo backend;
 - a tabela `public.admin_users`, usada pelo login do painel;
+- a tabela `public.mercado_livre_oauth_tokens`, acessível somente pelo backend, para renovar a autorização da API;
 - validações de categoria, status, preços e estoque;
 - índices para catálogo, categoria e SKU;
 - atualização automática de `updated_at`;
@@ -29,3 +30,4 @@ Se você já executou o schema anterior, aplique as migrações pendentes em ord
 
 1. [`migrations/202609200002_admin_users.sql`](./migrations/202609200002_admin_users.sql), caso a tabela de administradores ainda não exista;
 2. [`migrations/202609200003_mercado_livre_catalog.sql`](./migrations/202609200003_mercado_livre_catalog.sql), para armazenar descrição, galeria, ficha técnica, avaliações e status dos anúncios importados.
+3. [`migrations/202609210001_mercado_livre_oauth.sql`](./migrations/202609210001_mercado_livre_oauth.sql), para armazenar access token e refresh token com RLS e sem acesso direto pelo navegador.

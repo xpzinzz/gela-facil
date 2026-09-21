@@ -9,7 +9,9 @@ Vitrine de produtos indicados por afiliado do Mercado Livre e apresentação dos
 
 ## Links de afiliado
 
-No painel administrativo, crie ou edite o produto e preencha **Link de afiliado do Mercado Livre**. O frontend busca esse dado pela API e o botão “Ver no Mercado Livre” abre somente URLs HTTPS do Mercado Livre ou `meli.la`.
+Gere o link do produto no **Portal de Afiliados e Criadores** ou pela **Barra de Afiliados** do Mercado Livre. Depois, no painel administrativo, cole esse link no campo de importação. O backend resolve o `meli.la` apenas para identificar o anúncio e preserva o link afiliado original no produto. O botão “Ver no Mercado Livre” usa exatamente esse endereço.
+
+A API de anúncios não cria o rastreamento de afiliado. Por isso, importar somente um ID `MLB...` preenche os dados, mas o link de afiliado ainda precisa ser informado antes de divulgar o produto.
 
 ## Backend e Supabase
 
@@ -19,7 +21,7 @@ O backend fica em `backend/` e serve o site, o admin e a API.
 2. Crie `backend/.env` com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PRODUCT_IMAGES_BUCKET=products` e um `SESSION_SECRET` aleatório de pelo menos 32 caracteres.
 3. No primeiro início, inclua também `ADMIN_USER` e `ADMIN_PASSWORD` (senha com pelo menos 12 caracteres). O backend cria o primeiro registro em `admin_users` e salva somente o hash bcrypt da senha. Depois que esse administrador existir no banco, essas duas variáveis de bootstrap podem ser removidas do ambiente.
 4. O schema cria um bucket público chamado `products`. Mantenha `SUPABASE_PRODUCT_IMAGES_BUCKET=products` no `.env`.
-5. Para importar anúncios, configure `MERCADO_LIVRE_ACCESS_TOKEN` somente no `backend/.env`. Nunca coloque esse token nos arquivos do frontend.
+5. Para conectar a API do Mercado Livre, configure `MERCADO_LIVRE_CLIENT_ID`, `MERCADO_LIVRE_CLIENT_SECRET` e `MERCADO_LIVRE_REDIRECT_URI` somente no `backend/.env`. O painel conduz a autorização e o backend renova o token automaticamente. Nunca coloque segredo ou token no frontend.
 6. Instale e rode:
 
 ```bash
@@ -59,7 +61,7 @@ No cadastro de produto do admin, voce pode enviar uma imagem para o bucket ou co
 
 ## Importação do Mercado Livre
 
-No painel administrativo, abra **Adicionar produto**, cole um ID `MLB...`, link de anúncio ou link `meli.la` e use **Buscar dados do anúncio**. O backend consulta a API oficial e preenche:
+No painel administrativo, abra **Adicionar produto** e conecte a conta do Mercado Livre. Depois, cole preferencialmente o link de afiliado `meli.la` e use **Buscar dados do anúncio**. O backend consulta a API oficial e preenche:
 
 - título, marca, preço atual e preço anterior;
 - imagem principal e galeria;
@@ -69,4 +71,17 @@ No painel administrativo, abra **Adicionar produto**, cole um ID `MLB...`, link 
 
 Produtos já importados exibem um botão de sincronização na tabela do painel. O sistema não mostra estoque numérico do vendedor: para afiliados, a API informa apenas se o anúncio está ativo ou indisponível. O campo de estoque do painel continua sendo um controle interno e não representa o estoque do Mercado Livre.
 
-Em uma base existente, execute `supabase/migrations/202609200003_mercado_livre_catalog.sql` antes de salvar o primeiro produto importado.
+Em uma base existente, execute, nesta ordem:
+
+1. `supabase/migrations/202609200003_mercado_livre_catalog.sql`, para os dados dos anúncios;
+2. `supabase/migrations/202609210001_mercado_livre_oauth.sql`, para os tokens OAuth protegidos por RLS.
+
+### Fluxo completo
+
+1. Escolha um anúncio de produto elegível no Mercado Livre.
+2. Gere o link pelo Portal/Barra de Afiliados.
+3. No admin da Gela Fácil, conecte sua conta do Mercado Livre uma única vez.
+4. Cole o link afiliado no importador; o backend extrai o `MLB` e consulta anúncio, preço vigente, fotos, descrição, atributos e avaliações.
+5. Revise os dados e salve. O link afiliado original fica associado ao produto.
+6. O visitante conhece o produto na Gela Fácil e clica conscientemente em “Ver no Mercado Livre”. A compra, pagamento, entrega e atribuição da comissão ocorrem no Mercado Livre.
+7. Use o botão de sincronização no admin para atualizar os dados. Se o token expirar, o backend usa o `refresh_token` e salva os novos tokens automaticamente.

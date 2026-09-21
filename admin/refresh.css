@@ -104,6 +104,12 @@ button:disabled { opacity: .55; cursor: wait; transform: none; }
 .product-section-description { font-size: 12px; color: var(--admin-muted); margin: 8px 0 16px; }
 .product-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 20px; background: #f8fafd; border: 1px solid var(--admin-border); border-radius: 14px; }
 .mercado-livre-import .product-fields { background: linear-gradient(135deg, #fff9db, #fffdf2); border-color: #eed66f; }
+.mercado-livre-connection { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 14px 0; padding: 14px 16px; border: 1px solid #eed66f; border-radius: 10px; background: #fffdf2; }
+.mercado-livre-connection div { display: flex; flex-direction: column; gap: 3px; }
+.mercado-livre-connection strong { color: #213b68; }
+.mercado-livre-connection small { color: #617086; }
+.mercado-livre-connection.connected { border-color: #80d6a8; background: #f1fff7; }
+.mercado-livre-connection.error { border-color: #e8a5ad; background: #fff5f6; }
 .mercado-livre-import .product-section-number { width: 36px; background: #ffe600; color: #213b68; font-weight: 800; }
 .mercado-livre-import-action { display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; }
 .mercado-livre-import-action .btn-primary-admin { width: 100%; justify-content: center; }
@@ -120,6 +126,7 @@ button:disabled { opacity: .55; cursor: wait; transform: none; }
   #product-modal .modal-header h3 { font-size: 21px; }
   .product-form-sections { padding: 18px; }
   .product-fields { grid-template-columns: minmax(0, 1fr); padding: 16px; }
+  .mercado-livre-connection { align-items: stretch; flex-direction: column; }
   #product-modal .modal-footer { padding: 14px 18px; flex-direction: row; }
   #product-modal .modal-footer > button { flex: 1; width: auto; justify-content: center; }
   .product-save-note { display: none; }
