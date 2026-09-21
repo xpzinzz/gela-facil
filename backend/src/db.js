@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const bcrypt = require('bcryptjs');
 const WebSocket = require('ws');
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -103,7 +104,54 @@ async function initDb() {
       .insert(seedProducts.map(toDbProduct));
     throwIfError(seedError);
   }
+
+  const { count: adminCount, error: adminCountError } = await supabase
+    .from('admin_users')
+    .select('id', { count: 'exact', head: true });
+  throwIfError(adminCountError);
+
+  if (adminCount === 0) {
+    const username = String(process.env.ADMIN_USER || '').trim();
+    const configuredPassword = String(process.env.ADMIN_PASSWORD || '');
+    if (!username || !configuredPassword) {
+      throw new Error('Configure ADMIN_USER e ADMIN_PASSWORD para criar o primeiro administrador.');
+    }
+
+    const passwordHash = configuredPassword.startsWith('$2')
+      ? configuredPassword
+      : await bcrypt.hash(configuredPassword, 12);
+    const { error: adminSeedError } = await supabase
+      .from('admin_users')
+      .insert({ username, password_hash: passwordHash });
+    throwIfError(adminSeedError);
+  }
 }
+
+const adminRepo = {
+  async findByUsername(username) {
+    const { data, error } = await supabase
+      .from('admin_users')
+      .select('id, username, password_hash, active')
+      .eq('username', username)
+      .maybeSingle();
+    throwIfError(error);
+    if (!data) return null;
+    return {
+      id: data.id,
+      username: data.username,
+      passwordHash: data.password_hash,
+      active: data.active,
+    };
+  },
+
+  async recordLogin(id) {
+    const { error } = await supabase
+      .from('admin_users')
+      .update({ last_login_at: new Date().toISOString() })
+      .eq('id', id);
+    throwIfError(error);
+  },
+};
 
 const productRepo = {
   async listAdmin() {
@@ -230,4 +278,4 @@ async function uploadProductImage(file) {
   };
 }
 
-module.exports = { initDb, productRepo, uploadProductImage };
+module.exports = { initDb, adminRepo, productRepo, uploadProductImage };

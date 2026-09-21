@@ -15,10 +15,10 @@ No painel administrativo, crie ou edite o produto e preencha **Link de afiliado 
 
 O backend fica em `backend/` e serve o site, o admin e a API.
 
-1. No Supabase, rode o SQL de `backend/sql/schema.sql`.
-2. Crie `backend/.env` usando `backend/.env.example` como base.
-3. Preencha `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SESSION_SECRET`, `ADMIN_USER` e `ADMIN_PASSWORD`. `SESSION_SECRET` deve ter pelo menos 32 caracteres aleatórios; não use credenciais padrão.
-4. Crie um bucket publico no Supabase Storage chamado `products`, ou ajuste `SUPABASE_PRODUCT_IMAGES_BUCKET` no `.env`.
+1. No SQL Editor do Supabase, rode `supabase/schema.sql`. Para carregar imediatamente os produtos iniciais, rode também `supabase/seed.sql`.
+2. Crie `backend/.env` com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PRODUCT_IMAGES_BUCKET=products` e um `SESSION_SECRET` aleatório de pelo menos 32 caracteres.
+3. No primeiro início, inclua também `ADMIN_USER` e `ADMIN_PASSWORD`. O backend cria o primeiro registro em `admin_users` e salva somente o hash bcrypt da senha. Depois que esse administrador existir no banco, essas duas variáveis de bootstrap podem ser removidas do ambiente.
+4. O schema cria um bucket público chamado `products`. Mantenha `SUPABASE_PRODUCT_IMAGES_BUCKET=products` no `.env`.
 5. Instale e rode:
 
 ```bash

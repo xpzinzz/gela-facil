@@ -5,13 +5,13 @@ const session = require('express-session');
 const helmet = require('helmet');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
-const { initDb, productRepo, uploadProductImage } = require('./src/db');
+const { initDb, adminRepo, productRepo, uploadProductImage } = require('./src/db');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const rootDir = path.resolve(__dirname, '..');
 const isProduction = process.env.NODE_ENV === 'production';
-const requiredEnv = ['SESSION_SECRET', 'ADMIN_USER', 'ADMIN_PASSWORD'];
+const requiredEnv = ['SESSION_SECRET'];
 const missingEnv = requiredEnv.filter(name => !process.env[name]);
 
 if (missingEnv.length > 0) {
@@ -159,22 +159,22 @@ function validateProduct(product) {
 }
 
 app.post('/api/admin/login', async (req, res) => {
-  const expectedUser = process.env.ADMIN_USER;
-  const expectedPassword = process.env.ADMIN_PASSWORD;
   const { user, password } = req.body || {};
+  const admin = await adminRepo.findByUsername(String(user || '').trim());
+  const validPassword = admin?.active
+    ? await bcrypt.compare(String(password || ''), admin.passwordHash)
+    : false;
 
-  const validUser = String(user || '') === expectedUser;
-  const validPassword = expectedPassword.startsWith('$2')
-    ? await bcrypt.compare(String(password || ''), expectedPassword)
-    : String(password || '') === expectedPassword;
-
-  if (!validUser || !validPassword) {
+  if (!admin || !validPassword) {
     return res.status(401).json({ error: 'Usuario ou senha invalidos.' });
   }
+
+  await adminRepo.recordLogin(admin.id);
 
   req.session.regenerate((err) => {
     if (err) return res.status(500).json({ error: 'Falha ao criar sessao.' });
     req.session.admin = true;
+    req.session.adminUser = admin.username;
     res.json({ ok: true });
   });
 });
@@ -187,7 +187,7 @@ app.post('/api/admin/logout', requireAdmin, (req, res) => {
 });
 
 app.get('/api/admin/me', requireAdmin, (_req, res) => {
-  res.json({ user: process.env.ADMIN_USER });
+  res.json({ user: _req.session.adminUser });
 });
 
 app.post('/api/admin/upload', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
