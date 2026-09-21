@@ -17,7 +17,7 @@ O backend fica em `backend/` e serve o site, o admin e a API.
 
 1. No SQL Editor do Supabase, rode `supabase/schema.sql`. Para carregar imediatamente os produtos iniciais, rode também `supabase/seed.sql`.
 2. Crie `backend/.env` com `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_PRODUCT_IMAGES_BUCKET=products` e um `SESSION_SECRET` aleatório de pelo menos 32 caracteres.
-3. No primeiro início, inclua também `ADMIN_USER` e `ADMIN_PASSWORD`. O backend cria o primeiro registro em `admin_users` e salva somente o hash bcrypt da senha. Depois que esse administrador existir no banco, essas duas variáveis de bootstrap podem ser removidas do ambiente.
+3. No primeiro início, inclua também `ADMIN_USER` e `ADMIN_PASSWORD` (senha com pelo menos 12 caracteres). O backend cria o primeiro registro em `admin_users` e salva somente o hash bcrypt da senha. Depois que esse administrador existir no banco, essas duas variáveis de bootstrap podem ser removidas do ambiente.
 4. O schema cria um bucket público chamado `products`. Mantenha `SUPABASE_PRODUCT_IMAGES_BUCKET=products` no `.env`.
 5. Para importar anúncios, configure `MERCADO_LIVRE_ACCESS_TOKEN` somente no `backend/.env`. Nunca coloque esse token nos arquivos do frontend.
 6. Instale e rode:
@@ -32,6 +32,24 @@ Depois acesse:
 
 - Site: `http://localhost:3000/`
 - Admin: `http://localhost:3000/admin/`
+
+### Criar ou redefinir o acesso administrativo
+
+Se ainda não houver um administrador, ou se você não souber mais a senha do registro existente, defina temporariamente no `backend/.env`:
+
+```env
+ADMIN_USER=seu_usuario
+ADMIN_PASSWORD=uma_senha_forte_com_12_ou_mais_caracteres
+```
+
+Com o backend parado, execute:
+
+```bash
+cd backend
+npm run admin:set-password
+```
+
+O comando cria o usuário informado ou troca sua senha, reativa o acesso e nunca grava a senha original no Supabase. Após confirmar o login, remova `ADMIN_PASSWORD` do `.env` e reinicie o backend.
 
 O Live Server nas portas 5500–5599 também pode ser usado para visualizar o site. Nessas portas, as páginas públicas consultam o backend no mesmo host, na porta 3000. Mantenha `npm start` rodando em `backend/`, com o `.env` configurado. O Live Server sozinho não fornece a API de produtos. Em produção, a API continua no mesmo endereço do site.
 

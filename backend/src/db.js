@@ -181,6 +181,12 @@ async function initDb() {
     if (!username || !configuredPassword) {
       throw new Error('Configure ADMIN_USER e ADMIN_PASSWORD para criar o primeiro administrador.');
     }
+    if (!/^[a-zA-Z0-9._-]{3,64}$/.test(username)) {
+      throw new Error('ADMIN_USER deve ter de 3 a 64 caracteres e usar apenas letras, numeros, ponto, hifen ou sublinhado.');
+    }
+    if (!configuredPassword.startsWith('$2') && (configuredPassword.length < 12 || configuredPassword.length > 128)) {
+      throw new Error('ADMIN_PASSWORD deve ter entre 12 e 128 caracteres.');
+    }
 
     const passwordHash = configuredPassword.startsWith('$2')
       ? configuredPassword

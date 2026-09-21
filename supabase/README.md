@@ -21,7 +21,9 @@ O `schema.sql` cria:
 - RLS e bloqueio de acesso direto pelos papéis `anon` e `authenticated`;
 - o bucket público `products`, limitado a imagens JPEG, PNG ou WebP de até 5 MB.
 
-No primeiro início, o backend cria o primeiro registro em `admin_users` usando `ADMIN_USER` e `ADMIN_PASSWORD`. A senha é convertida em hash bcrypt antes de ser gravada; o valor original não é armazenado no banco. Depois dessa criação, as duas variáveis de bootstrap podem ser removidas. `SESSION_SECRET` continua apenas no `backend/.env`.
+No primeiro início, o backend cria o primeiro registro em `admin_users` usando `ADMIN_USER` e `ADMIN_PASSWORD` (mínimo de 12 caracteres). A senha é convertida em hash bcrypt antes de ser gravada; o valor original não é armazenado no banco. Depois dessa criação, as duas variáveis de bootstrap podem ser removidas. `SESSION_SECRET` continua apenas no `backend/.env`.
+
+Para criar outro administrador ou redefinir uma senha desconhecida, configure temporariamente essas duas variáveis e execute `npm run admin:set-password` dentro de `backend/`. O comando atualiza apenas o usuário indicado e o reativa. Remova `ADMIN_PASSWORD` do ambiente após confirmar o acesso.
 
 Se você já executou o schema anterior, aplique as migrações pendentes em ordem:
 
