@@ -6,7 +6,7 @@
   <link rel="icon" type="image/webp" sizes="512x512" href="/assets/brand/site-icon.webp" />
   <link rel="apple-touch-icon" href="/assets/brand/site-icon.webp" />
   <title>Painel Admin – Gela Fácil</title>
-  <meta name="description" content="Painel administrativo da Gela Fácil. Gerencie produtos e estoque." />
+  <meta name="description" content="Painel administrativo da Gela Fácil. Gerencie os produtos do catálogo." />
   <meta name="robots" content="noindex, nofollow" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/admin/admin.css" />
@@ -33,11 +33,6 @@
         <li><a href="#" class="nav-item active" aria-current="page" data-page="products" id="nav-products">
           <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
           <span class="nav-label">Produtos</span>
-        </a></li>
-        <li><a href="#" class="nav-item" data-page="stock" id="nav-stock">
-          <span class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
-          <span class="nav-label">Estoque</span>
-          <span class="nav-badge" id="stock-alert-badge">!</span>
         </a></li>
       </ul>
     </nav>
@@ -84,7 +79,6 @@
       <div class="catalog-summary" aria-label="Resumo do catálogo">
         <div><span>Produtos cadastrados</span><strong id="summary-total">—</strong><small>Todo o seu catálogo</small></div>
         <div><span>Ativos no site</span><strong id="summary-active">—</strong><small>Visíveis para os clientes</small></div>
-        <div><span>Estoque em atenção</span><strong id="summary-low-stock">—</strong><small>Baixo ou esgotado</small></div>
         <div><span>Produtos inativos</span><strong id="summary-inactive">—</strong><small>Fora da vitrine</small></div>
       </div>
       <div id="catalog-feedback" class="catalog-feedback" role="status" aria-live="polite"><span>Carregando seu catálogo…</span><button id="retry-products" type="button" hidden>Tentar novamente</button></div>
@@ -97,7 +91,7 @@
         <div class="page-header">
           <div>
             <h2>Produtos</h2>
-            <p class="page-sub">Gerencie imagens, preços, publicação e estoque.</p>
+            <p class="page-sub">Gerencie imagens, preços e publicação.</p>
           </div>
           <button class="btn-primary-admin" id="btn-add-product">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -122,7 +116,6 @@
             <option value="name">Nome A-Z</option>
             <option value="price-asc">Menor Preço</option>
             <option value="price-desc">Maior Preço</option>
-            <option value="stock">Estoque</option>
           </select>
         </div>
 
@@ -133,7 +126,6 @@
                 <th>Produto</th>
                 <th>Categoria</th>
                 <th>Preço</th>
-                <th>Estoque</th>
                 <th>Publicação / link</th>
                 <th>Ações</th>
               </tr>
@@ -142,93 +134,6 @@
           </table>
         </div>
         <div class="table-pagination" id="products-pagination"></div>
-      </section>
-
-      <!-- ══════════ STOCK PAGE ══════════ -->
-      <section class="page" id="page-stock">
-        <div class="page-header">
-          <div>
-            <h2>Controle de Estoque</h2>
-            <p class="page-sub">Acompanhe e ajuste as quantidades disponíveis.</p>
-          </div>
-          <button class="btn-primary-admin" id="btn-stock-entry">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Movimentar estoque
-          </button>
-        </div>
-
-        <!-- Stock KPIs -->
-        <div class="stock-kpi-row">
-          <div class="stock-kpi-card stock-ok">
-            <div class="stock-kpi-num" id="stock-ok-count">—</div>
-            <div class="stock-kpi-label">Em estoque</div>
-          </div>
-          <div class="stock-kpi-card stock-low">
-            <div class="stock-kpi-num" id="stock-low-count">—</div>
-            <div class="stock-kpi-label">Estoque baixo</div>
-          </div>
-          <div class="stock-kpi-card stock-out">
-            <div class="stock-kpi-num" id="stock-out-count">—</div>
-            <div class="stock-kpi-label">Sem estoque</div>
-          </div>
-          <div class="stock-kpi-card stock-value">
-            <div class="stock-kpi-num" id="stock-total-value">—</div>
-            <div class="stock-kpi-label">Valor total em estoque</div>
-          </div>
-        </div>
-
-        <!-- Stock Filters -->
-        <div class="filter-bar">
-          <div class="search-field">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Buscar produto..." id="stock-search" aria-label="Buscar no estoque" />
-          </div>
-          <select class="filter-select" id="stock-status-filter" aria-label="Filtrar situação do estoque">
-            <option value="all">Todos os status</option>
-            <option value="ok">Em estoque</option>
-            <option value="low">Estoque baixo</option>
-            <option value="out">Sem estoque</option>
-          </select>
-        </div>
-
-        <div class="table-wrap">
-          <table class="admin-table" id="stock-table">
-            <thead>
-              <tr>
-                <th>Produto</th>
-                <th>SKU</th>
-                <th>Categoria</th>
-                <th>Qtd. Atual</th>
-                <th>Mín. Recomendado</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="stock-body"></tbody>
-          </table>
-        </div>
-
-        <!-- Stock History -->
-        <div class="section-divider"></div>
-        <div class="dash-card" style="margin-top:0">
-          <div class="dash-card-header">
-            <div><h3>Movimentações desta sessão</h3><p class="form-help">As quantidades são salvas. Esta lista e as observações são temporárias.</p></div>
-          </div>
-          <div class="table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Produto</th>
-                  <th>Tipo</th>
-                  <th>Quantidade</th>
-                  <th>Responsável</th>
-                </tr>
-              </thead>
-              <tbody id="stock-history-body"></tbody>
-            </table>
-          </div>
-        </div>
       </section>
 
       <!-- ══════════ ORDERS PAGE ══════════ -->
@@ -282,7 +187,11 @@
 <div class="form-group">
           <label for="prod-specs">Características (opcional)</label>
           <input type="text" id="prod-specs" placeholder="Inverter, 12.000 BTU, A+++" class="settings-input" aria-describedby="prod-specs-help" />
-        <small class="form-help" id="prod-specs-help">Separe por vírgulas. Ex.: Inverter, 12.000 BTU, 220 V.</small></div></div>
+        <small class="form-help" id="prod-specs-help">Separe por vírgulas. Ex.: Inverter, 12.000 BTU, 220 V.</small></div>
+<div class="form-group">
+            <label for="prod-sku">Código do produto / SKU (opcional)</label>
+            <input type="text" id="prod-sku" placeholder="GF-001" class="settings-input" aria-describedby="prod-sku-help" />
+          <small class="form-help" id="prod-sku-help">Código interno de identificação. Ex.: GF-001.</small></div></div>
         </fieldset>
         <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">02</span>Preço e publicação</legend>
           <p class="product-section-description">Defina a oferta e a visibilidade no catálogo.</p>
@@ -304,7 +213,7 @@
         </div>
         </fieldset>
         <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">03</span>Imagem do produto</legend>
-          <p class="product-section-description">Envie um arquivo ou informe o endereço da imagem.</p>
+          <p class="product-section-description">Defina a imagem principal e adicione outras fotos para a galeria.</p>
           <div class="product-fields"><div class="form-group">
             <label for="prod-image-file">Enviar imagem (opcional)</label>
             <input type="file" id="prod-image-file" class="settings-input" aria-describedby="prod-image-file-help" accept="image/jpeg,image/png,image/webp" />
@@ -312,22 +221,15 @@
 <div class="form-group">
           <label for="prod-image">Endereço da imagem (opcional)</label>
           <input type="text" id="prod-image" placeholder="https://... ou assets/produtos/produto.webp" class="settings-input" aria-describedby="prod-image-help" />
-        <small class="form-help" id="prod-image-help">Use uma URL completa ou um caminho como assets/produtos/produto.webp.</small></div></div>
-        </fieldset>
-        <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">04</span>Controle de estoque</legend>
-          <p class="product-section-description">Informações internas para acompanhar a disponibilidade.</p>
-          <div class="product-fields"><div class="form-group">
-            <label for="prod-stock">Quantidade em estoque *</label>
-            <input type="number" id="prod-stock" placeholder="0" class="settings-input" min="0" required />
-          </div>
+        <small class="form-help" id="prod-image-help">Use uma URL completa ou um caminho como assets/produtos/produto.webp.</small></div>
 <div class="form-group">
-            <label for="prod-min-stock">Estoque mínimo (opcional)</label>
-            <input type="number" id="prod-min-stock" placeholder="3" class="settings-input" aria-describedby="prod-min-stock-help" min="0" />
-          <small class="form-help" id="prod-min-stock-help">O alerta aparece quando o estoque chega a este valor ou menos. Padrão: 3 unidades.</small></div>
+            <label for="prod-gallery-files">Adicionar mais fotos (opcional)</label>
+            <input type="file" id="prod-gallery-files" class="settings-input" aria-describedby="prod-gallery-files-help" accept="image/jpeg,image/png,image/webp" multiple />
+          <small class="form-help" id="prod-gallery-files-help">Selecione várias fotos de uma vez. Até 11 imagens extras, com 5 MB cada.</small></div>
 <div class="form-group">
-            <label for="prod-sku">Código do produto / SKU (opcional)</label>
-            <input type="text" id="prod-sku" placeholder="GF-001" class="settings-input" aria-describedby="prod-sku-help" />
-          <small class="form-help" id="prod-sku-help">Código interno de identificação. Ex.: GF-001.</small></div></div>
+          <label for="prod-gallery">Endereços de outras fotos (opcional)</label>
+          <textarea id="prod-gallery" class="settings-input gallery-addresses" aria-describedby="prod-gallery-help" placeholder="https://.../foto-2.webp&#10;https://.../foto-3.webp"></textarea>
+        <small class="form-help" id="prod-gallery-help">Informe um endereço por linha. As fotos aparecerão na galeria da página do produto.</small></div></div>
         </fieldset>
         </div>
         <div class="modal-footer">
@@ -339,47 +241,6 @@
     </div>
   </div>
 </div>
-
-<!-- Stock Entry Modal -->
-<div class="modal-overlay" id="stock-modal-overlay">
-  <div class="modal modal-sm" id="stock-modal" role="dialog" aria-modal="true" aria-labelledby="stock-modal-title" tabindex="-1">
-    <div class="modal-header">
-      <h3 id="stock-modal-title">Movimentar estoque</h3>
-      <button class="modal-close" aria-label="Fechar janela" data-modal="stock-modal-overlay">&times;</button>
-    </div>
-    <div class="modal-body">
-      <form id="stock-form">
-        <div class="form-group">
-          <label for="stock-product-select">Produto *</label>
-          <select id="stock-product-select" class="settings-input" required></select>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="stock-type">Tipo *</label>
-            <select id="stock-type" class="settings-input">
-              <option value="in">Entrada</option>
-              <option value="out">Saída</option>
-              <option value="adjust">Ajuste</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="stock-qty">Quantidade *</label>
-            <input type="number" id="stock-qty" placeholder="0" class="settings-input" min="0" required />
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="stock-note">Motivo / Observação</label>
-          <input type="text" id="stock-note" placeholder="Ex: Compra fornecedor, Venda, Ajuste inventário" class="settings-input" />
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn-cancel" data-modal="stock-modal-overlay">Cancelar</button>
-          <button type="submit" class="btn-primary-admin">Registrar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 
 <!-- Toast Notification -->
 <div class="toast" id="toast" role="status" aria-live="polite">

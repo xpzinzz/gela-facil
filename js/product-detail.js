@@ -36,6 +36,7 @@ function normalizeApiDetailProduct(product) {
     brand: product.brand,
     category: product.category,
     price: product.price,
+    oldPrice: product.oldPrice,
     image,
     rating: Number(product.rating || 0),
     ratingCount: Number(product.ratingCount || 0),
@@ -157,6 +158,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   // Format prices
   const formattedPrice = formatPrice(detailProduct.price);
+  const previousPrice = document.getElementById('previous-price-val');
+  const priceLabel = document.getElementById('price-label');
+  if (detailProduct.oldPrice && detailProduct.oldPrice > detailProduct.price) {
+    previousPrice.textContent = `De ${formatPrice(detailProduct.oldPrice)}`;
+    previousPrice.hidden = false;
+    priceLabel.textContent = 'Preço promocional';
+  } else {
+    previousPrice.hidden = true;
+    priceLabel.textContent = 'Preço';
+  }
   document.getElementById('original-price-val').textContent = formattedPrice;
   document.getElementById('summary-product-val').textContent = formattedPrice;
   

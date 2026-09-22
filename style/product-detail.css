@@ -173,6 +173,22 @@
   box-shadow: var(--shadow-sm);
 }
 
+.previous-price {
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: line-through;
+  margin-bottom: 4px;
+}
+
+.promotion-label {
+  color: var(--blue);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .original-price {
   font-size: 2.2rem;
   font-weight: 900;

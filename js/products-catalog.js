@@ -106,6 +106,7 @@ async function loadProductsFromApi() {
         brand: product.brand,
         category: product.category,
         price: product.price,
+        oldPrice: product.oldPrice,
         image: product.image,
         rating: Number(product.rating || 0),
         ratingCount: Number(product.ratingCount || 0),
@@ -357,7 +358,7 @@ function filterAndRender() {
       
       const tagHtml = '';
         
-      const oldPriceHtml = '';
+      const oldPriceHtml = prod.oldPrice && prod.oldPrice > prod.price ? `<span class="old-price">${formatPrice(prod.oldPrice)}</span>` : '';
 
       const safeName = escapeHtml(prod.name);
       const safeBrand = escapeHtml(prod.brand);

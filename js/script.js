@@ -226,8 +226,9 @@ function renderHomeProductCard(product, index) {
   const image = normalizeProductImage(product.image);
   const categories = productCategoriesFor(product);
   const specTags = productSpecsToTags(product.specs);
-  const oldPriceHtml = product.oldPrice ? `<span class="old-price">${formatPrice(product.oldPrice)}</span>` : '';
-  const tagHtml = product.oldPrice && index < 3 ? '<div class="product-tag promo">Oferta</div>' : '';
+  const hasPromotion = product.oldPrice && product.oldPrice > product.price;
+  const oldPriceHtml = hasPromotion ? `<span class="old-price">${formatPrice(product.oldPrice)}</span>` : '';
+  const tagHtml = hasPromotion && index < 3 ? '<div class="product-tag promo">Oferta</div>' : '';
   const safeName = escapeHtml(product.name);
   const safeBrand = escapeHtml(product.brand);
   const safeImage = escapeHtml(image);

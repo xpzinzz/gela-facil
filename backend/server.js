@@ -141,8 +141,8 @@ function normalizeProductPayload(body) {
     status: String(body.status || 'active').trim(),
     price: Number(body.price || 0),
     oldPrice: body.oldPrice === null || body.oldPrice === '' ? null : Number(body.oldPrice),
-    stock: Number.parseInt(body.stock || 0, 10),
-    minStock: Number.parseInt(body.minStock || 3, 10),
+    stock: Number.parseInt(body.stock ?? 0, 10),
+    minStock: Number.parseInt(body.minStock ?? 3, 10),
     sku: String(body.sku || '').trim(),
     image: String(body.image || '').trim(),
     specs: String(body.specs || '').trim(),
@@ -267,11 +267,17 @@ app.post('/api/admin/products', requireAdmin, asyncHandler(async (req, res) => {
 app.put('/api/admin/products/:id', requireAdmin, asyncHandler(async (req, res) => {
   const id = parseProductId(req.params.id);
   if (!id) return res.status(400).json({ error: 'ID invalido.' });
-  const product = normalizeProductPayload(req.body);
+  const current = await productRepo.getAdmin(id);
+  if (!current) return res.status(404).json({ error: 'Produto nao encontrado.' });
+  const product = normalizeProductPayload({
+    ...current,
+    ...req.body,
+    stock: current.stock,
+    minStock: current.minStock,
+  });
   const error = validateProduct(product);
   if (error) return res.status(400).json({ error });
   const updated = await productRepo.update(id, product);
-  if (!updated) return res.status(404).json({ error: 'Produto nao encontrado.' });
   res.json(updated);
 }));
 

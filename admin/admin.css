@@ -43,7 +43,6 @@ h4,h5,h6,
 .nav-label,
 .login-form label,
 .kpi-label,
-.stock-kpi-label,
 .summary-label,
 .form-group label,
 .order-detail-item label,
@@ -185,14 +184,6 @@ h4,h5,h6,
 .nav-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .nav-label { transition: opacity 0.2s ease; }
 .sidebar.collapsed .nav-label { opacity: 0; pointer-events: none; }
-
-.nav-badge {
-  background: var(--admin-danger); color: white;
-  font-size: 0.65rem; font-weight: 800; border-radius: 99px;
-  padding: 2px 7px; margin-left: auto; flex-shrink: 0;
-}
-.nav-badge.orders-badge { background: var(--admin-warning); }
-#stock-alert-badge { display: none; }
 
 .sidebar-footer {
   padding: 16px 12px; border-top: 1px solid var(--admin-border);
@@ -396,26 +387,6 @@ h4,h5,h6,
 .link-view-all { font-size: 0.8rem; color: var(--admin-blue); font-weight: 600; transition: var(--transition); }
 .link-view-all:hover { color: var(--admin-sky); }
 
-/* ── STOCK ALERTS LIST ───────────────────────────────────── */
-.stock-alerts-list { display: flex; flex-direction: column; gap: 10px; }
-.stock-alert-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px; background: rgba(255,255,255,0.03);
-  border: 1px solid var(--admin-border); border-radius: 10px;
-  transition: var(--transition);
-}
-.stock-alert-item:hover { background: rgba(255,255,255,0.06); }
-.stock-alert-icon {
-  width: 36px; height: 36px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  font-size: 0.75rem; font-weight: 800;
-}
-.alert-icon-low { background: rgba(245,158,11,0.15); color: var(--admin-warning); }
-.alert-icon-out { background: rgba(239,68,68,0.15); color: var(--admin-danger); }
-.stock-alert-info { flex: 1; overflow: hidden; }
-.stock-alert-name { font-size: 0.83rem; font-weight: 600; color: var(--admin-white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.stock-alert-qty { font-size: 0.75rem; color: var(--admin-muted); }
-
 /* ── FILTER BAR ──────────────────────────────────────────── */
 .filter-bar {
   display: flex; align-items: center; gap: 12px;
@@ -491,10 +462,6 @@ h4,h5,h6,
 .badge-shipped   { background: rgba(139,92,246,0.1);  color: #8B5CF6; }
 .badge-delivered { background: rgba(34,197,94,0.1);   color: var(--admin-success); }
 .badge-cancelled { background: rgba(239,68,68,0.1);   color: var(--admin-danger); }
-.badge-ok        { background: rgba(34,197,94,0.1);   color: var(--admin-success); }
-.badge-low       { background: rgba(245,158,11,0.1);  color: var(--admin-warning); }
-.badge-out       { background: rgba(239,68,68,0.1);   color: var(--admin-danger); }
-
 /* Action Buttons */
 .action-btns { display: flex; gap: 6px; }
 .btn-action {
@@ -538,38 +505,6 @@ h4,h5,h6,
   padding: 1px 7px; font-size: 0.72rem; font-weight: 700;
 }
 .status-tab.active .tab-count { background: rgba(255,255,255,0.25); }
-
-/* ── STOCK PAGE ──────────────────────────────────────────── */
-.stock-kpi-row {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 14px; margin-bottom: 22px;
-}
-.stock-kpi-card {
-  background: var(--admin-card); border: 1px solid var(--admin-border);
-  border-radius: var(--r); padding: 20px; border-top: 3px solid transparent;
-  transition: var(--transition);
-}
-.stock-kpi-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-.stock-ok { border-top-color: var(--admin-success); }
-.stock-low { border-top-color: var(--admin-warning); }
-.stock-out { border-top-color: var(--admin-danger); }
-.stock-value { border-top-color: var(--admin-blue); }
-.stock-kpi-num { font-size: 1.8rem; font-weight: 800; font-family: var(--font-title); color: var(--admin-white); }
-.stock-kpi-label { font-size: 0.78rem; color: var(--admin-muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
-
-/* Stock progress bar */
-.stock-progress-wrap { display: flex; align-items: center; gap: 10px; }
-.stock-progress-bar {
-  flex: 1; height: 6px; background: rgba(255,255,255,0.07);
-  border-radius: 3px; overflow: hidden;
-}
-.stock-progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
-.fill-ok  { background: var(--admin-success); }
-.fill-low { background: var(--admin-warning); }
-.fill-out { background: var(--admin-danger); }
-.stock-progress-num { font-size: 0.8rem; font-weight: 700; color: var(--admin-white); min-width: 24px; text-align: right; }
-
-.section-divider { height: 1px; background: var(--admin-border); margin: 24px 0; }
 
 /* ── REPORTS PAGE ────────────────────────────────────────── */
 .reports-grid {
@@ -788,8 +723,8 @@ select.settings-input optgroup,
   .filter-bar { gap: 8px; }
   .search-field { min-width: 100%; }
   .filter-select { flex: 1 1 calc(50% - 4px); min-width: 0; }
-  .kpi-grid, .stock-kpi-row { grid-template-columns: 1fr; }
-  .kpi-card, .stock-kpi-card, .chart-card, .dash-card, .settings-card { padding: 16px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .kpi-card, .chart-card, .dash-card, .settings-card { padding: 16px; }
   .admin-table { min-width: 620px; }
   .modal-overlay { padding: 8px; }
   .modal { max-height: calc(100dvh - 16px); }

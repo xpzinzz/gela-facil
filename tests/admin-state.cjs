@@ -8,31 +8,34 @@ const get = id => {
  if (!elements.has(id)) elements.set(id, { value: '', textContent: '', innerHTML: '', style: {}, hidden: false, disabled: false, listeners: {}, setAttribute() {}, removeAttribute() {}, addEventListener(type, fn) { this.listeners[type] = fn; }, querySelector() { return get(id + '-child'); } });
  return elements.get(id);
 };
-const context = vm.createContext({ document: { getElementById: get, addEventListener() {} }, window: {}, console, setTimeout, fetch: async () => ({ok:true,json:async()=>[]}) });
+const context = vm.createContext({ document: { getElementById: get, addEventListener() {} }, window: { location: { hostname: 'localhost', port: '3000' } }, console, setTimeout, fetch: async () => ({ok:true,json:async()=>[]}) });
 vm.runInContext(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'),'utf8'), context);
-for (const id of ['product-category-filter','product-status-filter','stock-status-filter']) get(id).value='all';
+for (const id of ['product-category-filter','product-status-filter']) get(id).value='all';
 get('product-sort').value='name';
 vm.runInContext(`DB.products = [
- {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,stock:0,minStock:0,status:'active',image:'assets/test.png'},
- {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,stock:4,minStock:2,status:'inactive',image:''}
-]; renderProducts(); renderStock();`,context);
+ {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,status:'active',image:'assets/test.png',gallery:[]},
+ {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,status:'inactive',image:'',gallery:[]}
+]; renderProducts();`,context);
 assert.equal(get('summary-total').textContent,2);
 assert.equal(get('summary-active').textContent,1);
-assert.equal(get('summary-low-stock').textContent,1);
+assert.equal(get('summary-inactive').textContent,1);
 assert.match(get('products-body').innerHTML,/Ar &lt;teste&gt;/);
 assert.match(get('products-body').innerHTML,/src="\/assets\/test.png"/);
 assert.match(get('products-body').innerHTML,/123,45/);
-assert.match(get('stock-history-body').innerHTML,/Nenhuma movimentação/);
 get('product-status-filter').value='inactive';
 vm.runInContext('renderProducts()',context);
 assert.equal(get('products-pagination').textContent,'1 de 2 produtos');
 get('product-search').value='nonexistent';
 vm.runInContext('renderProducts()',context);
 assert.match(get('products-body').innerHTML,/Nenhum produto encontrado/);
-vm.runInContext('DB.products = []; renderStock()',context);
-assert.equal(get('btn-stock-entry').disabled,true);
-assert.match(get('stock-body').innerHTML,/Nenhum produto/);
 (async()=>{
+ get('prod-gallery').value='assets/foto-2.webp\nassets/foto-2.webp\nassets/foto-3.webp';
+ const gallery=await vm.runInContext("buildProductGallery('assets/principal.webp')",context);
+ assert.equal(JSON.stringify(gallery),JSON.stringify(['assets/principal.webp','assets/foto-2.webp','assets/foto-3.webp']));
+ context.window.location={hostname:'127.0.0.1',port:'8000'};
+ context.fetch=async()=>({ok:true,status:200,headers:{get:()=> 'text/html; charset=utf-8'}});
+ await assert.rejects(vm.runInContext("apiFetch('/api/admin/products')",context),/prévia não está conectada à API/);
+ context.window.location={hostname:'localhost',port:'3000'};
  context.fetch=async()=>{throw Error('offline');};
  await vm.runInContext('refreshCatalog()',context);
  assert.equal(get('retry-products').hidden,false);
@@ -53,6 +56,8 @@ assert.match(get('stock-body').innerHTML,/Nenhum produto/);
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(new Set(ids).size,ids.length,'Duplicate HTML ids');
  assert.ok(!html.includes('page-orders'));
+ assert.ok(!/estoque|stock/i.test(html),'Admin HTML should not expose stock controls');
+ assert.ok(ids.includes('prod-gallery-files') && ids.includes('prod-gallery'));
  for(const match of html.matchAll(/<label for="([^"]+)"/g)) assert.ok(ids.includes(match[1]));
- console.log('PASS: summary, filters, escaping, images, currency, empty stock/history, API failure/retry, duplicate submit prevention, HTML ids and labels.');
+ console.log('PASS: summary, filters, escaping, images, currency, gallery, stock removal, API failure/retry, duplicate submit prevention, HTML ids and labels.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
