@@ -84,7 +84,7 @@
       <div class="catalog-summary" aria-label="Resumo do catálogo">
         <div><span>Produtos cadastrados</span><strong id="summary-total">—</strong><small>Todo o seu catálogo</small></div>
         <div><span>Ativos no site</span><strong id="summary-active">—</strong><small>Visíveis para os clientes</small></div>
-        <div><span>Sem link de afiliado</span><strong id="summary-pending">—</strong><small>Revise antes de divulgar</small></div>
+        <div><span>Estoque em atenção</span><strong id="summary-low-stock">—</strong><small>Baixo ou esgotado</small></div>
         <div><span>Produtos inativos</span><strong id="summary-inactive">—</strong><small>Fora da vitrine</small></div>
       </div>
       <div id="catalog-feedback" class="catalog-feedback" role="status" aria-live="polite"><span>Carregando seu catálogo…</span><button id="retry-products" type="button" hidden>Tentar novamente</button></div>
@@ -97,7 +97,7 @@
         <div class="page-header">
           <div>
             <h2>Produtos</h2>
-            <p class="page-sub">Gerencie imagens, preços e links do Mercado Livre.</p>
+            <p class="page-sub">Gerencie imagens, preços, publicação e estoque.</p>
           </div>
           <button class="btn-primary-admin" id="btn-add-product">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -118,7 +118,7 @@
             <option value="portatil">Portátil</option>
             <option value="bebidas">Clima Bebidas</option>
           </select>
-          <select class="filter-select" id="product-status-filter" aria-label="Filtrar publicação"><option value="all">Todos os produtos</option><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="missing-link">Sem link de afiliado</option></select><select class="filter-select" id="product-sort" aria-label="Ordenar produtos">
+          <select class="filter-select" id="product-status-filter" aria-label="Filtrar publicação"><option value="all">Todos os produtos</option><option value="active">Ativos</option><option value="inactive">Inativos</option></select><select class="filter-select" id="product-sort" aria-label="Ordenar produtos">
             <option value="name">Nome A-Z</option>
             <option value="price-asc">Menor Preço</option>
             <option value="price-desc">Maior Preço</option>
@@ -149,7 +149,7 @@
         <div class="page-header">
           <div>
             <h2>Controle de Estoque</h2>
-            <p class="page-sub">Controle interno de quantidades. Não sincroniza com o estoque do Mercado Livre.</p>
+            <p class="page-sub">Acompanhe e ajuste as quantidades disponíveis.</p>
           </div>
           <button class="btn-primary-admin" id="btn-stock-entry">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -260,21 +260,6 @@
     <div class="modal-body">
       <form id="product-form">
         <div class="product-form-sections">
-        <fieldset class="product-section mercado-livre-import"><legend><span class="product-section-number" aria-hidden="true">ML</span>Importar do Mercado Livre</legend>
-          <p class="product-section-description">Cole o ID MLB, o link do anúncio ou o link de afiliado. O token permanece protegido no servidor.</p>
-          <div class="mercado-livre-connection" id="mercado-livre-connection">
-            <div><strong id="mercado-livre-connection-title">Verificando conexão…</strong><small id="mercado-livre-connection-status">A conta conectada permite consultar a API oficial.</small></div>
-            <button type="button" class="btn-action" id="mercado-livre-connect-button">Conectar Mercado Livre</button>
-          </div>
-          <div class="product-fields mercado-livre-import-fields"><div class="form-group">
-            <label for="prod-ml-reference">Link ou ID do anúncio</label>
-            <input type="text" id="prod-ml-reference" placeholder="MLB1234567890 ou https://meli.la/..." class="settings-input" aria-describedby="prod-ml-reference-help" />
-            <small class="form-help" id="prod-ml-reference-help">Para preservar sua comissão, cole o link gerado no Portal de Afiliados. Importamos os dados e mantemos esse mesmo link no botão de compra.</small>
-          </div><div class="form-group mercado-livre-import-action">
-            <button type="button" class="btn-primary-admin" id="prod-ml-import-button">Buscar dados do anúncio</button>
-            <small class="form-help mercado-livre-import-status" id="prod-ml-import-status" role="status" aria-live="polite">O estoque exato não é fornecido para afiliados.</small>
-          </div></div>
-        </fieldset>
         <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">01</span>Identificação do produto</legend>
           <p class="product-section-description">Dados que ajudam o cliente a encontrar o produto.</p>
           <div class="product-fields"><div class="form-group">
@@ -316,11 +301,7 @@
               <option value="inactive">Inativo</option>
             </select>
           <small class="form-help" id="prod-status-help">Ativo: aparece no catálogo. Inativo: fica oculto do site.</small></div>
-<div class="form-group">
-          <label for="prod-affiliate-url">Link de afiliado (opcional)</label>
-          <input type="url" id="prod-affiliate-url" placeholder="https://mercadolivre.com.br/..." class="settings-input" aria-describedby="prod-affiliate-url-help" />
-
-        <small class="form-help" id="prod-affiliate-url-help">Destino do botão “Ver no Mercado Livre”. Confira o link antes de publicar.</small></div></div>
+        </div>
         </fieldset>
         <fieldset class="product-section"><legend><span class="product-section-number" aria-hidden="true">03</span>Imagem do produto</legend>
           <p class="product-section-description">Envie um arquivo ou informe o endereço da imagem.</p>

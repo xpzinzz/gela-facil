@@ -5,14 +5,7 @@ const session = require('express-session');
 const helmet = require('helmet');
 const bcrypt = require('bcryptjs');
 const multer = require('multer');
-const { initDb, adminRepo, mercadoLivreTokenRepo, productRepo, uploadProductImage } = require('./src/db');
-const { MercadoLivreError, importMercadoLivreProduct } = require('./src/mercado-livre');
-const {
-  createAuthorizationUrl,
-  createOAuthState,
-  exchangeAuthorizationCode,
-  getValidAccessToken,
-} = require('./src/mercado-livre-oauth');
+const { initDb, adminRepo, productRepo, uploadProductImage } = require('./src/db');
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -110,21 +103,6 @@ function isSafeImageReference(value) {
   }
 }
 
-function isMercadoLivreAffiliateUrl(value) {
-  if (!value) return true;
-  try {
-    const url = new URL(value);
-    const host = url.hostname.toLowerCase();
-    return url.protocol === 'https:' && (
-      host === 'meli.la' ||
-      host === 'mercadolivre.com.br' ||
-      host.endsWith('.mercadolivre.com.br')
-    );
-  } catch {
-    return false;
-  }
-}
-
 function parseProductId(value) {
   const id = Number(value);
   return Number.isInteger(id) && id > 0 ? id : null;
@@ -167,17 +145,13 @@ function normalizeProductPayload(body) {
     minStock: Number.parseInt(body.minStock || 3, 10),
     sku: String(body.sku || '').trim(),
     image: String(body.image || '').trim(),
-    affiliateUrl: String(body.affiliateUrl || '').trim(),
     specs: String(body.specs || '').trim(),
-    mercadoLivreId: String(body.mercadoLivreId || '').trim().toUpperCase(),
     description: String(body.description || '').trim(),
     gallery,
     attributes,
     rating: Number(body.rating || 0),
     ratingCount: Number.parseInt(body.ratingCount || 0, 10),
     reviews,
-    sourceStatus: String(body.sourceStatus || '').trim(),
-    sourceSyncedAt: body.sourceSyncedAt ? String(body.sourceSyncedAt) : null,
   };
 }
 
@@ -196,9 +170,6 @@ function validateProduct(product) {
   if (!Number.isInteger(product.minStock) || product.minStock < 0) return 'Estoque minimo invalido.';
   if (!isSafeImageReference(product.image)) return 'URL da imagem invalida.';
   if (product.gallery.some(image => !isSafeImageReference(image))) return 'Uma imagem da galeria e invalida.';
-  if (!isMercadoLivreAffiliateUrl(product.affiliateUrl)) return 'Link de afiliado do Mercado Livre invalido.';
-  if (product.mercadoLivreId && !/^MLB\d{6,}$/.test(product.mercadoLivreId)) return 'ID do Mercado Livre invalido.';
-  if (product.mercadoLivreId && product.status === 'active' && !product.affiliateUrl) return 'Informe o link de afiliado antes de publicar este produto.';
   if (product.description.length > 10000) return 'Descricao excede o limite de 10000 caracteres.';
   if (!Number.isFinite(product.rating) || product.rating < 0 || product.rating > 5) return 'Avaliacao invalida.';
   if (!Number.isInteger(product.ratingCount) || product.ratingCount < 0) return 'Quantidade de avaliacoes invalida.';
@@ -241,65 +212,6 @@ app.get('/api/admin/me', requireAdmin, (_req, res) => {
 app.post('/api/admin/upload', requireAdmin, upload.single('image'), asyncHandler(async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'Imagem obrigatoria.' });
   res.status(201).json(await uploadProductImage(req.file));
-}));
-
-app.get('/api/admin/mercado-livre/oauth/status', requireAdmin, asyncHandler(async (_req, res) => {
-  const configured = ['MERCADO_LIVRE_CLIENT_ID', 'MERCADO_LIVRE_CLIENT_SECRET', 'MERCADO_LIVRE_REDIRECT_URI']
-    .every(name => String(process.env[name] || '').trim());
-  try {
-    const tokens = await mercadoLivreTokenRepo.get();
-    return res.json({
-      configured,
-      connected: Boolean(tokens),
-      expiresAt: tokens?.expiresAt || null,
-      userId: tokens?.userId || null,
-    });
-  } catch (error) {
-    return res.status(503).json({ error: error.message, configured, connected: false });
-  }
-}));
-
-app.get('/api/admin/mercado-livre/oauth/start', requireAdmin, (req, res) => {
-  const state = createOAuthState();
-  req.session.mercadoLivreOAuth = {
-    state,
-    expiresAt: Date.now() + 10 * 60 * 1000,
-  };
-  res.json({ authorizationUrl: createAuthorizationUrl(state) });
-});
-
-app.get('/oauth/mercado-livre/callback', async (req, res) => {
-  const pending = req.session?.mercadoLivreOAuth;
-  if (req.session) delete req.session.mercadoLivreOAuth;
-  const receivedState = String(req.query.state || '');
-  const expectedState = String(pending?.state || '');
-  const receivedStateBuffer = Buffer.from(receivedState);
-  const expectedStateBuffer = Buffer.from(expectedState);
-  const stateMatches = receivedStateBuffer.length === expectedStateBuffer.length && receivedStateBuffer.length > 0 &&
-    require('crypto').timingSafeEqual(receivedStateBuffer, expectedStateBuffer);
-
-  if (!req.session?.admin || !pending || pending.expiresAt < Date.now() || !stateMatches) {
-    return res.redirect('/admin/?ml_oauth=invalid_state');
-  }
-  if (req.query.error) return res.redirect('/admin/?ml_oauth=denied');
-
-  const code = String(req.query.code || '').trim();
-  if (!code || code.length > 2048) return res.redirect('/admin/?ml_oauth=missing_code');
-
-  try {
-    await exchangeAuthorizationCode(code, mercadoLivreTokenRepo);
-    return res.redirect('/admin/?ml_oauth=connected');
-  } catch (error) {
-    console.error('Falha no OAuth do Mercado Livre:', error.code || error.message);
-    return res.redirect('/admin/?ml_oauth=failed');
-  }
-});
-
-app.post('/api/admin/mercado-livre/import', requireAdmin, asyncHandler(async (req, res) => {
-  const reference = String(req.body?.reference || '').trim();
-  if (!reference || reference.length > 2048) return res.status(400).json({ error: 'Informe um link ou ID valido.' });
-  const accessToken = await getValidAccessToken(mercadoLivreTokenRepo);
-  res.json(await importMercadoLivreProduct(reference, { accessToken }));
 }));
 
 app.get('/api/products', asyncHandler(async (_req, res) => {
@@ -361,17 +273,6 @@ app.put('/api/admin/products/:id', requireAdmin, asyncHandler(async (req, res) =
   res.json(updated);
 }));
 
-app.post('/api/admin/products/:id/sync-mercado-livre', requireAdmin, asyncHandler(async (req, res) => {
-  const id = parseProductId(req.params.id);
-  if (!id) return res.status(400).json({ error: 'ID invalido.' });
-  const product = await productRepo.getAdmin(id);
-  if (!product) return res.status(404).json({ error: 'Produto nao encontrado.' });
-  const reference = product.affiliateUrl || product.mercadoLivreId;
-  if (!reference) return res.status(400).json({ error: 'Cadastre um link ou ID do Mercado Livre primeiro.' });
-  const accessToken = await getValidAccessToken(mercadoLivreTokenRepo);
-  res.json(await productRepo.updateMercadoLivreData(id, await importMercadoLivreProduct(reference, { accessToken })));
-}));
-
 app.patch('/api/admin/products/:id/stock', requireAdmin, asyncHandler(async (req, res) => {
   const id = parseProductId(req.params.id);
   if (!id) return res.status(400).json({ error: 'ID invalido.' });
@@ -411,8 +312,7 @@ app.get('/admin/refresh.css', (_req, res) => {
 app.get('/admin/admin.js', requireAdmin, (_req, res) => {
   res.sendFile(path.join(rootDir, 'admin', 'admin.js'));
 });
-app.get('/admin', (_req, res) => res.redirect(301, '/admin/'));
-app.get(['/admin/', '/admin/index.html'], (req, res) => {
+app.get(['/admin', '/admin/', '/admin/index.html'], (req, res) => {
   if (!req.session || req.session.admin !== true) return res.redirect('/admin/login.html');
   return res.sendFile(path.join(rootDir, 'admin', 'index.html'));
 });
@@ -428,9 +328,6 @@ app.get(['/', '/index.html'], (_req, res) => res.sendFile(path.join(rootDir, 'in
 
 app.use((err, _req, res, _next) => {
   console.error(err);
-  if (err instanceof MercadoLivreError) {
-    return res.status(err.statusCode).json({ error: err.message, code: err.code });
-  }
   res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 

@@ -3314,6 +3314,39 @@ footer {
   background: transparent;
   transition: var(--transition);
   padding: 16px;
+  overflow: hidden;
+}
+
+.product-icon-container .product-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-icon-container .product-image {
+  transform: scale(1.035);
+}
+
+.btn-cart-add svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s ease;
+}
+
+.btn-cart-add:hover svg,
+.btn-cart-add:focus-visible svg {
+  transform: translate(1px, -1px);
 }
 
 .modal-product-icon-container {
@@ -4955,25 +4988,6 @@ footer {
     flex-direction: column;
   }
 }
-/* Affiliate storefront disclosure */
-.affiliate-disclosure {
-  max-width: 1180px;
-  margin: 28px auto;
-  padding: 20px 24px;
-  border: 1px solid rgba(255, 204, 0, .55);
-  border-radius: 16px;
-  background: #fff9dc;
-  color: #173042;
-  display: grid;
-  gap: 7px;
-  line-height: 1.45;
-}
-.affiliate-disclosure strong { font-size: 1.05rem; }
-.affiliate-disclosure span { display: block; }
-@media (max-width: 700px) {
-  .affiliate-disclosure { margin: 18px 16px; padding: 17px; }
-}
-
 /* Personalized service banners */
 .bento-section .bento-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5176,10 +5190,9 @@ html { scroll-padding-top: 110px; }
 :where(.nav-container, .hero-content, .products-header, .product-info,
   .bento-card-content, .footer-col, .footer-brand, .stat-text) { min-width: 0; }
 :where(.btn-primary, .btn-ghost, .bento-btn, .bento-btn-sm) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
-.affiliate-disclosure { width: calc(100% - 32px); }
 .clima-bebidas-header .header-left { min-width: 0; }
 .cart-drawer { width: min(420px, 100%); max-height: 100dvh; }
-:where(.footer-contact, .affiliate-disclosure, .product-name) { overflow-wrap: anywhere; }
+:where(.footer-contact, .product-name) { overflow-wrap: anywhere; }
 @media (max-width: 1024px) {
   .hero-carousel { height: auto; min-height: 100svh; }
   .carousel-track { display: grid; height: auto; min-height: 100svh; }
@@ -5222,7 +5235,7 @@ html { scroll-padding-top: 110px; }
   .qty-btn { width: 44px; height: 44px; }
 }
 
-/* Affiliate storefront: retired controls stay hidden before JavaScript loads. */
+/* Retired checkout controls stay hidden before JavaScript loads. */
 #cart-float-btn, #cart-drawer, #cart-drawer-overlay, #modal-cart-add-btn,
 .rating-summary, .product-rating { display: none !important; }
 .product-card:focus-visible, .destaque-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }

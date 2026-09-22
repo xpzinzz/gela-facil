@@ -20,16 +20,16 @@ const supabase = createClient(supabaseUrl, serviceRoleKey, {
 });
 
 const seedProducts = [
-  { brand: 'Samsung', name: 'WindFree Inverter 12.000 BTU', category: 'inverter', price: 2399, oldPrice: 2899, stock: 8, minStock: 5, sku: 'SAM-WF-12K', specs: 'Inverter, 12.000 BTU, A+++', status: 'active', image: 'assets/produtos/samsung_windfree.webp', affiliateUrl: '' },
-  { brand: 'LG', name: 'Dual Inverter Voice 9.000 BTU', category: 'inverter', price: 1849, oldPrice: 2199, stock: 3, minStock: 5, sku: 'LG-DI-9K', specs: 'Inverter, 9.000 BTU, Wi-Fi', status: 'active', image: 'assets/produtos/lg_dual_inverter.webp', affiliateUrl: '' },
-  { brand: 'Midea', name: 'Xtreme Save Inverter 18.000 BTU', category: 'inverter', price: 2899, oldPrice: 3499, stock: 12, minStock: 5, sku: 'MID-XS-18K', specs: 'Inverter, 18.000 BTU, A++', status: 'active', image: 'assets/produtos/midea_xtreme_save.webp', affiliateUrl: '' },
-  { brand: 'Elgin', name: 'Eco Inverter Plus 24.000 BTU', category: 'inverter', price: 3699, oldPrice: 4299, stock: 5, minStock: 4, sku: 'ELG-EI-24K', specs: 'Inverter, 24.000 BTU, Quente/Frio', status: 'active', image: 'assets/produtos/elgin_eco_inverter.webp', affiliateUrl: '' },
-  { brand: 'Springer', name: 'Silentia 7.500 BTU Split', category: 'split', price: 1299, oldPrice: 1699, stock: 0, minStock: 4, sku: 'SPR-SL-7.5K', specs: 'Split, 7.500 BTU, Silencioso', status: 'active', image: 'assets/produtos/springer_silentia.webp', affiliateUrl: '' },
-  { brand: 'Philco', name: 'Portable Portatil 12.000 BTU', category: 'portatil', price: 1749, oldPrice: 2099, stock: 2, minStock: 3, sku: 'PHI-PB-12K', specs: 'Portatil, 12.000 BTU, Sem obra', status: 'active', image: 'assets/produtos/philco_portable.webp', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Frigobar 122 Litros EM120', category: 'bebidas', price: 1209, oldPrice: 1809, stock: 7, minStock: 3, sku: 'ELX-FB-122L', specs: '122 Litros, Branco, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_frigobar.webp', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Cervejeira Home Bar EB100', category: 'bebidas', price: 2229, oldPrice: 2729, stock: 4, minStock: 3, sku: 'ELX-CB-100L', specs: '100 Litros, Frost Free, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_cervejeira.webp', affiliateUrl: '' },
-  { brand: 'Venax', name: 'Cervejeira Blue Light 102L', category: 'bebidas', price: 2529, oldPrice: 3423, stock: 1, minStock: 3, sku: 'VNX-BL-102L', specs: '102 Litros, Blue Light, 220V', status: 'inactive', image: 'assets/clima-bebidas/venax_cervejeira.webp', affiliateUrl: '' },
-  { brand: 'Electrolux', name: 'Cervejeira com Torre de Chopp EB10C', category: 'bebidas', price: 2799, oldPrice: 3693, stock: 0, minStock: 2, sku: 'ELX-TC-100L', specs: 'Torre de Chopp, 100 Litros, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_chopp.webp', affiliateUrl: '' },
+  { brand: 'Samsung', name: 'WindFree Inverter 12.000 BTU', category: 'inverter', price: 2399, oldPrice: 2899, stock: 8, minStock: 5, sku: 'SAM-WF-12K', specs: 'Inverter, 12.000 BTU, A+++', status: 'active', image: 'assets/produtos/samsung_windfree.webp' },
+  { brand: 'LG', name: 'Dual Inverter Voice 9.000 BTU', category: 'inverter', price: 1849, oldPrice: 2199, stock: 3, minStock: 5, sku: 'LG-DI-9K', specs: 'Inverter, 9.000 BTU, Wi-Fi', status: 'active', image: 'assets/produtos/lg_dual_inverter.webp' },
+  { brand: 'Midea', name: 'Xtreme Save Inverter 18.000 BTU', category: 'inverter', price: 2899, oldPrice: 3499, stock: 12, minStock: 5, sku: 'MID-XS-18K', specs: 'Inverter, 18.000 BTU, A++', status: 'active', image: 'assets/produtos/midea_xtreme_save.webp' },
+  { brand: 'Elgin', name: 'Eco Inverter Plus 24.000 BTU', category: 'inverter', price: 3699, oldPrice: 4299, stock: 5, minStock: 4, sku: 'ELG-EI-24K', specs: 'Inverter, 24.000 BTU, Quente/Frio', status: 'active', image: 'assets/produtos/elgin_eco_inverter.webp' },
+  { brand: 'Springer', name: 'Silentia 7.500 BTU Split', category: 'split', price: 1299, oldPrice: 1699, stock: 0, minStock: 4, sku: 'SPR-SL-7.5K', specs: 'Split, 7.500 BTU, Silencioso', status: 'active', image: 'assets/produtos/springer_silentia.webp' },
+  { brand: 'Philco', name: 'Portable Portatil 12.000 BTU', category: 'portatil', price: 1749, oldPrice: 2099, stock: 2, minStock: 3, sku: 'PHI-PB-12K', specs: 'Portatil, 12.000 BTU, Sem obra', status: 'active', image: 'assets/produtos/philco_portable.webp' },
+  { brand: 'Electrolux', name: 'Frigobar 122 Litros EM120', category: 'bebidas', price: 1209, oldPrice: 1809, stock: 7, minStock: 3, sku: 'ELX-FB-122L', specs: '122 Litros, Branco, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_frigobar.webp' },
+  { brand: 'Electrolux', name: 'Cervejeira Home Bar EB100', category: 'bebidas', price: 2229, oldPrice: 2729, stock: 4, minStock: 3, sku: 'ELX-CB-100L', specs: '100 Litros, Frost Free, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_cervejeira.webp' },
+  { brand: 'Venax', name: 'Cervejeira Blue Light 102L', category: 'bebidas', price: 2529, oldPrice: 3423, stock: 1, minStock: 3, sku: 'VNX-BL-102L', specs: '102 Litros, Blue Light, 220V', status: 'inactive', image: 'assets/clima-bebidas/venax_cervejeira.webp' },
+  { brand: 'Electrolux', name: 'Cervejeira com Torre de Chopp EB10C', category: 'bebidas', price: 2799, oldPrice: 3693, stock: 0, minStock: 2, sku: 'ELX-TC-100L', specs: 'Torre de Chopp, 100 Litros, 110V', status: 'active', image: 'assets/clima-bebidas/electrolux_chopp.webp' },
 ];
 
 const localWebpReplacements = new Map([
@@ -65,30 +65,23 @@ function toDbProduct(product) {
     specs: product.specs,
     status: product.status,
     image: product.image,
-    affiliate_url: product.affiliateUrl || null,
-    mercado_livre_id: product.mercadoLivreId || null,
     description: product.description || null,
     gallery: product.gallery || [],
     source_attributes: product.attributes || {},
     rating: product.rating || 0,
     rating_count: product.ratingCount || 0,
     reviews: product.reviews || [],
-    source_status: product.sourceStatus || null,
-    source_synced_at: product.sourceSyncedAt || null,
   };
 }
 
-function toLegacyDbProduct(product) {
+function toBasicDbProduct(product) {
   const data = toDbProduct(product);
-  delete data.mercado_livre_id;
   delete data.description;
   delete data.gallery;
   delete data.source_attributes;
   delete data.rating;
   delete data.rating_count;
   delete data.reviews;
-  delete data.source_status;
-  delete data.source_synced_at;
   return data;
 }
 
@@ -106,16 +99,12 @@ function fromDbProduct(row) {
     specs: row.specs,
     status: row.status,
     image: normalizeImageReference(row.image),
-    affiliateUrl: row.affiliate_url || '',
-    mercadoLivreId: row.mercado_livre_id || '',
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
     attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),
     reviews: Array.isArray(row.reviews) ? row.reviews : [],
-    sourceStatus: row.source_status || '',
-    sourceSyncedAt: row.source_synced_at || null,
   };
 }
 
@@ -129,28 +118,20 @@ function fromPublicDbProduct(row) {
     oldPrice: row.old_price === null ? null : Number(row.old_price),
     specs: row.specs,
     image: normalizeImageReference(row.image),
-    affiliateUrl: row.affiliate_url || '',
-    mercadoLivreId: row.mercado_livre_id || '',
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
     attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),
     reviews: Array.isArray(row.reviews) ? row.reviews : [],
-    sourceStatus: row.source_status || '',
-    sourceSyncedAt: row.source_synced_at || null,
   };
 }
 
-const publicProductColumns = 'id, brand, name, category, price, old_price, specs, image, affiliate_url, mercado_livre_id, description, gallery, source_attributes, rating, rating_count, reviews, source_status, source_synced_at';
-const publicProductColumnsWithoutAffiliate = 'id, brand, name, category, price, old_price, specs, image';
+const publicProductColumns = 'id, brand, name, category, price, old_price, specs, image, description, gallery, source_attributes, rating, rating_count, reviews';
+const basicPublicProductColumns = 'id, brand, name, category, price, old_price, specs, image';
 
 function isMissingCatalogColumn(error) {
-  return ['42703', 'PGRST204'].includes(error?.code) && /(affiliate_url|mercado_livre_id|source_attributes|source_status|gallery|rating_count)/i.test(error.message || '');
-}
-
-function migrationRequiredError() {
-  return new Error('Aplique supabase/migrations/202609200003_mercado_livre_catalog.sql antes de salvar produtos importados.');
+  return ['42703', 'PGRST204'].includes(error?.code) && /(description|source_attributes|gallery|rating_count|reviews)/i.test(error.message || '');
 }
 
 function throwIfError(error) {
@@ -224,52 +205,6 @@ const adminRepo = {
   },
 };
 
-function mercadoLivreTokenMigrationError() {
-  return new Error('Aplique supabase/migrations/202609210001_mercado_livre_oauth.sql antes de conectar o Mercado Livre.');
-}
-
-function isMissingMercadoLivreTokenTable(error) {
-  return ['42P01', 'PGRST205'].includes(error?.code) || /mercado_livre_oauth_tokens/i.test(error?.message || '');
-}
-
-const mercadoLivreTokenRepo = {
-  async get() {
-    const { data, error } = await supabase
-      .from('mercado_livre_oauth_tokens')
-      .select('access_token, refresh_token, token_type, expires_at, user_id, scope')
-      .eq('integration', 'catalog')
-      .maybeSingle();
-    if (isMissingMercadoLivreTokenTable(error)) throw mercadoLivreTokenMigrationError();
-    throwIfError(error);
-    if (!data) return null;
-    return {
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
-      tokenType: data.token_type,
-      expiresAt: data.expires_at,
-      userId: data.user_id,
-      scope: data.scope || '',
-    };
-  },
-
-  async save(tokens) {
-    const { error } = await supabase
-      .from('mercado_livre_oauth_tokens')
-      .upsert({
-        integration: 'catalog',
-        access_token: tokens.accessToken,
-        refresh_token: tokens.refreshToken,
-        token_type: tokens.tokenType || 'Bearer',
-        expires_at: tokens.expiresAt,
-        user_id: tokens.userId,
-        scope: tokens.scope || '',
-        updated_at: new Date().toISOString(),
-      }, { onConflict: 'integration' });
-    if (isMissingMercadoLivreTokenTable(error)) throw mercadoLivreTokenMigrationError();
-    throwIfError(error);
-  },
-};
-
 const productRepo = {
   async listAdmin() {
     const { data, error } = await supabase
@@ -288,7 +223,7 @@ const productRepo = {
     if (isMissingCatalogColumn(error)) {
       ({ data, error } = await supabase
         .from('products')
-        .select(publicProductColumnsWithoutAffiliate)
+        .select(basicPublicProductColumns)
         .eq('status', 'active')
         .order('id', { ascending: false }));
     }
@@ -305,7 +240,7 @@ const productRepo = {
     if (isMissingCatalogColumn(error)) {
       ({ data, error } = await supabase
         .from('products')
-        .select(publicProductColumnsWithoutAffiliate)
+        .select(basicPublicProductColumns)
         .eq('id', id)
         .eq('status', 'active')
         .maybeSingle());
@@ -320,10 +255,9 @@ const productRepo = {
       .select('*')
       .single();
     if (isMissingCatalogColumn(error)) {
-      if (product.mercadoLivreId) throw migrationRequiredError();
       ({ data, error } = await supabase
         .from('products')
-        .insert(toLegacyDbProduct(product))
+        .insert(toBasicDbProduct(product))
         .select('*')
         .single());
     }
@@ -338,10 +272,9 @@ const productRepo = {
       .select('*')
       .maybeSingle();
     if (isMissingCatalogColumn(error)) {
-      if (product.mercadoLivreId) throw migrationRequiredError();
       ({ data, error } = await supabase
         .from('products')
-        .update(toLegacyDbProduct(product))
+        .update(toBasicDbProduct(product))
         .eq('id', id)
         .select('*')
         .maybeSingle());
@@ -355,42 +288,6 @@ const productRepo = {
       .select('*')
       .eq('id', id)
       .maybeSingle();
-    throwIfError(error);
-    return data ? fromDbProduct(data) : null;
-  },
-  async updateMercadoLivreData(id, snapshot) {
-    const update = toDbProduct({
-      ...snapshot,
-      stock: 0,
-      minStock: 0,
-      sku: '',
-      status: 'active',
-    });
-    const allowedFields = {
-      name: update.name,
-      brand: update.brand,
-      category: update.category,
-      price: update.price,
-      old_price: update.old_price,
-      specs: update.specs,
-      image: update.image,
-      mercado_livre_id: update.mercado_livre_id,
-      description: update.description,
-      gallery: update.gallery,
-      source_attributes: update.source_attributes,
-      rating: update.rating,
-      rating_count: update.rating_count,
-      reviews: update.reviews,
-      source_status: update.source_status,
-      source_synced_at: update.source_synced_at,
-    };
-    const { data, error } = await supabase
-      .from('products')
-      .update(allowedFields)
-      .eq('id', id)
-      .select('*')
-      .maybeSingle();
-    if (isMissingCatalogColumn(error)) throw migrationRequiredError();
     throwIfError(error);
     return data ? fromDbProduct(data) : null;
   },
@@ -457,4 +354,4 @@ async function uploadProductImage(file) {
   };
 }
 
-module.exports = { initDb, adminRepo, mercadoLivreTokenRepo, productRepo, uploadProductImage };
+module.exports = { initDb, adminRepo, productRepo, uploadProductImage };

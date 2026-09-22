@@ -13,17 +13,17 @@ vm.runInContext(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'),'utf
 for (const id of ['product-category-filter','product-status-filter','stock-status-filter']) get(id).value='all';
 get('product-sort').value='name';
 vm.runInContext(`DB.products = [
- {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,stock:0,minStock:0,status:'active',affiliateUrl:'',image:'assets/test.png'},
- {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,stock:4,minStock:2,status:'inactive',affiliateUrl:'https://meli.la/test',image:''}
+ {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,stock:0,minStock:0,status:'active',image:'assets/test.png'},
+ {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,stock:4,minStock:2,status:'inactive',image:''}
 ]; renderProducts(); renderStock();`,context);
 assert.equal(get('summary-total').textContent,2);
 assert.equal(get('summary-active').textContent,1);
-assert.equal(get('summary-pending').textContent,1);
+assert.equal(get('summary-low-stock').textContent,1);
 assert.match(get('products-body').innerHTML,/Ar &lt;teste&gt;/);
 assert.match(get('products-body').innerHTML,/src="\/assets\/test.png"/);
 assert.match(get('products-body').innerHTML,/123,45/);
 assert.match(get('stock-history-body').innerHTML,/Nenhuma movimentação/);
-get('product-status-filter').value='missing-link';
+get('product-status-filter').value='inactive';
 vm.runInContext('renderProducts()',context);
 assert.equal(get('products-pagination').textContent,'1 de 2 produtos');
 get('product-search').value='nonexistent';

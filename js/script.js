@@ -199,20 +199,6 @@ function escapeHtml(value) {
   }[char]));
 }
 
-function isValidAffiliateUrl(value) {
-  try {
-    const url = new URL(value);
-    const host = url.hostname.toLowerCase();
-    return url.protocol === 'https:' && (
-      host === 'meli.la' ||
-      host === 'mercadolivre.com.br' ||
-      host.endsWith('.mercadolivre.com.br')
-    );
-  } catch {
-    return false;
-  }
-}
-
 function productSpecsToTags(specs) {
   return String(specs || '')
     .split(',')
@@ -254,14 +240,12 @@ function renderHomeProductCard(product, index) {
     category: product.category,
     price: product.price,
     image,
-    affiliateUrl: product.affiliateUrl || '',
     rating: Number(product.rating || 0),
     ratingCount: Number(product.ratingCount || 0),
     gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [image],
     desc: product.description || product.specs || '',
     specs: product.attributes && Object.keys(product.attributes).length ? product.attributes : Object.fromEntries(specTags.map((tag, tagIndex) => [`Info ${tagIndex + 1}`, tag])),
-    reviews: Array.isArray(product.reviews) ? product.reviews : [],
-    sourceStatus: product.sourceStatus || ''
+    reviews: Array.isArray(product.reviews) ? product.reviews : []
   };
 
   return `
@@ -280,7 +264,9 @@ function renderHomeProductCard(product, index) {
         <div class="product-specs">${specsHtml}</div>
         <div class="product-footer">
           <div class="product-price-wrap">${oldPriceHtml}<span class="product-price">${formatPrice(product.price)}</span></div>
-          <button class="btn-cart-add" aria-label="Ver produto e consultar link do Mercado Livre">↗</button>
+          <button class="btn-cart-add" aria-label="Ver detalhes de ${safeName}">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17 17 7"></path><path d="M7 7h10v10"></path></svg>
+          </button>
         </div>
       </div>
     </div>`;
@@ -476,72 +462,23 @@ window.closeCartDrawer = function() {
   document.body.style.overflow = '';
 };
 
-// Affiliate storefront: product sales happen on Mercado Livre, never on this site.
-window.openMercadoLivreProduct = function(productId, directAffiliateUrl = '') {
-  const product = productDetailsDb[String(productId)];
-  const affiliateUrl = directAffiliateUrl || (product && product.affiliateUrl);
-  if (isValidAffiliateUrl(affiliateUrl)) {
-    window.open(affiliateUrl, '_blank', 'noopener,noreferrer');
-    return;
-  }
-  showToast('Link deste produto no Mercado Livre em breve.');
-};
-
 document.addEventListener('DOMContentLoaded', async () => {
-  // The old local checkout is intentionally disabled in affiliate mode.
+  // A vitrine atual direciona o contato pelo catálogo e pelo WhatsApp.
   document.querySelectorAll('#cart-float-btn, #cart-drawer, #cart-drawer-overlay').forEach(el => {
     el.style.display = 'none';
   });
-
-  const main = document.querySelector('main') || document.querySelector('#produtos');
-  if (main && !document.querySelector('.affiliate-disclosure')) {
-    const notice = document.createElement('aside');
-    notice.className = 'affiliate-disclosure';
-    notice.setAttribute('aria-label', 'Como funcionam as compras e os serviços');
-    notice.innerHTML = `
-      <strong>Compra segura pelo Mercado Livre</strong>
-      <span>Pagamento, entrega, troca e garantia do produto são tratados diretamente pelo Mercado Livre e pelo vendedor. A Gela Fácil apenas indica os produtos como afiliada.</span>
-      <span><b>Serviço separado:</b> instalação e manutenção somente de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal. Não atendemos outros refrigeradores.</span>`;
-    if (main.classList.contains('product-detail-container')) {
-      // Na página de detalhes, o aviso precisa ficar dentro da área com
-      // espaçamento próprio, abaixo da barra fixa de navegação.
-      main.classList.add('has-affiliate-disclosure');
-      main.prepend(notice);
-    } else {
-      main.parentNode.insertBefore(notice, main);
-    }
-  }
-
-  const firstHeroTitle = document.querySelector('.carousel-slide:first-child h1');
-  const firstHeroText = document.querySelector('.carousel-slide:first-child .hero-sub');
-  if (firstHeroTitle) firstHeroTitle.innerHTML = 'Escolha seu <em>ar-condicionado</em><br>e compre pelo<br>Mercado Livre.';
-  if (firstHeroText) firstHeroText.textContent = 'Compare modelos selecionados e finalize a compra com pagamento e entrega pelo Mercado Livre. Em Linhares, Sooretama, Aracruz e Rio Bananal, você também pode contratar nossa instalação e manutenção separadamente.';
   const commercialText = document.querySelector('.carousel-slide:nth-child(3) .hero-sub');
   if (commercialText) commercialText.textContent = 'Instalação, dimensionamento e manutenção de sistemas de ar-condicionado para empresas em Linhares, Sooretama, Aracruz e Rio Bananal. Fale conosco para avaliar seu projeto.';
-
-  const statCopies = [
-    ['Mercado Livre', 'Pagamento e entrega'],
-    ['4 cidades', 'Atendimento no ES'],
-    ['Sob consulta', 'Orçamento do serviço'],
-    ['Equipe local', 'Instalação e manutenção']
-  ];
-  document.querySelectorAll('.stats-bar .stat-text').forEach((box, index) => {
-    if (!statCopies[index]) return;
-    const strong = box.querySelector('strong');
-    const span = box.querySelector('span');
-    if (strong) strong.textContent = statCopies[index][0];
-    if (span) span.textContent = statCopies[index][1];
-  });
 
   const catalogTitle = document.querySelector('.catalog-title');
   const catalogSubtitle = document.querySelector('.catalog-subtitle');
   if (catalogTitle) catalogTitle.textContent = 'Produtos selecionados para você';
-  if (catalogSubtitle) catalogSubtitle.textContent = 'Consulte os detalhes aqui e finalize a compra diretamente no Mercado Livre. Os links de afiliado serão disponibilizados em breve.';
+  if (catalogSubtitle) catalogSubtitle.textContent = 'Compare modelos, confira os detalhes e fale com nossa equipe para saber mais.';
 
   await loadHomeProductsFromApi();
 
   document.querySelectorAll('.footer-brand > p').forEach(p => {
-    p.textContent = 'Curadoria de produtos anunciados no Mercado Livre e serviços de instalação e manutenção de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal.';
+    p.textContent = 'Produtos selecionados e serviços de instalação e manutenção de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal.';
   });
   document.querySelectorAll('.footer-contact a').forEach(link => {
     if (link.textContent.includes('Atendemos')) link.lastChild.textContent = ' Atendemos Linhares, Sooretama, Aracruz e Rio Bananal';
@@ -568,19 +505,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>`;
   }
 
-  const relabelProductActions = root => {
-    root.querySelectorAll('.view-details-btn').forEach(el => {
-      if (el.textContent !== 'Ver detalhes') el.textContent = 'Ver detalhes';
-    });
-    root.querySelectorAll('.rating-summary, .product-rating').forEach(el => el.style.display = 'none');
-    root.querySelectorAll('.btn-cart-add').forEach(btn => {
-      if (btn.textContent.trim() !== '↗') btn.textContent = '↗';
-      const label = 'Ver produto e consultar link do Mercado Livre';
-      if (btn.getAttribute('aria-label') !== label) btn.setAttribute('aria-label', label);
-    });
-  };
-  relabelProductActions(document);
-  new MutationObserver(() => relabelProductActions(document)).observe(document.body, { childList: true, subtree: true });
 });
 
 // ── PRODUCT CARD EVENT LISTENER ADJUSTMENT ──────────────
@@ -596,8 +520,6 @@ document.addEventListener('click', (e) => {
 
   if (e.target.closest('.btn-cart-add')) {
     e.stopPropagation();
-    openMercadoLivreProduct(card.dataset.id);
-    return;
   }
 
   const id = card.dataset.id;

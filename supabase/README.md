@@ -15,7 +15,6 @@ O `schema.sql` cria:
 
 - a tabela `public.products` com as colunas usadas pelo backend;
 - a tabela `public.admin_users`, usada pelo login do painel;
-- a tabela `public.mercado_livre_oauth_tokens`, acessível somente pelo backend, para renovar a autorização da API;
 - validações de categoria, status, preços e estoque;
 - índices para catálogo, categoria e SKU;
 - atualização automática de `updated_at`;
@@ -26,8 +25,5 @@ No primeiro início, o backend cria o primeiro registro em `admin_users` usando 
 
 Para criar outro administrador ou redefinir uma senha desconhecida, configure temporariamente essas duas variáveis e execute `npm run admin:set-password` dentro de `backend/`. O comando atualiza apenas o usuário indicado e o reativa. Remova `ADMIN_PASSWORD` do ambiente após confirmar o acesso.
 
-Se você já executou o schema anterior, aplique as migrações pendentes em ordem:
-
-1. [`migrations/202609200002_admin_users.sql`](./migrations/202609200002_admin_users.sql), caso a tabela de administradores ainda não exista;
-2. [`migrations/202609200003_mercado_livre_catalog.sql`](./migrations/202609200003_mercado_livre_catalog.sql), para armazenar descrição, galeria, ficha técnica, avaliações e status dos anúncios importados.
-3. [`migrations/202609210001_mercado_livre_oauth.sql`](./migrations/202609210001_mercado_livre_oauth.sql), para armazenar access token e refresh token com RLS e sem acesso direto pelo navegador.
+Se você já executou um schema anterior sem a tabela de administradores, aplique
+[`migrations/202609200002_admin_users.sql`](./migrations/202609200002_admin_users.sql).

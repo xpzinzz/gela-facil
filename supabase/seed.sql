@@ -12,8 +12,7 @@ insert into public.products (
   sku,
   specs,
   status,
-  image,
-  affiliate_url
+  image
 )
 select
   seed.brand,
@@ -26,8 +25,7 @@ select
   seed.sku,
   seed.specs,
   seed.status,
-  seed.image,
-  null
+  seed.image
 from (
   values
     ('Samsung', 'WindFree Inverter 12.000 BTU', 'inverter', 2399.00, 2899.00, 8, 5, 'SAM-WF-12K', 'Inverter, 12.000 BTU, A+++', 'active', 'assets/produtos/samsung_windfree.png'),

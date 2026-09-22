@@ -107,14 +107,12 @@ async function loadProductsFromApi() {
         category: product.category,
         price: product.price,
         image: product.image,
-        affiliateUrl: product.affiliateUrl || '',
         rating: Number(product.rating || 0),
         ratingCount: Number(product.ratingCount || 0),
         gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [product.image].filter(Boolean),
         desc: product.description || product.specs || '',
         specs: product.attributes && Object.keys(product.attributes).length ? product.attributes : specsTextToObject(product.specs),
-        reviews: Array.isArray(product.reviews) ? product.reviews : [],
-        sourceStatus: product.sourceStatus || ''
+        reviews: Array.isArray(product.reviews) ? product.reviews : []
       };
     });
   } catch (error) {
@@ -374,7 +372,6 @@ function filterAndRender() {
               <img src="${safeImage}" alt="${safeName}" class="product-image" loading="lazy" decoding="async" />
             </div>
             ${tagHtml}
-            <div class="product-availability">${prod.sourceStatus === 'active' ? 'Disponível no Mercado Livre' : (prod.sourceStatus ? 'Anúncio indisponível' : (isValidAffiliateUrl(prod.affiliateUrl) ? 'Consulte o anúncio' : 'Link em breve'))}</div>
             <div class="product-hover-overlay">
               <span class="view-details-btn">Ver detalhes <span aria-hidden="true">→</span></span>
             </div>
@@ -391,10 +388,13 @@ function filterAndRender() {
               <div class="product-price-wrap">
                 ${oldPriceHtml}
                 <span class="product-price">${formatPrice(prod.price)}</span>
-                <span class="product-payment-note">Compra, pagamento e entrega pelo Mercado Livre</span>
+                <span class="product-payment-note">Veja detalhes e especificações</span>
               </div>
-              <button class="btn-cart-add" aria-label="Consultar ${safeName} no Mercado Livre">
-                <span aria-hidden="true">↗</span>
+              <button class="btn-cart-add" aria-label="Ver detalhes de ${safeName}">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M7 17 17 7"></path>
+                  <path d="M7 7h10v10"></path>
+                </svg>
               </button>
             </div>
           </div>
@@ -412,16 +412,12 @@ function setupCardClickListeners() {
   const cards = document.querySelectorAll('#catalog-grid .product-card');
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
-      // Don't navigate if user clicked the quick-add cart button
-      if (e.target.closest('.btn-cart-add')) {
-        return;
-      }
       const id = card.getAttribute('data-id');
       window.location.href = `./product-detail.html?id=${id}`;
     });
 
     card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.target.closest('.btn-cart-add')) {
+      if (e.key === 'Enter') {
         const id = card.getAttribute('data-id');
         window.location.href = `./product-detail.html?id=${id}`;
       }
@@ -437,12 +433,7 @@ function setupCardClickListeners() {
       if (!card) return;
       
       const id = card.getAttribute('data-id');
-      const name = card.getAttribute('data-name');
-      const brand = card.getAttribute('data-brand');
-      const price = parseInt(card.getAttribute('data-price'));
-      const image = card.getAttribute('data-image');
-      
-      openMercadoLivreProduct(id);
+      window.location.href = `./product-detail.html?id=${id}`;
     });
   });
 }

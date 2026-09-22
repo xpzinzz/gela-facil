@@ -15,7 +15,7 @@ const html = fs.readFileSync(file, 'utf8').replace(/<div class="product-card"[\s
   return card.replace(/data-price="[^"]*"/, `data-price="${product.price}"`)
     .replace(/data-name="[^"]*"/, `data-name="${escape(product.name)}"`)
     .replace(/(<h3 class="product-name">)[\s\S]*?(<\/h3>)/, `$1${escape(product.name)}$2`)
-    .replace(/(<span class="product-price">)[\s\S]*?(<\/span>)/, `$1${Number.isFinite(product.price) ? product.price.toLocaleString('pt-BR', {style:'currency',currency:'BRL'}) : 'Consulte no Mercado Livre'}$2`);
+    .replace(/(<span class="product-price">)[\s\S]*?(<\/span>)/, `$1${Number.isFinite(product.price) ? product.price.toLocaleString('pt-BR', {style:'currency',currency:'BRL'}) : 'Consulte'}$2`);
 });
 fs.writeFileSync(file, html);
 console.log('Home synchronized with productDetailsDb.');

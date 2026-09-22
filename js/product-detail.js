@@ -36,10 +36,6 @@ function normalizeApiDetailProduct(product) {
     category: product.category,
     price: product.price,
     image,
-    affiliateUrl: product.affiliateUrl || '',
-    mercadoLivreId: product.mercadoLivreId || '',
-    sourceStatus: product.sourceStatus || '',
-    sourceSyncedAt: product.sourceSyncedAt || null,
     rating: Number(product.rating || 0),
     ratingCount: Number(product.ratingCount || 0),
     gallery: Array.isArray(product.gallery) && product.gallery.length ? product.gallery : [image],
@@ -52,8 +48,8 @@ function normalizeApiDetailProduct(product) {
 function updateProductSeo(id, product) {
   const title = `${product.name} | Gela Fácil`;
   const description = product.desc
-    ? `${product.name}: ${product.desc}. Consulte o anúncio no Mercado Livre.`
-    : `Confira ${product.name}, selecionado pela Gela Fácil, e acesse o anúncio no Mercado Livre.`;
+    ? `${product.name}: ${product.desc}. Confira detalhes e solicite informações à Gela Fácil.`
+    : `Confira ${product.name}, selecionado pela Gela Fácil.`;
   const canonical = new URL('/pages/product-detail.html', window.location.origin);
   canonical.searchParams.set('id', id);
   const image = new URL(adjustImagePath(product.image), window.location.href).href;
@@ -124,7 +120,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     name: detailProduct.name,
     price: detailProduct.price,
     image: detailProduct.image,
-    affiliateUrl: detailProduct.affiliateUrl || '',
     selectedOption: 'delivery',
     selectedOptionName: 'Apenas Entrega',
     selectedOptionPrice: 0
@@ -138,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <p>Instalação e manutenção de ar-condicionado em Linhares, Sooretama, Aracruz e Rio Bananal. Solicite avaliação e orçamento pelo WhatsApp.</p>
       <a class="btn-primary" target="_blank" rel="noopener noreferrer" href="https://wa.me/5527999735745?text=Ol%C3%A1!%20Vi%20um%20ar-condicionado%20no%20site%20e%20gostaria%20de%20um%20or%C3%A7amento%20de%20instala%C3%A7%C3%A3o%20ou%20manuten%C3%A7%C3%A3o.">Pedir orçamento de serviço</a>` : `
       <div class="services-section-title">Importante sobre este produto</div>
-      <p>A Gela Fácil não oferece instalação nem manutenção para geladeiras, frigobares, cervejeiras ou outros refrigeradores. Compra, entrega e demais responsabilidades ficam com o Mercado Livre e o vendedor.</p>`;
+      <p>A Gela Fácil não oferece instalação nem manutenção para geladeiras, frigobares, cervejeiras ou outros refrigeradores. Consulte disponibilidade e condições diretamente com nossa equipe.</p>`;
   }
   
   // Populate basic text details
@@ -208,24 +203,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   const buyNowBtn = document.getElementById('modal-buy-now-btn');
   if (buyNowBtn) {
-    const unavailable = detailProduct.sourceStatus && detailProduct.sourceStatus !== 'active';
-    buyNowBtn.textContent = unavailable ? 'Anúncio indisponível' : 'Ver no Mercado Livre';
-    buyNowBtn.disabled = unavailable;
-    if (!unavailable) {
-      buyNowBtn.addEventListener('click', () => {
-        openMercadoLivreProduct(currentProduct.id, currentProduct.affiliateUrl);
-      });
-    }
+    buyNowBtn.textContent = 'Solicitar informações';
+    buyNowBtn.addEventListener('click', () => {
+      const message = encodeURIComponent(`Olá! Vi o produto ${detailProduct.name} no site da Gela Fácil e gostaria de mais informações.`);
+      window.open(`https://wa.me/5527999735745?text=${message}`, '_blank', 'noopener,noreferrer');
+    });
   }
 
   const summaryBox = document.querySelector('.detail-summary-box');
   if (summaryBox) {
-    const availability = detailProduct.sourceStatus === 'active' ? 'Produto disponível' : (detailProduct.sourceStatus ? 'Anúncio indisponível' : 'Consulte a disponibilidade');
-    summaryBox.innerHTML = `<strong>Valor anunciado no Mercado Livre</strong><p style="margin:8px 0 0"><b>${availability}.</b> O preço, parcelamento, estoque e frete devem ser confirmados no anúncio. Serviços da Gela Fácil não estão incluídos.</p>`;
+    summaryBox.innerHTML = `<strong>Valor de referência</strong><p style="margin:8px 0 0"><b>Consulte a disponibilidade.</b> Preço, condições e atendimento podem ser confirmados diretamente com a Gela Fácil.</p>`;
   }
   
   // Recalculate totals
-  // No local checkout or combined product/service total in affiliate mode.
+  // O catálogo funciona como vitrine; as condições são confirmadas no atendimento.
 });
 
 // Render dynamic thumbnails
@@ -290,7 +281,7 @@ function renderReviews() {
   
   const reviews = detailProduct.reviews || [];
   if (reviews.length === 0) {
-    list.textContent = 'A nota geral foi importada, mas o Mercado Livre não retornou comentários para exibição.';
+    list.textContent = 'Ainda não há comentários para exibição.';
     return;
   }
   
@@ -308,7 +299,7 @@ function renderReviews() {
     header.append(title, stars);
     const date = document.createElement('div');
     date.className = 'review-date';
-    date.textContent = rev.date ? `Avaliado em ${new Date(rev.date).toLocaleDateString('pt-BR')}` : 'Avaliação publicada no Mercado Livre';
+    date.textContent = rev.date ? `Avaliado em ${new Date(rev.date).toLocaleDateString('pt-BR')}` : 'Avaliação publicada';
     const comment = document.createElement('div');
     comment.className = 'review-comment';
     comment.style.marginTop = '8px';
