@@ -295,6 +295,12 @@
   padding: 18px 20px;
   margin-top: 0;
   box-shadow: 0 10px 24px rgba(35, 67, 130, 0.08);
+  font-family: 'Poppins', sans-serif;
+}
+
+.detail-summary-box *,
+.actions-row button {
+  font-family: 'Poppins', sans-serif;
 }
 
 .summary-row {
