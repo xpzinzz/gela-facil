@@ -70,6 +70,11 @@ const serverSource = fs.readFileSync(path.join(root, 'backend/server.js'), 'utf8
 
 for (const relativePath of referenceFiles) {
   const contents = fs.readFileSync(path.join(root, relativePath), 'utf8');
+  for (const match of contents.matchAll(/https:\/\/wa\.me\/[^"'`\s]+/g)) {
+    const whatsappUrl = decodeURIComponent(match[0]);
+    assert.match(whatsappUrl, /ar-condicionado/i, `${relativePath}: WhatsApp fora do atendimento de ar-condicionado`);
+    assert.match(whatsappUrl, /(instala|manuten|limpeza|higien|reparo|PMOC)/i, `${relativePath}: WhatsApp fora de instalação ou manutenção`);
+  }
   for (const match of contents.matchAll(/(?:\.\.\/|\/)?(assets\/[A-Za-z0-9_./-]+\.(?:webp|svg))/g)) {
     const asset = path.join(root, ...match[1].split('/'));
     assert.ok(fs.existsSync(asset), `${relativePath}: ativo ausente ${match[1]}`);
