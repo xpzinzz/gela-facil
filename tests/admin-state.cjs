@@ -13,7 +13,7 @@ vm.runInContext(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'),'utf
 for (const id of ['product-category-filter','product-status-filter']) get(id).value='all';
 get('product-sort').value='name';
 vm.runInContext(`DB.products = [
- {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,status:'active',image:'assets/test.png',gallery:[]},
+ {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,status:'active',image:'assets/test.png',gallery:[],affiliateUrl:'https://mercadolivre.com/sec/teste'},
  {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,status:'inactive',image:'',gallery:[]}
 ]; renderProducts();`,context);
 assert.equal(get('summary-total').textContent,2);
@@ -22,6 +22,7 @@ assert.equal(get('summary-inactive').textContent,1);
 assert.match(get('products-body').innerHTML,/Ar &lt;teste&gt;/);
 assert.match(get('products-body').innerHTML,/src="\/assets\/test.png"/);
 assert.match(get('products-body').innerHTML,/123,45/);
+assert.match(get('products-body').innerHTML,/Abrir link de afiliado/);
 get('product-status-filter').value='inactive';
 vm.runInContext('renderProducts()',context);
 assert.equal(get('products-pagination').textContent,'1 de 2 produtos');
@@ -58,6 +59,7 @@ assert.match(get('products-body').innerHTML,/Nenhum produto encontrado/);
  assert.ok(!html.includes('page-orders'));
  assert.ok(!/estoque|stock/i.test(html),'Admin HTML should not expose stock controls');
  assert.ok(ids.includes('prod-gallery-files') && ids.includes('prod-gallery'));
+ assert.ok(ids.includes('prod-affiliate-url'));
  for(const match of html.matchAll(/<label for="([^"]+)"/g)) assert.ok(ids.includes(match[1]));
  console.log('PASS: summary, filters, escaping, images, currency, gallery, stock removal, API failure/retry, duplicate submit prevention, HTML ids and labels.');
 })().catch(error=>{console.error(error);process.exitCode=1;});

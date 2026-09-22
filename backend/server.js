@@ -103,6 +103,24 @@ function isSafeImageReference(value) {
   }
 }
 
+function isMercadoLivreAffiliateUrl(value) {
+  if (!value) return false;
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    return url.protocol === 'https:' && (
+      hostname === 'mercadolivre.com' ||
+      hostname === 'www.mercadolivre.com' ||
+      hostname === 'mercadolivre.com.br' ||
+      hostname.endsWith('.mercadolivre.com.br') ||
+      hostname === 'meli.la' ||
+      hostname.endsWith('.meli.la')
+    );
+  } catch {
+    return false;
+  }
+}
+
 function parseProductId(value) {
   const id = Number(value);
   return Number.isInteger(id) && id > 0 ? id : null;
@@ -141,6 +159,7 @@ function normalizeProductPayload(body) {
     status: String(body.status || 'active').trim(),
     price: Number(body.price || 0),
     oldPrice: body.oldPrice === null || body.oldPrice === '' ? null : Number(body.oldPrice),
+    affiliateUrl: String(body.affiliateUrl || '').trim(),
     stock: Number.parseInt(body.stock ?? 0, 10),
     minStock: Number.parseInt(body.minStock ?? 3, 10),
     sku: String(body.sku || '').trim(),
@@ -166,6 +185,7 @@ function validateProduct(product) {
   if (!productStatuses.has(product.status)) return 'Status invalido.';
   if (!Number.isFinite(product.price) || product.price < 0) return 'Preco invalido.';
   if (product.oldPrice !== null && (!Number.isFinite(product.oldPrice) || product.oldPrice < 0)) return 'Preco original invalido.';
+  if (!isMercadoLivreAffiliateUrl(product.affiliateUrl)) return 'Informe um link de afiliado valido do Mercado Livre.';
   if (!Number.isInteger(product.stock) || product.stock < 0) return 'Estoque invalido.';
   if (!Number.isInteger(product.minStock) || product.minStock < 0) return 'Estoque minimo invalido.';
   if (!isSafeImageReference(product.image)) return 'URL da imagem invalida.';

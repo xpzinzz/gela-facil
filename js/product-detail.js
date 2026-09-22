@@ -37,6 +37,7 @@ function normalizeApiDetailProduct(product) {
     category: product.category,
     price: product.price,
     oldPrice: product.oldPrice,
+    affiliateUrl: product.affiliateUrl || '',
     image,
     rating: Number(product.rating || 0),
     ratingCount: Number(product.ratingCount || 0),
@@ -228,16 +229,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   const buyNowBtn = document.getElementById('modal-buy-now-btn');
   if (buyNowBtn) {
-    buyNowBtn.textContent = 'Solicitar informações';
-    buyNowBtn.addEventListener('click', () => {
-      const message = encodeURIComponent(`Olá! Vi o produto ${detailProduct.name} no site da Gela Fácil e gostaria de mais informações.`);
-      window.open(`https://wa.me/5527999735745?text=${message}`, '_blank', 'noopener,noreferrer');
-    });
+    if (detailProduct.affiliateUrl) {
+      buyNowBtn.textContent = 'Comprar no Mercado Livre';
+      buyNowBtn.addEventListener('click', () => {
+        window.open(detailProduct.affiliateUrl, '_blank', 'noopener,noreferrer');
+      });
+    } else {
+      buyNowBtn.textContent = 'Link de compra indisponível';
+      buyNowBtn.disabled = true;
+    }
   }
 
   const summaryBox = document.querySelector('.detail-summary-box');
   if (summaryBox) {
-    summaryBox.innerHTML = `<strong>Valor de referência</strong><p style="margin:8px 0 0"><b>Consulte a disponibilidade.</b> Preço, condições e atendimento podem ser confirmados diretamente com a Gela Fácil.</p>`;
+    summaryBox.innerHTML = `<strong>Compra segura</strong><p style="margin:8px 0 0">O botão acima leva ao anúncio do produto no Mercado Livre. Instalação e manutenção de ar-condicionado são oferecidas separadamente pelo WhatsApp.</p>`;
   }
   
   // Recalculate totals

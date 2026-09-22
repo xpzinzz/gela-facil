@@ -229,6 +229,7 @@ function renderProducts() {
     const sku = escapeHtml(p.sku);
     const image = escapeHtml(p.image?.startsWith('assets/') ? '/' + p.image : p.image);
     const category = escapeHtml(p.category);
+    const affiliateUrl = escapeHtml(p.affiliateUrl);
     return `
     <tr>
       <td>
@@ -242,7 +243,7 @@ function renderProducts() {
       </td>
       <td>${category.charAt(0).toUpperCase() + category.slice(1)}</td>
       <td>${p.oldPrice && p.oldPrice > p.price ? `<small style="color:var(--admin-muted);text-decoration:line-through">${fmt(p.oldPrice)}</small><br>` : ''}<strong>${fmt(p.price)}</strong></td>
-      <td>${getStatusBadge(p.status)}</td>
+      <td>${getStatusBadge(p.status)}${p.affiliateUrl ? `<br><a href="${affiliateUrl}" target="_blank" rel="noopener noreferrer" class="table-link">Abrir link de afiliado</a>` : '<br><small style="color:var(--admin-danger)">Link não cadastrado</small>'}</td>
       <td>
         <div class="action-btns">
           <button class="btn-action" title="Editar" onclick="openEditProduct(${p.id})">
@@ -278,6 +279,7 @@ function openEditProduct(id) {
   document.getElementById('prod-status').value = p.status;
   document.getElementById('prod-price').value = p.price;
   document.getElementById('prod-old-price').value = p.oldPrice || '';
+  document.getElementById('prod-affiliate-url').value = p.affiliateUrl || '';
   document.getElementById('prod-image-file').value = '';
   document.getElementById('prod-image').value = p.image || '';
   document.getElementById('prod-gallery-files').value = '';
@@ -311,6 +313,7 @@ function setupProductForm() {
         status: document.getElementById('prod-status').value,
         price: parseFloat(document.getElementById('prod-price').value),
         oldPrice: parseFloat(document.getElementById('prod-old-price').value) || null,
+        affiliateUrl: document.getElementById('prod-affiliate-url').value.trim(),
         sku: document.getElementById('prod-sku').value.trim(),
         specs: document.getElementById('prod-specs').value.trim(),
       };

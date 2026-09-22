@@ -52,7 +52,20 @@ function normalizeImageReference(image) {
   return localWebpReplacements.get(image) || image;
 }
 
+const affiliateUrlAttribute = '__mercadoLivreAffiliateUrl';
+
+function splitSourceAttributes(sourceAttributes) {
+  const attributes = sourceAttributes && typeof sourceAttributes === 'object' && !Array.isArray(sourceAttributes)
+    ? { ...sourceAttributes }
+    : {};
+  const affiliateUrl = String(attributes[affiliateUrlAttribute] || '');
+  delete attributes[affiliateUrlAttribute];
+  return { affiliateUrl, attributes };
+}
+
 function toDbProduct(product) {
+  const sourceAttributes = { ...(product.attributes || {}) };
+  if (product.affiliateUrl) sourceAttributes[affiliateUrlAttribute] = product.affiliateUrl;
   return {
     brand: product.brand,
     name: product.name,
@@ -67,7 +80,7 @@ function toDbProduct(product) {
     image: product.image,
     description: product.description || null,
     gallery: product.gallery || [],
-    source_attributes: product.attributes || {},
+    source_attributes: sourceAttributes,
     rating: product.rating || 0,
     rating_count: product.ratingCount || 0,
     reviews: product.reviews || [],
@@ -86,6 +99,7 @@ function toBasicDbProduct(product) {
 }
 
 function fromDbProduct(row) {
+  const { affiliateUrl, attributes } = splitSourceAttributes(row.source_attributes);
   return {
     id: row.id,
     brand: row.brand,
@@ -101,7 +115,8 @@ function fromDbProduct(row) {
     image: normalizeImageReference(row.image),
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
-    attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
+    affiliateUrl,
+    attributes,
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),
     reviews: Array.isArray(row.reviews) ? row.reviews : [],
@@ -109,6 +124,7 @@ function fromDbProduct(row) {
 }
 
 function fromPublicDbProduct(row) {
+  const { affiliateUrl, attributes } = splitSourceAttributes(row.source_attributes);
   return {
     id: row.id,
     brand: row.brand,
@@ -120,7 +136,8 @@ function fromPublicDbProduct(row) {
     image: normalizeImageReference(row.image),
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
-    attributes: row.source_attributes && typeof row.source_attributes === 'object' ? row.source_attributes : {},
+    affiliateUrl,
+    attributes,
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),
     reviews: Array.isArray(row.reviews) ? row.reviews : [],

@@ -457,6 +457,15 @@ h4,h5,h6,
 .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .badge-active    { background: rgba(34,197,94,0.1);  color: var(--admin-success); }
 .badge-inactive  { background: rgba(136,146,164,0.1); color: var(--admin-muted); }
+.table-link {
+  display: inline-block;
+  margin-top: 7px;
+  color: var(--admin-blue);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .badge-pending   { background: rgba(245,158,11,0.1);  color: var(--admin-warning); }
 .badge-processing{ background: rgba(59,130,246,0.1);  color: var(--admin-info); }
 .badge-shipped   { background: rgba(139,92,246,0.1);  color: #8B5CF6; }

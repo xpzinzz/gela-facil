@@ -41,6 +41,8 @@ assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declar
 const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js'), 'utf8');
 assert.match(productSeoSource, /'@type': 'BreadcrumbList'/, 'produto precisa gerar breadcrumbs dinâmicos');
 assert.match(productSeoSource, /const publicSiteOrigin = 'https:\/\/gelafacilref\.com\.br'/, 'produto precisa usar o domínio canônico oficial');
+assert.match(productSeoSource, /window\.open\(detailProduct\.affiliateUrl/, 'botão de compra precisa abrir o link de afiliado');
+assert.doesNotMatch(productSeoSource, /window\.open\(`https:\/\/wa\.me/, 'botão de compra não pode abrir WhatsApp');
 
 const rewriteMap = new Map(vercelConfig.rewrites.map(rewrite => [rewrite.source, rewrite.destination]));
 assert.ok(!rewriteMap.has('/robots.txt'), 'robots.txt deve ser servido como arquivo estático');
