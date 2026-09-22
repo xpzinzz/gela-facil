@@ -15,6 +15,7 @@
   <meta property="og:locale" content="pt_BR">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Gela Fácil">
+  <meta property="og:url" content="/pages/products.html">
   <meta property="og:title" content="Catálogo de ar-condicionado e climatização | Gela Fácil">
   <meta property="og:description" content="Compare produtos selecionados e confira todos os detalhes.">
   <meta property="og:image" content="/assets/hero/catalog-products-hero.webp">
@@ -35,11 +36,22 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "name": "Catálogo de ar-condicionado e climatização da Gela Fácil",
-      "url": "/pages/products.html",
-      "description": "Produtos selecionados pela Gela Fácil.",
-      "isPartOf": { "@type": "WebSite", "name": "Gela Fácil", "url": "/" }
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "name": "Catálogo de ar-condicionado e climatização da Gela Fácil",
+          "url": "/pages/products.html",
+          "description": "Produtos selecionados pela Gela Fácil.",
+          "isPartOf": { "@type": "WebSite", "name": "Gela Fácil", "url": "/" }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Início", "item": "/" },
+            { "@type": "ListItem", "position": 2, "name": "Produtos", "item": "/pages/products.html" }
+          ]
+        }
+      ]
     }
   </script>
 </head>

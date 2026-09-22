@@ -233,7 +233,8 @@ app.get('/api/admin/products', requireAdmin, asyncHandler(async (_req, res) => {
 
 app.get('/robots.txt', (req, res) => {
   const baseUrl = publicBaseUrl(req);
-  res.type('text/plain').send([
+  res.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+  res.type('text/plain; charset=utf-8').send([
     'User-agent: *',
     'Allow: /',
     'Disallow: /admin/',
@@ -252,7 +253,8 @@ app.get('/sitemap.xml', asyncHandler(async (req, res) => {
     ...products.map(product => `${baseUrl}/pages/product-detail.html?id=${encodeURIComponent(product.id)}`),
   ];
   const body = urls.map(url => `  <url><loc>${escapeXml(url)}</loc></url>`).join('\n');
-  res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`);
+  res.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=86400');
+  res.type('application/xml; charset=utf-8').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</urlset>\n`);
 }));
 
 app.post('/api/admin/products', requireAdmin, asyncHandler(async (req, res) => {

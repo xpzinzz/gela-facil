@@ -57,6 +57,7 @@ function updateProductSeo(id, product) {
   document.title = title;
   document.getElementById('meta-description')?.setAttribute('content', description);
   document.getElementById('canonical-url')?.setAttribute('href', canonical.href);
+  document.getElementById('og-url')?.setAttribute('content', canonical.href);
   document.getElementById('og-title')?.setAttribute('content', title);
   document.getElementById('og-description')?.setAttribute('content', description);
   document.getElementById('og-image')?.setAttribute('content', image);
@@ -69,12 +70,24 @@ function updateProductSeo(id, product) {
   structuredData.id = 'product-structured-data';
   structuredData.textContent = JSON.stringify({
     '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    image: [image],
-    description: product.desc || description,
-    brand: { '@type': 'Brand', name: product.brand },
-    url: canonical.href,
+    '@graph': [
+      {
+        '@type': 'Product',
+        name: product.name,
+        image: [image],
+        description: product.desc || description,
+        brand: { '@type': 'Brand', name: product.brand },
+        url: canonical.href,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', window.location.origin).href },
+          { '@type': 'ListItem', position: 2, name: 'Produtos', item: new URL('/pages/products.html', window.location.origin).href },
+          { '@type': 'ListItem', position: 3, name: product.name, item: canonical.href },
+        ],
+      },
+    ],
   });
   document.getElementById('product-structured-data')?.remove();
   document.head.appendChild(structuredData);
