@@ -3,6 +3,7 @@
 // State variables specific to this details page
 let detailProduct = null;
 let currentRatingSelection = 5;
+const publicSiteOrigin = 'https://gelafacilref.com.br';
 
 // Helper to adjust relative image paths when running on a subfolder page
 function adjustImagePath(path) {
@@ -50,9 +51,9 @@ function updateProductSeo(id, product) {
   const description = product.desc
     ? `${product.name}: ${product.desc}. Confira detalhes e solicite informações à Gela Fácil.`
     : `Confira ${product.name}, selecionado pela Gela Fácil.`;
-  const canonical = new URL('/pages/product-detail.html', window.location.origin);
+  const canonical = new URL('/pages/product-detail.html', publicSiteOrigin);
   canonical.searchParams.set('id', id);
-  const image = new URL(adjustImagePath(product.image), window.location.href).href;
+  const image = new URL(adjustImagePath(product.image), publicSiteOrigin).href;
 
   document.title = title;
   document.getElementById('meta-description')?.setAttribute('content', description);
@@ -82,8 +83,8 @@ function updateProductSeo(id, product) {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', window.location.origin).href },
-          { '@type': 'ListItem', position: 2, name: 'Produtos', item: new URL('/pages/products.html', window.location.origin).href },
+          { '@type': 'ListItem', position: 1, name: 'Início', item: new URL('/', publicSiteOrigin).href },
+          { '@type': 'ListItem', position: 2, name: 'Produtos', item: new URL('/pages/products.html', publicSiteOrigin).href },
           { '@type': 'ListItem', position: 3, name: product.name, item: canonical.href },
         ],
       },

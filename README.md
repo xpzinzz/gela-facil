@@ -46,4 +46,4 @@ O teste também protege os elementos essenciais de SEO: metadados, dados estrutu
 
 ## Publicação e indexação
 
-Os arquivos `robots.txt` e `sitemap.xml` ficam na raiz do frontend e são publicados diretamente pela Vercel, sem depender do backend. No Google Search Console, cadastre `https://gela-facil.vercel.app/sitemap.xml`. Ao publicar ou remover produtos, mantenha as URLs do sitemap sincronizadas com o catálogo.
+Os arquivos `robots.txt` e `sitemap.xml` ficam na raiz do frontend e são publicados diretamente pela Vercel, sem depender do backend. No Google Search Console, cadastre `https://gelafacilref.com.br/sitemap.xml`. Ao publicar ou remover produtos, mantenha as URLs do sitemap sincronizadas com o catálogo.

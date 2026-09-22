@@ -40,6 +40,7 @@ const catalogHtml = fs.readFileSync(path.join(root, 'pages/products.html'), 'utf
 assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declarar breadcrumbs');
 const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js'), 'utf8');
 assert.match(productSeoSource, /'@type': 'BreadcrumbList'/, 'produto precisa gerar breadcrumbs dinâmicos');
+assert.match(productSeoSource, /const publicSiteOrigin = 'https:\/\/gelafacilref\.com\.br'/, 'produto precisa usar o domínio canônico oficial');
 
 const rewriteMap = new Map(vercelConfig.rewrites.map(rewrite => [rewrite.source, rewrite.destination]));
 assert.ok(!rewriteMap.has('/robots.txt'), 'robots.txt deve ser servido como arquivo estático');
@@ -49,7 +50,7 @@ assert.equal(rewriteMap.get('/api/:path*'), 'https://gela-facil.onrender.com/api
 const robots = fs.readFileSync(path.join(root, 'robots.txt'), 'utf8');
 assert.match(robots, /^User-agent: \*$/m, 'robots.txt precisa declarar o robô');
 assert.match(robots, /^Disallow: \/admin\/$/m, 'robots.txt precisa bloquear o painel');
-assert.match(robots, /^Sitemap: https:\/\/gela-facil\.vercel\.app\/sitemap\.xml$/m, 'robots.txt precisa indicar o sitemap público');
+assert.match(robots, /^Sitemap: https:\/\/gelafacilref\.com\.br\/sitemap\.xml$/m, 'robots.txt precisa indicar o sitemap público');
 
 const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 assert.match(sitemap, /^<\?xml version="1\.0" encoding="UTF-8"\?>/, 'sitemap.xml precisa ter cabeçalho XML');
@@ -57,7 +58,7 @@ assert.match(sitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/site
 const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 assert.ok(sitemapLocations.length >= 2, 'sitemap.xml precisa listar as páginas públicas');
 assert.equal(new Set(sitemapLocations).size, sitemapLocations.length, 'sitemap.xml não pode repetir URLs');
-sitemapLocations.forEach(location => assert.ok(location.startsWith('https://gela-facil.vercel.app/'), `URL inválida no sitemap: ${location}`));
+sitemapLocations.forEach(location => assert.ok(location.startsWith('https://gelafacilref.com.br/'), `URL inválida no sitemap: ${location}`));
 
 const adminHeaders = vercelConfig.headers.find(rule => rule.source === '/admin/:path*')?.headers || [];
 const robotsHeader = adminHeaders.find(header => header.key.toLowerCase() === 'x-robots-tag')?.value || '';

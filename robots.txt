@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/admin/
 
-Sitemap: https://gela-facil.vercel.app/sitemap.xml
+Sitemap: https://gelafacilref.com.br/sitemap.xml
