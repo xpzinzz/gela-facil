@@ -182,15 +182,10 @@ function setupNavigation() {
 
 // ── MODALS ────────────────────────────────────────────────
 function setupModals() {
-  document.querySelectorAll('.modal-close, .btn-cancel').forEach(btn => {
+  document.querySelectorAll('.modal-close').forEach(btn => {
     btn.addEventListener('click', () => {
       const modalId = btn.dataset.modal;
       if (modalId) closeModal(modalId);
-    });
-  });
-  document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) closeModal(overlay.id);
     });
   });
 }
@@ -199,7 +194,6 @@ function openModal(id) { modalReturnFocus = document.activeElement; const overla
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; modalReturnFocus?.focus(); }
 document.addEventListener('keydown', event => {
  const overlay = document.querySelector('.modal-overlay.open'); if (!overlay) return;
- if (event.key === 'Escape') closeModal(overlay.id);
  if (event.key === 'Tab') { const items = [...overlay.querySelectorAll('button, input, select, textarea, a[href]')].filter(el => !el.disabled && el.getClientRects().length); const first = items[0], last = items.at(-1); if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); } else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); } }
 });
 
