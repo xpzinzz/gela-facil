@@ -48,6 +48,10 @@ function normalizeApiDetailProduct(product) {
   };
 }
 
+function redirectToCatalog() {
+  window.location.replace('/pages/products.html');
+}
+
 function updateProductSeo(id, product) {
   const title = `${product.name} | Gela Fácil`;
   const description = product.desc
@@ -58,6 +62,7 @@ function updateProductSeo(id, product) {
   const image = new URL(adjustImagePath(product.image), publicSiteOrigin).href;
 
   document.title = title;
+  document.querySelector('meta[name="robots"]')?.setAttribute('content', 'index, follow, max-image-preview:large');
   document.getElementById('meta-description')?.setAttribute('content', description);
   document.getElementById('canonical-url')?.setAttribute('href', canonical.href);
   document.getElementById('og-url')?.setAttribute('content', canonical.href);
@@ -111,19 +116,16 @@ async function loadDetailProductFromApi(id) {
 document.addEventListener('DOMContentLoaded', async () => {
   // Parse ID from URL
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = params.get('id')?.trim();
   if (!id) {
-    window.location.href = '../index.html';
+    redirectToCatalog();
     return;
   }
 
   detailProduct = await loadDetailProductFromApi(id);
   
   if (!detailProduct) {
-    showToast('Produto não encontrado. Redirecionando para a página principal...');
-    setTimeout(() => {
-      window.location.href = '../index.html';
-    }, 2000);
+    redirectToCatalog();
     return;
   }
 

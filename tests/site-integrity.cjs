@@ -18,7 +18,11 @@ for (const relativePath of publicPages) {
 
   assert.ok(title.length >= 30 && title.length <= 65, `${relativePath}: tamanho inadequado do title`);
   assert.ok(description.length >= 70 && description.length <= 170, `${relativePath}: tamanho inadequado da description`);
-  assert.match(html, /<meta\s+name="robots"\s+content="index, follow, max-image-preview:large"[^>]*>/);
+  if (relativePath === 'pages/product-detail.html') {
+    assert.match(html, /<meta\s+name="robots"\s+content="noindex, follow"[^>]*>/);
+  } else {
+    assert.match(html, /<meta\s+name="robots"\s+content="index, follow, max-image-preview:large"[^>]*>/);
+  }
   assert.match(html, /<link\s+rel="canonical"/);
   assert.match(html, /<meta\s+property="og:title"/);
   assert.match(html, /<meta\s+property="og:url"/, `${relativePath}: og:url ausente`);
@@ -45,6 +49,8 @@ const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js')
 const productDetailHtml = fs.readFileSync(path.join(root, 'pages/product-detail.html'), 'utf8');
 assert.match(productSeoSource, /'@type': 'BreadcrumbList'/, 'produto precisa gerar breadcrumbs dinâmicos');
 assert.match(productSeoSource, /const publicSiteOrigin = 'https:\/\/gelafacilref\.com\.br'/, 'produto precisa usar o domínio canônico oficial');
+assert.match(productSeoSource, /window\.location\.replace\('\/pages\/products\.html'\)/, 'produto sem ID ou inexistente precisa substituir a URL pelo catálogo');
+assert.match(productSeoSource, /meta\[name="robots"\].*index, follow/s, 'produto válido precisa ser indexável');
 assert.match(productSeoSource, /window\.open\(detailProduct\.affiliateUrl/, 'botão de compra precisa abrir o link de afiliado');
 assert.doesNotMatch(productSeoSource, /window\.open\(`https:\/\/wa\.me/, 'botão de compra não pode abrir WhatsApp');
 assert.ok(productDetailHtml.indexOf('class="actions-row"') < productDetailHtml.indexOf('class="detail-summary-box"'), 'botão de compra precisa ficar acima do card de resumo');
@@ -66,6 +72,7 @@ const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match
 assert.ok(sitemapLocations.length >= 2, 'sitemap.xml precisa listar as páginas públicas');
 assert.equal(new Set(sitemapLocations).size, sitemapLocations.length, 'sitemap.xml não pode repetir URLs');
 sitemapLocations.forEach(location => assert.ok(location.startsWith('https://gelafacilref.com.br/'), `URL inválida no sitemap: ${location}`));
+assert.ok(!sitemapLocations.some(location => /\/pages\/product-detail(?:\.html)?$/.test(location)), 'sitemap não pode listar a rota genérica sem produto');
 
 const adminHeaders = vercelConfig.headers.find(rule => rule.source === '/admin/:path*')?.headers || [];
 const robotsHeader = adminHeaders.find(header => header.key.toLowerCase() === 'x-robots-tag')?.value || '';
