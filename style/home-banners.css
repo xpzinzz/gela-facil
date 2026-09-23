@@ -9,6 +9,10 @@
 #hero-section .btn-hero { min-height: 48px; }
 
 /* Service banners keep their own image area when stacked on narrow screens. */
+#instalacao .bento-grid > .legacy-bento-card {
+  display: none !important;
+}
+
 #instalacao .bento-grid { grid-auto-rows: auto; align-items: stretch; }
 #instalacao .card-vrf { --service-banner: url('../assets/bento/banner-instalacao-v2.webp'); }
 #instalacao .card-camaras { --service-banner: url('../assets/bento/banner-manutencao-v2.webp'); }

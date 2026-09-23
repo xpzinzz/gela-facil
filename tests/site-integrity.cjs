@@ -35,7 +35,10 @@ for (const relativePath of publicPages) {
 }
 
 const homeHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const homeBannersCss = fs.readFileSync(path.join(root, 'style/home-banners.css'), 'utf8');
 assert.match(homeHtml, /"@type": "HVACBusiness"/, 'página inicial precisa identificar o negócio local');
+assert.match(homeHtml, /legacy-bento-card/, 'blocos antigos da home precisam estar identificados para remoção visual');
+assert.match(homeBannersCss, /legacy-bento-card[\s\S]*display:\s*none\s*!important/, 'blocos antigos da home não podem aparecer');
 const catalogHtml = fs.readFileSync(path.join(root, 'pages/products.html'), 'utf8');
 assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declarar breadcrumbs');
 const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js'), 'utf8');
