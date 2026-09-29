@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const publicPages = ['index.html', 'pages/products.html', 'pages/product-detail.html'];
+const publicPages = ['index.html', 'pages/products.html', 'pages/product-detail.html', 'pages/privacidade-e-termos.html'];
 const vercelConfig = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
 const referenceFiles = [
   ...publicPages,
@@ -45,6 +45,11 @@ assert.match(homeHtml, /legacy-bento-card/, 'blocos antigos da home precisam est
 assert.match(homeBannersCss, /legacy-bento-card[\s\S]*display:\s*none\s*!important/, 'blocos antigos da home não podem aparecer');
 const catalogHtml = fs.readFileSync(path.join(root, 'pages/products.html'), 'utf8');
 assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declarar breadcrumbs');
+const legalHtml = fs.readFileSync(path.join(root, 'pages/privacidade-e-termos.html'), 'utf8');
+assert.match(legalHtml, /id="politica-de-privacidade"/, 'página jurídica precisa conter a Política de Privacidade');
+assert.match(legalHtml, /id="termos-de-uso"/, 'página jurídica precisa conter os Termos de Uso');
+assert.match(legalHtml, /class="legal-navbar"/, 'página jurídica precisa ter navbar fixa');
+assert.match(legalHtml, />Voltar ao site</, 'página jurídica precisa oferecer retorno ao site');
 const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js'), 'utf8');
 const productDetailHtml = fs.readFileSync(path.join(root, 'pages/product-detail.html'), 'utf8');
 assert.match(productSeoSource, /'@type': 'BreadcrumbList'/, 'produto precisa gerar breadcrumbs dinâmicos');

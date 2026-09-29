@@ -1190,7 +1190,7 @@ textarea {
 
 .nav-cta-primary {
   background: var(--white);
-  color: var(--navy);
+  color: #FFFFFF;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
 }
 .nav-cta-primary:hover {
@@ -2518,6 +2518,24 @@ footer {
   font-size: 0.82rem;
   flex-wrap: wrap;
   gap: 16px;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-legal-links a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-legal-links a:hover {
+  color: var(--sky);
 }
 
 /* ── FLOATING BUTTONS ──────────────────────────────────── */
@@ -5219,7 +5237,8 @@ html { scroll-padding-top: 110px; }
   .stat-item { min-width: 0; padding: 0; flex-direction: column; text-align: center; }
   .stat-text strong { font-size: 1rem; overflow-wrap: anywhere; }
   .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .footer-bottom { flex-wrap: wrap; gap: 12px; text-align: center; }
+  .footer-bottom { flex-direction: column; flex-wrap: wrap; gap: 12px; text-align: center; }
+  .footer-legal-links { justify-content: center; gap: 10px 16px; }
   .clima-bebidas-header .header-right { width: 100%; min-width: 0; }
   .bento-section .card-vrf .bento-card-content,
   .bento-section .card-camaras .bento-card-content { max-width: 100%; }
