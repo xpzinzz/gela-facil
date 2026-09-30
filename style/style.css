@@ -2480,6 +2480,23 @@ footer {
   gap: 16px;
 }
 
+.footer-credits {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-credits a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.footer-credits a:hover {
+  color: var(--sky);
+}
+
 .footer-legal-links {
   display: flex;
   align-items: center;

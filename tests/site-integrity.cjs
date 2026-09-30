@@ -46,6 +46,7 @@ assert.match(homeBannersCss, /legacy-bento-card[\s\S]*display:\s*none\s*!importa
 assert.match(homeHtml, /id="assorted-products-search"/, 'home precisa oferecer busca para os itens variados');
 assert.match(homeHtml, /id="assorted-products-search-clear"/, 'busca de itens variados precisa oferecer limpeza rápida');
 const homeSource = fs.readFileSync(path.join(root, 'js/script.js'), 'utf8');
+assert.match(homeHtml, /href="https:\/\/craftevolution\.vercel\.app\/"[^>]*>Desenvolvido por Craft Evolution<\/a>/, 'rodapé da home precisa creditar a Craft Evolution com o link correto');
 assert.match(homeSource, /storefrontSection === 'air-conditioners'/, 'escolha administrativa precisa ter prioridade na classificação da home');
 assert.match(homeSource, /storefrontSection === 'assorted'/, 'home precisa respeitar a escolha por itens variados');
 assert.match(homeSource, /productName\.includes\('frigobar'\)/, 'itens legados precisam separar frigobares da categoria genérica de bebidas');
@@ -54,12 +55,14 @@ assert.match(homeSource, /setupAssortedProductsSearch\(assortedProducts\)/, 'hom
 assert.match(homeSource, /queryTerms\.every\(term => searchableText\.includes\(term\)\)/, 'busca precisa considerar todos os termos digitados');
 assert.doesNotMatch(homeSource, /data-assorted-filter/, 'botões antigos de filtro não devem permanecer na home');
 const catalogHtml = fs.readFileSync(path.join(root, 'pages/products.html'), 'utf8');
+assert.match(catalogHtml, /href="https:\/\/craftevolution\.vercel\.app\/"[^>]*>Desenvolvido por Craft Evolution<\/a>/, 'rodapé do catálogo precisa creditar a Craft Evolution com o link correto');
 assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declarar breadcrumbs');
 assert.match(catalogHtml, /id="air-conditioners-group"/, 'catálogo precisa separar a seção de ar-condicionados');
 assert.match(catalogHtml, /id="assorted-products-group"/, 'catálogo precisa separar a seção de itens variados');
 const catalogSource = fs.readFileSync(path.join(root, 'js/products-catalog.js'), 'utf8');
 assert.match(catalogSource, /filteredProducts\.filter\(isAirConditionerProduct\)/, 'catálogo precisa classificar ar-condicionados explicitamente');
 const legalHtml = fs.readFileSync(path.join(root, 'pages/privacidade-e-termos.html'), 'utf8');
+assert.match(legalHtml, /href="https:\/\/craftevolution\.vercel\.app\/"[^>]*>Desenvolvido por Craft Evolution<\/a>/, 'rodapé jurídico precisa creditar a Craft Evolution com o link correto');
 assert.match(legalHtml, /id="politica-de-privacidade"/, 'página jurídica precisa conter a Política de Privacidade');
 assert.match(legalHtml, /id="termos-de-uso"/, 'página jurídica precisa conter os Termos de Uso');
 assert.match(legalHtml, /class="legal-navbar"/, 'página jurídica precisa ter navbar fixa');
