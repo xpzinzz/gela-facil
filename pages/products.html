@@ -101,8 +101,8 @@
     <div class="catalog-header-container">
       <span class="catalog-label">Catálogo Completo</span>
       <h1 class="catalog-title">Encontre o Clima Ideal</h1>
-      <p class="catalog-subtitle">Escolha entre ar-condicionados de alta tecnologia e cervejeiras premium para equipar o
-        seu ambiente.</p>
+      <p class="catalog-subtitle">Encontre primeiro os melhores ar-condicionados e, depois, explore nossa sele&ccedil;&atilde;o de
+        itens variados.</p>
     </div>
   </header>
 
@@ -210,8 +210,34 @@
         </div>
       </div>
 
-      <div class="catalog-grid" id="catalog-grid">
-        <!-- Dynamically filled with products -->
+      <div class="catalog-product-groups">
+        <section class="catalog-product-group" id="air-conditioners-group" aria-labelledby="air-conditioners-title">
+          <div class="catalog-group-heading">
+            <div>
+              <span class="catalog-group-kicker">Climatiza&ccedil;&atilde;o</span>
+              <h2 id="air-conditioners-title">Ar-condicionados</h2>
+              <p>Modelos para climatizar sua casa ou empresa com conforto e economia.</p>
+            </div>
+            <span class="catalog-group-count"><strong id="air-conditioners-count">0</strong> produtos</span>
+          </div>
+          <div class="catalog-grid" id="catalog-grid">
+            <!-- Dynamically filled with air conditioners -->
+          </div>
+        </section>
+
+        <section class="catalog-product-group catalog-product-group--assorted" id="assorted-products-group" aria-labelledby="assorted-products-title">
+          <div class="catalog-group-heading">
+            <div>
+              <span class="catalog-group-kicker">Achadinhos</span>
+              <h2 id="assorted-products-title">Itens variados</h2>
+              <p>Outros produtos selecionados para deixar seu dia a dia mais pr&aacute;tico.</p>
+            </div>
+            <span class="catalog-group-count"><strong id="assorted-products-count">0</strong> produtos</span>
+          </div>
+          <div class="catalog-grid" id="catalog-assorted-grid">
+            <!-- Dynamically filled with assorted products -->
+          </div>
+        </section>
       </div>
 
       <!-- Empty state -->

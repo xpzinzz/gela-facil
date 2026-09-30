@@ -45,6 +45,10 @@ assert.match(homeHtml, /legacy-bento-card/, 'blocos antigos da home precisam est
 assert.match(homeBannersCss, /legacy-bento-card[\s\S]*display:\s*none\s*!important/, 'blocos antigos da home não podem aparecer');
 const catalogHtml = fs.readFileSync(path.join(root, 'pages/products.html'), 'utf8');
 assert.match(catalogHtml, /"@type": "BreadcrumbList"/, 'catálogo precisa declarar breadcrumbs');
+assert.match(catalogHtml, /id="air-conditioners-group"/, 'catálogo precisa separar a seção de ar-condicionados');
+assert.match(catalogHtml, /id="assorted-products-group"/, 'catálogo precisa separar a seção de itens variados');
+const catalogSource = fs.readFileSync(path.join(root, 'js/products-catalog.js'), 'utf8');
+assert.match(catalogSource, /filteredProducts\.filter\(isAirConditionerProduct\)/, 'catálogo precisa classificar ar-condicionados explicitamente');
 const legalHtml = fs.readFileSync(path.join(root, 'pages/privacidade-e-termos.html'), 'utf8');
 assert.match(legalHtml, /id="politica-de-privacidade"/, 'página jurídica precisa conter a Política de Privacidade');
 assert.match(legalHtml, /id="termos-de-uso"/, 'página jurídica precisa conter os Termos de Uso');

@@ -294,11 +294,16 @@ function resetFilters() {
 }
 
 function filterAndRender() {
-  const grid = document.getElementById('catalog-grid');
+  const airConditionersGrid = document.getElementById('catalog-grid');
+  const assortedProductsGrid = document.getElementById('catalog-assorted-grid');
+  const airConditionersGroup = document.getElementById('air-conditioners-group');
+  const assortedProductsGroup = document.getElementById('assorted-products-group');
   const emptyState = document.getElementById('catalog-empty-state');
   const resultsCount = document.getElementById('results-count');
+  const airConditionersCount = document.getElementById('air-conditioners-count');
+  const assortedProductsCount = document.getElementById('assorted-products-count');
   
-  if (!grid) return;
+  if (!airConditionersGrid || !assortedProductsGrid || !airConditionersGroup || !assortedProductsGroup) return;
 
   // 1. Filter products
   const filteredProducts = [];
@@ -344,16 +349,33 @@ function filterAndRender() {
     resultsCount.setAttribute('aria-live', 'polite');
   }
 
+  const airConditioners = filteredProducts.filter(isAirConditionerProduct);
+  const assortedProducts = filteredProducts.filter(product => !isAirConditionerProduct(product));
+
+  if (airConditionersCount) airConditionersCount.textContent = airConditioners.length;
+  if (assortedProductsCount) assortedProductsCount.textContent = assortedProducts.length;
+
   // 4. Render
   if (filteredProducts.length === 0) {
-    grid.style.display = 'none';
+    airConditionersGroup.hidden = true;
+    assortedProductsGroup.hidden = true;
     if (emptyState) emptyState.style.display = 'block';
   } else {
     if (emptyState) emptyState.style.display = 'none';
-    grid.style.display = 'grid';
-    
-    let html = '';
-    filteredProducts.forEach(prod => {
+    renderCatalogGroup(airConditionersGrid, airConditionersGroup, airConditioners);
+    renderCatalogGroup(assortedProductsGrid, assortedProductsGroup, assortedProducts);
+
+    // Attach click listeners to dynamically rendered cards
+    setupCardClickListeners();
+  }
+}
+
+function renderCatalogGroup(grid, group, products) {
+  group.hidden = products.length === 0;
+  grid.style.display = products.length ? 'grid' : 'none';
+
+  let html = '';
+  products.forEach(prod => {
       const specTags = getCardSpecTags(prod);
       
       const tagHtml = '';
@@ -401,16 +423,12 @@ function filterAndRender() {
           </div>
         </div>
       `;
-    });
-    grid.innerHTML = html;
-
-    // Attach click listeners to dynamically rendered cards
-    setupCardClickListeners();
-  }
+  });
+  grid.innerHTML = html;
 }
 
 function setupCardClickListeners() {
-  const cards = document.querySelectorAll('#catalog-grid .product-card');
+  const cards = document.querySelectorAll('.catalog-grid .product-card');
   cards.forEach(card => {
     card.addEventListener('click', (e) => {
       const id = card.getAttribute('data-id');
@@ -426,7 +444,7 @@ function setupCardClickListeners() {
   });
 
   // Attach quick-add buttons click
-  const quickAddBtns = document.querySelectorAll('#catalog-grid .btn-cart-add');
+  const quickAddBtns = document.querySelectorAll('.catalog-grid .btn-cart-add');
   quickAddBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();

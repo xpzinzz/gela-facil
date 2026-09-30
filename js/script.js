@@ -213,6 +213,23 @@ function productCategoriesFor(product) {
   return categories;
 }
 
+const airConditionerCategories = new Set(['inverter', 'split', 'portatil', 'janela']);
+
+function isAirConditionerProduct(product) {
+  const categories = [product.category, ...(product.categories || [])]
+    .filter(Boolean)
+    .map(category => normalizeProductCategory(category));
+  return categories.some(category => airConditionerCategories.has(category));
+}
+
+function normalizeProductCategory(category) {
+  return String(category || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
 function normalizeProductImage(path) {
   const imagePath = path || 'assets/produtos/banner-climatizacao-premium.webp';
   // Imagens cadastradas usam "assets/...". Torná-las absolutas evita que a
@@ -290,15 +307,15 @@ async function loadHomeProductsFromApi() {
     }
 
     Object.keys(productDetailsDb).forEach(id => delete productDetailsDb[id]);
-    const airConditioners = products.filter(product => product.category !== 'bebidas');
-    const drinks = products.filter(product => product.category === 'bebidas');
+    const airConditioners = products.filter(isAirConditionerProduct);
+    const assortedProducts = products.filter(product => !isAirConditionerProduct(product));
 
     grid.innerHTML = airConditioners.length
       ? airConditioners.map(renderHomeProductCard).join('')
       : '<p class="products-loading-state">Nenhum ar-condicionado ativo cadastrado.</p>';
-    drinksTrack.innerHTML = drinks.length
-      ? drinks.map(renderHomeProductCard).join('')
-      : '<p class="products-loading-state">Nenhum produto para bebidas cadastrado.</p>';
+    drinksTrack.innerHTML = assortedProducts.length
+      ? assortedProducts.map(renderHomeProductCard).join('')
+      : '<p class="products-loading-state">Nenhum item variado cadastrado.</p>';
 
     const activeFilter = document.querySelector('.filter-tab.active')?.getAttribute('data-filter') || 'all';
     applyProductFilter(activeFilter);
