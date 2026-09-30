@@ -298,27 +298,22 @@
           <div class="section-label">Itens variados</div>
           <h2 class="section-title dark">Achadinhos para deixar seu dia a dia mais prático</h2>
         </div>
-        <div class="header-right">
-          <div class="header-right-col">
-            <div class="clima-bebidas-nav" aria-label="Navegação dos produtos em destaque">
-              <button class="clima-bebidas-control" id="clima-bebidas-prev" type="button" aria-label="Produto anterior">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="m15 18-6-6 6-6" />
-                </svg>
-              </button>
-              <button class="clima-bebidas-control" id="clima-bebidas-next" type="button" aria-label="Próximo produto">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="m9 18 6-6-6-6" />
-                </svg>
-              </button>
-            </div>
+      </div>
 
-          </div>
+      <div class="assorted-products-toolbar" id="assorted-products-toolbar" hidden>
+        <div class="assorted-products-filters" id="assorted-products-filters" role="group" aria-label="Filtrar itens variados por categoria"></div>
+        <div class="clima-bebidas-nav" aria-label="Navegação dos itens variados">
+          <button class="clima-bebidas-control" id="clima-bebidas-prev" type="button" aria-label="Produtos anteriores">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
+          </button>
+          <button class="clima-bebidas-control" id="clima-bebidas-next" type="button" aria-label="Próximos produtos">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+          </button>
         </div>
       </div>
 
       <div class="clima-bebidas-slider-wrap">
-        <div class="clima-bebidas-track" id="clima-bebidas-track">
+        <div class="clima-bebidas-track" id="clima-bebidas-track" aria-live="polite">
           <p class="products-loading-state">Carregando produtos...</p>
         </div>
       </div>

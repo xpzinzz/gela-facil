@@ -230,6 +230,100 @@ function normalizeProductCategory(category) {
     .trim();
 }
 
+const assortedCategoryLabels = {
+  bebidas: 'Bebidas e refrigeração',
+  refrigeracao: 'Refrigeração',
+  cervejeiras: 'Cervejeiras',
+  frigobares: 'Frigobares',
+  eletrodomesticos: 'Eletrodomésticos',
+  ferramentas: 'Ferramentas',
+  outros: 'Outros itens'
+};
+
+function assortedCategoryName(category) {
+  const normalized = normalizeProductCategory(category) || 'outros';
+  if (assortedCategoryLabels[normalized]) return assortedCategoryLabels[normalized];
+
+  return normalized
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\p{L}/gu, letter => letter.toLocaleUpperCase('pt-BR'));
+}
+
+function assortedCategoryForProduct(product) {
+  const category = normalizeProductCategory(product.category) || 'outros';
+  if (category !== 'bebidas') return category;
+
+  const productName = normalizeProductCategory(product.name);
+  if (productName.includes('frigobar')) return 'frigobares';
+  if (productName.includes('cervejeira') || productName.includes('chopp')) return 'cervejeiras';
+  return category;
+}
+
+let assortedProductsCache = [];
+
+function assortedCategoryCounts(products) {
+  const counts = new Map();
+  products.forEach(product => {
+    const category = assortedCategoryForProduct(product);
+    counts.set(category, (counts.get(category) || 0) + 1);
+  });
+  return Array.from(counts.entries());
+}
+
+function renderAssortedProducts(category = 'all') {
+  const track = document.getElementById('clima-bebidas-track');
+  if (!track) return;
+
+  const visibleProducts = category === 'all'
+    ? assortedProductsCache
+    : assortedProductsCache.filter(product => assortedCategoryForProduct(product) === category);
+
+  track.innerHTML = visibleProducts.length
+    ? visibleProducts.map(renderHomeProductCard).join('')
+    : '<p class="products-loading-state">Nenhum item encontrado nesta categoria.</p>';
+  track.scrollLeft = 0;
+
+  document.querySelectorAll('[data-assorted-filter]').forEach(button => {
+    const isActive = button.dataset.assortedFilter === category;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
+function setupAssortedProductsFilter(products) {
+  const toolbar = document.getElementById('assorted-products-toolbar');
+  const filters = document.getElementById('assorted-products-filters');
+  const track = document.getElementById('clima-bebidas-track');
+  if (!toolbar || !filters || !track) return;
+
+  assortedProductsCache = products;
+  if (products.length === 0) {
+    toolbar.hidden = true;
+    track.innerHTML = '<p class="products-loading-state">Nenhum item variado cadastrado.</p>';
+    return;
+  }
+
+  const categoryCounts = assortedCategoryCounts(products);
+  const filterOptions = [['all', products.length], ...categoryCounts];
+  filters.innerHTML = filterOptions.map(([category, count]) => {
+    const label = category === 'all' ? 'Todos' : assortedCategoryName(category);
+    return `
+      <button class="assorted-filter-chip${category === 'all' ? ' active' : ''}" type="button"
+        data-assorted-filter="${escapeHtml(category)}" aria-pressed="${category === 'all'}">
+        <span>${escapeHtml(label)}</span><small>${count}</small>
+      </button>`;
+  }).join('');
+
+  filters.onclick = event => {
+    const button = event.target.closest('[data-assorted-filter]');
+    if (!button || !filters.contains(button)) return;
+    renderAssortedProducts(button.dataset.assortedFilter);
+  };
+
+  toolbar.hidden = false;
+  renderAssortedProducts('all');
+}
+
 function normalizeProductImage(path) {
   const imagePath = path || 'assets/produtos/banner-climatizacao-premium.webp';
   // Imagens cadastradas usam "assets/...". Torná-las absolutas evita que a
@@ -292,8 +386,8 @@ function renderHomeProductCard(product, index) {
 
 async function loadHomeProductsFromApi() {
   const grid = document.getElementById('products-grid');
-  const drinksTrack = document.getElementById('clima-bebidas-track');
-  if (!grid || !drinksTrack || !window.location.protocol.startsWith('http')) return;
+  const assortedTrack = document.getElementById('clima-bebidas-track');
+  if (!grid || !assortedTrack || !window.location.protocol.startsWith('http')) return;
 
   try {
     const response = await fetch(window.publicApiUrl('/api/products'));
@@ -302,7 +396,7 @@ async function loadHomeProductsFromApi() {
     const products = await response.json();
     if (!Array.isArray(products) || products.length === 0) {
       grid.innerHTML = '<p class="products-loading-state">Nenhum produto ativo cadastrado.</p>';
-      drinksTrack.innerHTML = '<p class="products-loading-state">Nenhum produto para bebidas cadastrado.</p>';
+      assortedTrack.innerHTML = '<p class="products-loading-state">Nenhum item variado cadastrado.</p>';
       return;
     }
 
@@ -313,15 +407,13 @@ async function loadHomeProductsFromApi() {
     grid.innerHTML = airConditioners.length
       ? airConditioners.map(renderHomeProductCard).join('')
       : '<p class="products-loading-state">Nenhum ar-condicionado ativo cadastrado.</p>';
-    drinksTrack.innerHTML = assortedProducts.length
-      ? assortedProducts.map(renderHomeProductCard).join('')
-      : '<p class="products-loading-state">Nenhum item variado cadastrado.</p>';
+    setupAssortedProductsFilter(assortedProducts);
 
     const activeFilter = document.querySelector('.filter-tab.active')?.getAttribute('data-filter') || 'all';
     applyProductFilter(activeFilter);
   } catch (err) {
     grid.innerHTML = '<p class="products-loading-state">Não foi possível carregar os produtos.</p>';
-    drinksTrack.innerHTML = '<p class="products-loading-state">Não foi possível carregar os produtos.</p>';
+    assortedTrack.innerHTML = '<p class="products-loading-state">Não foi possível carregar os produtos.</p>';
   }
 }
 
@@ -718,7 +810,6 @@ function scrollToProducts() {
   }
 }
 
-// Initialize remaining generic sliders
 setupSliderDragAndNav('clima-bebidas-track', 'clima-bebidas-prev', 'clima-bebidas-next');
 
 // ── DESTAQUES CAROUSEL DRAG & ARROWS ─────────────────────
