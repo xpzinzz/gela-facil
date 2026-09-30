@@ -14,7 +14,7 @@ for (const id of ['product-category-filter','product-status-filter']) get(id).va
 get('product-sort').value='name';
 vm.runInContext(`DB.products = [
  {id:1,name:'Ar <teste>',brand:'Marca',sku:null,category:'split',price:123.45,status:'active',image:'assets/test.png',gallery:[],affiliateUrl:'https://mercadolivre.com/sec/teste'},
- {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',price:22,status:'inactive',image:'',gallery:[]}
+ {id:2,name:'Outro',brand:'Marca',sku:'SKU2',category:'split',storefrontSection:'assorted',price:22,status:'inactive',image:'',gallery:[]}
 ]; renderProducts();`,context);
 assert.equal(get('summary-total').textContent,2);
 assert.equal(get('summary-active').textContent,1);
@@ -23,6 +23,16 @@ assert.match(get('products-body').innerHTML,/Ar &lt;teste&gt;/);
 assert.match(get('products-body').innerHTML,/src="\/assets\/test.png"/);
 assert.match(get('products-body').innerHTML,/123,45/);
 assert.match(get('products-body').innerHTML,/Abrir link de afiliado/);
+assert.match(get('products-body').innerHTML,/Ar-condicionados/);
+assert.match(get('products-body').innerHTML,/Itens variados/);
+assert.equal(vm.runInContext("getProductStorefrontSection({category:'bebidas'})",context),'assorted');
+assert.equal(vm.runInContext("getProductStorefrontSection({category:'split',storefrontSection:'assorted'})",context),'assorted');
+vm.runInContext('setupProductForm()',context);
+get('prod-category').value='split';
+get('prod-storefront-section').listeners.change({target:{value:'assorted'}});
+assert.equal(get('prod-category').value,'bebidas');
+get('prod-storefront-section').listeners.change({target:{value:'air-conditioners'}});
+assert.equal(get('prod-category').value,'inverter');
 get('product-status-filter').value='inactive';
 vm.runInContext('renderProducts()',context);
 assert.equal(get('products-pagination').textContent,'1 de 2 produtos');
@@ -60,6 +70,7 @@ assert.match(get('products-body').innerHTML,/Nenhum produto encontrado/);
  assert.ok(!/estoque|stock/i.test(html),'Admin HTML should not expose stock controls');
  assert.ok(ids.includes('prod-gallery-files') && ids.includes('prod-gallery'));
  assert.ok(ids.includes('prod-affiliate-url'));
+ assert.ok(ids.includes('prod-storefront-section'));
  assert.ok(!html.includes('btn-cancel'));
  assert.match(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'), 'utf8'), /querySelectorAll\('\.modal-close'\)/);
  assert.doesNotMatch(fs.readFileSync(path.join(projectRoot, 'admin', 'admin.js'), 'utf8'), /event\.key === 'Escape'\) closeModal/);

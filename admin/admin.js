@@ -198,6 +198,19 @@ document.addEventListener('keydown', event => {
 });
 
 // ── PRODUCTS ──────────────────────────────────────────────
+const adminAirConditionerCategories = new Set(['inverter', 'split', 'portatil', 'janela']);
+
+function getProductStorefrontSection(product) {
+  if (product.storefrontSection === 'air-conditioners' || product.storefrontSection === 'assorted') {
+    return product.storefrontSection;
+  }
+  return adminAirConditionerCategories.has(product.category) ? 'air-conditioners' : 'assorted';
+}
+
+function storefrontSectionLabel(section) {
+  return section === 'air-conditioners' ? 'Ar-condicionados' : 'Itens variados';
+}
+
 function renderProducts() {
   renderCatalogSummary();
   const searchTerm = document.getElementById('product-search').value.toLowerCase();
@@ -224,6 +237,7 @@ function renderProducts() {
     const image = escapeHtml(p.image?.startsWith('assets/') ? '/' + p.image : p.image);
     const category = escapeHtml(p.category);
     const affiliateUrl = escapeHtml(p.affiliateUrl);
+    const storefrontSection = getProductStorefrontSection(p);
     return `
     <tr>
       <td>
@@ -236,6 +250,7 @@ function renderProducts() {
         </div>
       </td>
       <td>${category.charAt(0).toUpperCase() + category.slice(1)}</td>
+      <td><span class="site-placement-badge ${storefrontSection === 'air-conditioners' ? 'air' : 'assorted'}">${storefrontSectionLabel(storefrontSection)}</span></td>
       <td>${p.oldPrice && p.oldPrice > p.price ? `<small style="color:var(--admin-muted);text-decoration:line-through">${fmt(p.oldPrice)}</small><br>` : ''}<strong>${fmt(p.price)}</strong></td>
       <td>${getStatusBadge(p.status)}${p.affiliateUrl ? `<br><a href="${affiliateUrl}" target="_blank" rel="noopener noreferrer" class="table-link">Abrir link de afiliado</a>` : '<br><small style="color:var(--admin-danger)">Link não cadastrado</small>'}</td>
       <td>
@@ -249,7 +264,7 @@ function renderProducts() {
         </div>
       </td>
     </tr>`;
-  }).join('') || '<tr><td colspan="5" class="empty-state"><strong>Nenhum produto encontrado</strong><span>Cadastre um produto ou ajuste os filtros da busca.</span></td></tr>';
+  }).join('') || '<tr><td colspan="6" class="empty-state"><strong>Nenhum produto encontrado</strong><span>Cadastre um produto ou ajuste os filtros da busca.</span></td></tr>';
   document.getElementById('products-pagination').textContent = `${list.length} de ${DB.products.length} produtos`;
 }
 
@@ -258,6 +273,7 @@ function openAddProduct() {
   document.getElementById('product-modal-title').textContent = 'Adicionar produto';
   document.getElementById('product-save-button').textContent = 'Adicionar produto';
   document.getElementById('product-form').reset();
+  document.getElementById('prod-storefront-section').value = 'air-conditioners';
   openModal('product-modal-overlay');
 }
 
@@ -269,6 +285,7 @@ function openEditProduct(id) {
   document.getElementById('product-save-button').textContent = 'Salvar alterações';
   document.getElementById('prod-name').value = p.name;
   document.getElementById('prod-brand').value = p.brand;
+  document.getElementById('prod-storefront-section').value = getProductStorefrontSection(p);
   document.getElementById('prod-category').value = p.category;
   document.getElementById('prod-status').value = p.status;
   document.getElementById('prod-price').value = p.price;
@@ -296,6 +313,11 @@ async function deleteProduct(id) {
 
 function setupProductForm() {
   document.getElementById('btn-add-product').addEventListener('click', openAddProduct);
+  document.getElementById('prod-storefront-section').addEventListener('change', event => {
+    const category = document.getElementById('prod-category');
+    if (event.target.value === 'assorted' && adminAirConditionerCategories.has(category.value)) category.value = 'bebidas';
+    if (event.target.value === 'air-conditioners' && !adminAirConditionerCategories.has(category.value)) category.value = 'inverter';
+  });
   bindBusyForm('product-form', async (e) => {
     e.preventDefault();
     const productId = editingProductId;
@@ -303,6 +325,7 @@ function setupProductForm() {
       const data = {
         name: document.getElementById('prod-name').value.trim(),
         brand: document.getElementById('prod-brand').value.trim(),
+        storefrontSection: document.getElementById('prod-storefront-section').value,
         category: document.getElementById('prod-category').value,
         status: document.getElementById('prod-status').value,
         price: parseFloat(document.getElementById('prod-price').value),

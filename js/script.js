@@ -216,6 +216,10 @@ function productCategoriesFor(product) {
 const airConditionerCategories = new Set(['inverter', 'split', 'portatil', 'janela']);
 
 function isAirConditionerProduct(product) {
+  const storefrontSection = normalizeProductCategory(product.storefrontSection);
+  if (storefrontSection === 'air-conditioners') return true;
+  if (storefrontSection === 'assorted') return false;
+
   const categories = [product.category, ...(product.categories || [])]
     .filter(Boolean)
     .map(category => normalizeProductCategory(category));
@@ -350,6 +354,7 @@ function renderHomeProductCard(product, index) {
     name: product.name,
     brand: product.brand,
     category: product.category,
+    storefrontSection: product.storefrontSection || '',
     price: product.price,
     image,
     rating: Number(product.rating || 0),

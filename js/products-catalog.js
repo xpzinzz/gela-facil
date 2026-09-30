@@ -105,6 +105,7 @@ async function loadProductsFromApi() {
         name: product.name,
         brand: product.brand,
         category: product.category,
+        storefrontSection: product.storefrontSection || '',
         price: product.price,
         oldPrice: product.oldPrice,
         image: product.image,

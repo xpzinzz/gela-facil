@@ -125,6 +125,7 @@
               <tr>
                 <th>Produto</th>
                 <th>Categoria</th>
+                <th>Seção no site</th>
                 <th>Preço</th>
                 <th>Publicação / link</th>
                 <th>Ações</th>
@@ -174,6 +175,14 @@
 <div class="form-group">
             <label for="prod-brand">Marca *</label>
             <input type="text" id="prod-brand" placeholder="Ex: Samsung" class="settings-input" required />
+          </div>
+<div class="form-group">
+            <label for="prod-storefront-section">Onde exibir no site *</label>
+            <select required id="prod-storefront-section" class="settings-input" aria-describedby="prod-storefront-section-help">
+              <option value="air-conditioners">Ar-condicionados</option>
+              <option value="assorted">Itens variados</option>
+            </select>
+            <small class="form-help" id="prod-storefront-section-help">Escolha em qual seção da home e do catálogo este produto aparecerá.</small>
           </div>
 <div class="form-group">
             <label for="prod-category">Categoria *</label>

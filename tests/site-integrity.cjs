@@ -45,6 +45,8 @@ assert.match(homeHtml, /legacy-bento-card/, 'blocos antigos da home precisam est
 assert.match(homeBannersCss, /legacy-bento-card[\s\S]*display:\s*none\s*!important/, 'blocos antigos da home não podem aparecer');
 assert.match(homeHtml, /id="assorted-products-filters"/, 'home precisa oferecer filtros para os itens variados');
 const homeSource = fs.readFileSync(path.join(root, 'js/script.js'), 'utf8');
+assert.match(homeSource, /storefrontSection === 'air-conditioners'/, 'escolha administrativa precisa ter prioridade na classificação da home');
+assert.match(homeSource, /storefrontSection === 'assorted'/, 'home precisa respeitar a escolha por itens variados');
 assert.match(homeSource, /productName\.includes\('frigobar'\)/, 'itens legados precisam separar frigobares da categoria genérica de bebidas');
 assert.match(homeSource, /productName\.includes\('cervejeira'\)/, 'itens legados precisam separar cervejeiras da categoria genérica de bebidas');
 assert.match(homeSource, /setupAssortedProductsFilter\(assortedProducts\)/, 'home precisa configurar os filtros de itens variados no local indicado');
@@ -94,6 +96,15 @@ const robotsHeader = adminHeaders.find(header => header.key.toLowerCase() === 'x
 assert.match(robotsHeader, /noindex/i, 'painel administrativo precisa enviar X-Robots-Tag noindex');
 
 const serverSource = fs.readFileSync(path.join(root, 'backend/server.js'), 'utf8');
+const databaseSource = fs.readFileSync(path.join(root, 'backend/src/db.js'), 'utf8');
+const adminHtml = fs.readFileSync(path.join(root, 'admin/index.html'), 'utf8');
+const adminSource = fs.readFileSync(path.join(root, 'admin/admin.js'), 'utf8');
+assert.match(adminHtml, /id="prod-storefront-section"/, 'painel precisa permitir escolher a seção do produto');
+assert.match(adminHtml, /value="air-conditioners"/, 'painel precisa oferecer a seção de ar-condicionados');
+assert.match(adminHtml, /value="assorted"/, 'painel precisa oferecer a seção de itens variados');
+assert.match(adminSource, /storefrontSection:\s*document\.getElementById\('prod-storefront-section'\)\.value/, 'painel precisa enviar a seção escolhida');
+assert.match(serverSource, /storefrontSections\.has\(product\.storefrontSection\)/, 'API precisa validar a seção escolhida');
+assert.match(databaseSource, /__storefrontSection/, 'banco precisa persistir a seção escolhida nos metadados do produto');
 
 for (const relativePath of referenceFiles) {
   const contents = fs.readFileSync(path.join(root, relativePath), 'utf8');

@@ -53,19 +53,25 @@ function normalizeImageReference(image) {
 }
 
 const affiliateUrlAttribute = '__mercadoLivreAffiliateUrl';
+const storefrontSectionAttribute = '__storefrontSection';
 
 function splitSourceAttributes(sourceAttributes) {
   const attributes = sourceAttributes && typeof sourceAttributes === 'object' && !Array.isArray(sourceAttributes)
     ? { ...sourceAttributes }
     : {};
   const affiliateUrl = String(attributes[affiliateUrlAttribute] || '');
+  const storefrontSection = String(attributes[storefrontSectionAttribute] || '');
   delete attributes[affiliateUrlAttribute];
-  return { affiliateUrl, attributes };
+  delete attributes[storefrontSectionAttribute];
+  return { affiliateUrl, storefrontSection, attributes };
 }
 
 function toDbProduct(product) {
   const sourceAttributes = { ...(product.attributes || {}) };
+  delete sourceAttributes[affiliateUrlAttribute];
+  delete sourceAttributes[storefrontSectionAttribute];
   if (product.affiliateUrl) sourceAttributes[affiliateUrlAttribute] = product.affiliateUrl;
+  if (product.storefrontSection) sourceAttributes[storefrontSectionAttribute] = product.storefrontSection;
   return {
     brand: product.brand,
     name: product.name,
@@ -99,7 +105,7 @@ function toBasicDbProduct(product) {
 }
 
 function fromDbProduct(row) {
-  const { affiliateUrl, attributes } = splitSourceAttributes(row.source_attributes);
+  const { affiliateUrl, storefrontSection, attributes } = splitSourceAttributes(row.source_attributes);
   return {
     id: row.id,
     brand: row.brand,
@@ -116,6 +122,7 @@ function fromDbProduct(row) {
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
     affiliateUrl,
+    storefrontSection,
     attributes,
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),
@@ -124,7 +131,7 @@ function fromDbProduct(row) {
 }
 
 function fromPublicDbProduct(row) {
-  const { affiliateUrl, attributes } = splitSourceAttributes(row.source_attributes);
+  const { affiliateUrl, storefrontSection, attributes } = splitSourceAttributes(row.source_attributes);
   return {
     id: row.id,
     brand: row.brand,
@@ -137,6 +144,7 @@ function fromPublicDbProduct(row) {
     description: row.description || '',
     gallery: Array.isArray(row.gallery) ? row.gallery : [],
     affiliateUrl,
+    storefrontSection,
     attributes,
     rating: Number(row.rating || 0),
     ratingCount: Number(row.rating_count || 0),

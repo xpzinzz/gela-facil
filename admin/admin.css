@@ -457,6 +457,17 @@ h4,h5,h6,
 .status-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 .badge-active    { background: rgba(34,197,94,0.1);  color: var(--admin-success); }
 .badge-inactive  { background: rgba(136,146,164,0.1); color: var(--admin-muted); }
+.site-placement-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.site-placement-badge.air { background: rgba(74,145,196,0.14); color: var(--admin-sky); }
+.site-placement-badge.assorted { background: rgba(245,158,11,0.12); color: var(--admin-warning); }
 .table-link {
   display: inline-block;
   margin-top: 7px;

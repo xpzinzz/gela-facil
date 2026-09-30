@@ -35,6 +35,7 @@ function normalizeApiDetailProduct(product) {
     name: product.name,
     brand: product.brand,
     category: product.category,
+    storefrontSection: product.storefrontSection || '',
     price: product.price,
     oldPrice: product.oldPrice,
     affiliateUrl: product.affiliateUrl || '',
@@ -143,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     selectedOptionPrice: 0
   };
 
-  const isAirConditioner = detailProduct.category !== 'bebidas' && !String(id).startsWith('b');
+  const isAirConditioner = isAirConditionerProduct(detailProduct);
   const servicesBox = document.querySelector('.services-container-box');
   if (servicesBox) {
     servicesBox.innerHTML = isAirConditioner ? `

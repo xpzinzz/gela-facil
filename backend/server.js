@@ -84,6 +84,7 @@ function asyncHandler(handler) {
 
 const productCategories = new Set(['inverter', 'split', 'portatil', 'bebidas']);
 const productStatuses = new Set(['active', 'inactive']);
+const storefrontSections = new Set(['air-conditioners', 'assorted']);
 const unsafeText = /[<>\u0000-\u001F\u007F]/;
 
 function validateText(value, label, maxLength, { required = false } = {}) {
@@ -156,6 +157,7 @@ function normalizeProductPayload(body) {
     name: String(body.name || '').trim(),
     brand: String(body.brand || '').trim(),
     category: String(body.category || '').trim(),
+    storefrontSection: String(body.storefrontSection || '').trim(),
     status: String(body.status || 'active').trim(),
     price: Number(body.price || 0),
     oldPrice: body.oldPrice === null || body.oldPrice === '' ? null : Number(body.oldPrice),
@@ -182,6 +184,7 @@ function validateProduct(product) {
     validateText(product.specs, 'Especificacoes', 500);
   if (textError) return textError;
   if (!productCategories.has(product.category)) return 'Categoria invalida.';
+  if (product.storefrontSection && !storefrontSections.has(product.storefrontSection)) return 'Secao de exibicao invalida.';
   if (!productStatuses.has(product.status)) return 'Status invalido.';
   if (!Number.isFinite(product.price) || product.price < 0) return 'Preco invalido.';
   if (product.oldPrice !== null && (!Number.isFinite(product.oldPrice) || product.oldPrice < 0)) return 'Preco original invalido.';
