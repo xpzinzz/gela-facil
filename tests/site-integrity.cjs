@@ -72,6 +72,10 @@ assert.match(legalHtml, /class="legal-navbar"/, 'página jurídica precisa ter n
 assert.match(legalHtml, />Voltar ao site</, 'página jurídica precisa oferecer retorno ao site');
 const productSeoSource = fs.readFileSync(path.join(root, 'js/product-detail.js'), 'utf8');
 const productDetailHtml = fs.readFileSync(path.join(root, 'pages/product-detail.html'), 'utf8');
+const productDetailCss = fs.readFileSync(path.join(root, 'style/product-detail.css'), 'utf8');
+assert.match(productDetailCss, /grid-template-areas:\s*"thumbnails main-image"/, 'galeria de produto precisa usar miniaturas laterais no desktop');
+assert.match(productDetailCss, /\.thumbnails-row::\-webkit-scrollbar\s*\{\s*display:\s*none/, 'galeria não deve exibir barra de rolagem visual');
+assert.match(productSeoSource, /aria-pressed/, 'miniaturas da galeria precisam indicar a foto selecionada');
 assert.match(productSeoSource, /'@type': 'BreadcrumbList'/, 'produto precisa gerar breadcrumbs dinâmicos');
 assert.match(productSeoSource, /const publicSiteOrigin = 'https:\/\/gelafacilref\.com\.br'/, 'produto precisa usar o domínio canônico oficial');
 assert.match(productSeoSource, /window\.location\.replace\('\/pages\/products\.html'\)/, 'produto sem ID ou inexistente precisa substituir a URL pelo catálogo');

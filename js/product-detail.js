@@ -257,20 +257,33 @@ function renderThumbnails() {
   const row = document.getElementById('thumbnails-row');
   if (!row) return;
   row.innerHTML = '';
+  row.setAttribute('aria-label', 'Galeria de imagens do produto');
   
   const images = detailProduct.gallery || [detailProduct.image];
   
   images.forEach((img, idx) => {
     const btn = document.createElement('button');
     btn.className = `thumb-btn ${idx === 0 ? 'active' : ''}`;
+    btn.type = 'button';
+    btn.setAttribute('aria-label', `Exibir foto ${idx + 1} de ${images.length}`);
+    btn.setAttribute('aria-pressed', String(idx === 0));
     const thumbnail = document.createElement('img');
     thumbnail.src = adjustImagePath(img);
     thumbnail.alt = `Foto ${idx + 1}`;
+    thumbnail.loading = 'lazy';
+    thumbnail.decoding = 'async';
     btn.appendChild(thumbnail);
     btn.onclick = () => {
-      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.thumb-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
-      document.getElementById('main-product-image').src = adjustImagePath(img);
+      btn.setAttribute('aria-pressed', 'true');
+      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+      const mainImage = document.getElementById('main-product-image');
+      mainImage.src = adjustImagePath(img);
+      mainImage.alt = `${detailProduct.name} — foto ${idx + 1}`;
     };
     row.appendChild(btn);
   });
