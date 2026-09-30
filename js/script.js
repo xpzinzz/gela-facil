@@ -265,40 +265,40 @@ function assortedCategoryForProduct(product) {
 
 let assortedProductsCache = [];
 
-function assortedCategoryCounts(products) {
-  const counts = new Map();
-  products.forEach(product => {
-    const category = assortedCategoryForProduct(product);
-    counts.set(category, (counts.get(category) || 0) + 1);
-  });
-  return Array.from(counts.entries());
+function assortedProductSearchText(product) {
+  return normalizeProductCategory([
+    product.name,
+    product.brand,
+    product.category,
+    assortedCategoryName(assortedCategoryForProduct(product)),
+    product.specs
+  ].filter(Boolean).join(' ')).replace(/\s+/g, ' ');
 }
 
-function renderAssortedProducts(category = 'all') {
+function renderAssortedProducts(searchTerm = '') {
   const track = document.getElementById('clima-bebidas-track');
   if (!track) return;
 
-  const visibleProducts = category === 'all'
+  const queryTerms = normalizeProductCategory(searchTerm).replace(/\s+/g, ' ').split(' ').filter(Boolean);
+  const visibleProducts = queryTerms.length === 0
     ? assortedProductsCache
-    : assortedProductsCache.filter(product => assortedCategoryForProduct(product) === category);
+    : assortedProductsCache.filter(product => {
+      const searchableText = assortedProductSearchText(product);
+      return queryTerms.every(term => searchableText.includes(term));
+    });
 
   track.innerHTML = visibleProducts.length
     ? visibleProducts.map(renderHomeProductCard).join('')
-    : '<p class="products-loading-state">Nenhum item encontrado nesta categoria.</p>';
+    : '<p class="products-loading-state">Nenhum item encontrado para esta busca.</p>';
   track.scrollLeft = 0;
-
-  document.querySelectorAll('[data-assorted-filter]').forEach(button => {
-    const isActive = button.dataset.assortedFilter === category;
-    button.classList.toggle('active', isActive);
-    button.setAttribute('aria-pressed', String(isActive));
-  });
 }
 
-function setupAssortedProductsFilter(products) {
+function setupAssortedProductsSearch(products) {
   const toolbar = document.getElementById('assorted-products-toolbar');
-  const filters = document.getElementById('assorted-products-filters');
+  const searchInput = document.getElementById('assorted-products-search');
+  const clearButton = document.getElementById('assorted-products-search-clear');
   const track = document.getElementById('clima-bebidas-track');
-  if (!toolbar || !filters || !track) return;
+  if (!toolbar || !searchInput || !clearButton || !track) return;
 
   assortedProductsCache = products;
   if (products.length === 0) {
@@ -307,25 +307,22 @@ function setupAssortedProductsFilter(products) {
     return;
   }
 
-  const categoryCounts = assortedCategoryCounts(products);
-  const filterOptions = [['all', products.length], ...categoryCounts];
-  filters.innerHTML = filterOptions.map(([category, count]) => {
-    const label = category === 'all' ? 'Todos' : assortedCategoryName(category);
-    return `
-      <button class="assorted-filter-chip${category === 'all' ? ' active' : ''}" type="button"
-        data-assorted-filter="${escapeHtml(category)}" aria-pressed="${category === 'all'}">
-        <span>${escapeHtml(label)}</span><small>${count}</small>
-      </button>`;
-  }).join('');
+  const applySearch = () => {
+    const query = searchInput.value.trim();
+    clearButton.hidden = query.length === 0;
+    renderAssortedProducts(query);
+  };
 
-  filters.onclick = event => {
-    const button = event.target.closest('[data-assorted-filter]');
-    if (!button || !filters.contains(button)) return;
-    renderAssortedProducts(button.dataset.assortedFilter);
+  searchInput.value = '';
+  searchInput.oninput = applySearch;
+  clearButton.onclick = () => {
+    searchInput.value = '';
+    applySearch();
+    searchInput.focus();
   };
 
   toolbar.hidden = false;
-  renderAssortedProducts('all');
+  applySearch();
 }
 
 function normalizeProductImage(path) {
@@ -412,7 +409,7 @@ async function loadHomeProductsFromApi() {
     grid.innerHTML = airConditioners.length
       ? airConditioners.map(renderHomeProductCard).join('')
       : '<p class="products-loading-state">Nenhum ar-condicionado ativo cadastrado.</p>';
-    setupAssortedProductsFilter(assortedProducts);
+    setupAssortedProductsSearch(assortedProducts);
 
     const activeFilter = document.querySelector('.filter-tab.active')?.getAttribute('data-filter') || 'all';
     applyProductFilter(activeFilter);

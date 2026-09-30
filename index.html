@@ -301,7 +301,13 @@
       </div>
 
       <div class="assorted-products-toolbar" id="assorted-products-toolbar" hidden>
-        <div class="assorted-products-filters" id="assorted-products-filters" role="group" aria-label="Filtrar itens variados por categoria"></div>
+        <div class="assorted-products-search" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>
+          </svg>
+          <input type="search" id="assorted-products-search" placeholder="Buscar nos itens variados..." aria-label="Buscar nos itens variados" autocomplete="off" />
+          <button type="button" id="assorted-products-search-clear" aria-label="Limpar busca" hidden>&times;</button>
+        </div>
         <div class="clima-bebidas-nav" aria-label="Navegação dos itens variados">
           <button class="clima-bebidas-control" id="clima-bebidas-prev" type="button" aria-label="Produtos anteriores">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
