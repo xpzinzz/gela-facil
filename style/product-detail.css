@@ -62,6 +62,25 @@
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.main-image-wrap img[data-image-shape="wide"] {
+  width: 92%;
+  height: auto;
+  max-width: 92%;
+  max-height: 78%;
+}
+
+.main-image-wrap img[data-image-shape="tall"] {
+  width: auto;
+  height: 90%;
+  max-width: 72%;
+  max-height: 90%;
+}
+
+.main-image-wrap img[data-image-shape="balanced"] {
+  width: 86%;
+  height: 86%;
+}
+
 .main-image-wrap:hover img {
   transform: scale(1.04);
 }
@@ -92,6 +111,10 @@
   max-height: 80%;
   object-fit: contain;
 }
+
+.thumb-btn img[data-image-shape="wide"] { width: 88%; height: auto; }
+.thumb-btn img[data-image-shape="tall"] { width: auto; height: 88%; }
+.thumb-btn img[data-image-shape="balanced"] { width: 82%; height: 82%; }
 
 .thumb-btn:hover {
   transform: translateY(-2px);

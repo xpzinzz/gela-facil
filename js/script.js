@@ -60,6 +60,40 @@
 let cartCount = 0;
 let currentProduct = null; // Holds info for the opened product in the modal
 
+const productImageSelector = [
+  '.product-icon-container .product-image',
+  '.main-image-wrap img',
+  '.thumb-btn img',
+  '.modal-product-icon-container img',
+  '.cart-item-img img',
+  '.chk-item-img img'
+].join(', ');
+
+function adjustProductImageToSize(image) {
+  if (!(image instanceof HTMLImageElement) || !image.naturalWidth || !image.naturalHeight) return;
+
+  const aspectRatio = image.naturalWidth / image.naturalHeight;
+  image.dataset.imageShape = aspectRatio >= 1.35
+    ? 'wide'
+    : aspectRatio <= 0.8
+      ? 'tall'
+      : 'balanced';
+}
+
+function setupAdaptiveProductImages() {
+  document.querySelectorAll(productImageSelector).forEach(image => {
+    if (image.complete) adjustProductImageToSize(image);
+  });
+
+  document.addEventListener('load', event => {
+    if (event.target instanceof HTMLImageElement && event.target.matches(productImageSelector)) {
+      adjustProductImageToSize(event.target);
+    }
+  }, true);
+}
+
+setupAdaptiveProductImages();
+
 // ── NAVBAR LOGIC & SCROLL TRANSITIONS ────────────────────
 const navbar = document.getElementById('navbar');
 const menuToggle = document.getElementById('menu-toggle');

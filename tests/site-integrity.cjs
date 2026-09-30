@@ -47,6 +47,9 @@ assert.match(homeHtml, /id="assorted-products-search"/, 'home precisa oferecer b
 assert.match(homeHtml, /id="assorted-products-search-clear"/, 'busca de itens variados precisa oferecer limpeza rápida');
 const homeSource = fs.readFileSync(path.join(root, 'js/script.js'), 'utf8');
 assert.match(homeHtml, /href="https:\/\/craftevolution\.vercel\.app\/"[^>]*>Desenvolvido por Craft Evolution<\/a>/, 'rodapé da home precisa creditar a Craft Evolution com o link correto');
+assert.match(homeSource, /function adjustProductImageToSize\(image\)/, 'imagens dos produtos precisam ser ajustadas conforme suas dimensões');
+assert.match(homeSource, /image\.naturalWidth \/ image\.naturalHeight/, 'ajuste das imagens precisa respeitar a proporção original');
+assert.match(homeSource, /image\.dataset\.imageShape/, 'formato calculado da imagem precisa ficar disponível para o CSS');
 assert.match(homeSource, /storefrontSection === 'air-conditioners'/, 'escolha administrativa precisa ter prioridade na classificação da home');
 assert.match(homeSource, /storefrontSection === 'assorted'/, 'home precisa respeitar a escolha por itens variados');
 assert.match(homeSource, /productName\.includes\('frigobar'\)/, 'itens legados precisam separar frigobares da categoria genérica de bebidas');
